@@ -2,10 +2,9 @@
 	Functions dealing with loading and initializing meshes, geometry, etc
 ###
 
-cache = {
+cache =
 	textures: {}
 	models: {}
-}
 
 # Asynchronously load a texture, cache it and return the object that will contain it
 loadAsyncTexture = (name, cb) ->
@@ -38,12 +37,11 @@ loadAsyncTexturesAndModels = (textures, models, cb) ->
 	cb(tex, mod)
 
 # Create a model with class 'objname', adding a mesh with the given material and geometry
-createModel = (objname, { material: material, geometry: geometry }) ->
+createModel = (objname, material: material, geometry: geometry) ->
 	obj = create(objname)
 	obj.add(create('Mesh', geometry, material))
 	obj
 
 ## Exports
-window.texture = texture
 window.createModel = createModel
 window.loadAsyncTexturesAndModels = loadAsyncTexturesAndModels

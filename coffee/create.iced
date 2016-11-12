@@ -8,9 +8,13 @@ create = (objname, opts...) ->
 	constr = THREE[objname]
 	# Inject some utility methods
 	constr.prototype ||= {}
-	# Sets the position of this object and returns it
+	# Sets the position of this object and returns self
 	constr.prototype.at = (args...) ->
 		@position.set(args...)
+		this
+	# Sets the scale of this object and returns self
+	constr.prototype.scaled = (scale) ->
+		@scale.set(scale, scale, scale)
 		this
 	# Calls a method of this object and returns self
 	constr.prototype.then = (name, args...) ->
