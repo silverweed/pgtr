@@ -26,5 +26,11 @@ create = (objname, opts...) ->
 	obj
 
 
+# Create a model with class 'Object3D', adding a mesh with the given material and geometry
+createModel = (material: material, geometry: geometry) ->
+	create('Object3D').add(create('Mesh', geometry, material))
+
+
 ## Exports
 window.create = create
+window.createModel = createModel

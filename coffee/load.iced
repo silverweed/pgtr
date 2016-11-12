@@ -1,6 +1,8 @@
 ###
-	Functions dealing with loading and initializing meshes, geometry, etc
+	Functions dealing with loading stuff
 ###
+
+'use strict'
 
 cache =
 	textures: {}
@@ -36,12 +38,6 @@ loadAsyncTexturesAndModels = (textures, models, cb) ->
 	l "Loaded textures and models."
 	cb(tex, mod)
 
-# Create a model with class 'objname', adding a mesh with the given material and geometry
-createModel = (objname, material: material, geometry: geometry) ->
-	obj = create(objname)
-	obj.add(create('Mesh', geometry, material))
-	obj
 
 ## Exports
-window.createModel = createModel
 window.loadAsyncTexturesAndModels = loadAsyncTexturesAndModels
