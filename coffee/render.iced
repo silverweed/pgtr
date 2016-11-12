@@ -6,9 +6,10 @@
 
 renderLoop = (opts) ->
 	render = ->
+		opts.stats?.begin()
 		requestAnimationFrame(render)
-		#delta = opts.clock.getDelta()
 		opts.renderer.render(opts.scene, opts.camera)
+		opts.stats?.end()
 	render()
 	null
 
