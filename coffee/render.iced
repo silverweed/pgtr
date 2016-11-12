@@ -5,12 +5,14 @@
 'use strict'
 
 renderLoop = (opts) ->
-	render = ->
+	animate = ->
 		opts.stats?.begin()
-		requestAnimationFrame(render)
+		requestAnimationFrame(animate)
+		delta = opts.clock.getDelta()
 		opts.renderer.render(opts.scene, opts.camera)
+		opts.entities?.player()?.update(delta)
 		opts.stats?.end()
-	render()
+	animate()
 	null
 
 

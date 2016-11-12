@@ -36,12 +36,26 @@ asyncBuildScene = (scene, cb) ->
 	await
 		asyncLoadTexturesAndModels(['shark'], ['shark'], defer(textures, models))
 		asyncLoadSkybox(CONF.SKYBOX.URLS, CONF.SKYBOX.SIZE, defer sky)
+
+	entities = Entities.new(scene)
+	entities.add('player', createPlayer(
+		createModel(
+			geometry: models.shark
+			material: create('MeshPhongMaterial',
+				shininess: 10
+				color: 0x222222
+				specular: 0x333333
+				map: textures.shark
+			)
+		).at(-20, 0, 0).scaled(3)
+	))
 	addAll(scene,
 		sky
 		create('DirectionalLight', 0xffffff, 4).at(1000, 1000, 1000)
 			.then('rotateY', 20)
 			.then('rotateZ', 30)
 		create('DirectionalLight', 0xffffff, 5).at(-1000, -1000, 1000)
+		entities.player()
 		createModel(
 			geometry: create('BoxGeometry', 10, 10, 10)
 			material: create('MeshPhongMaterial',
@@ -60,23 +74,17 @@ asyncBuildScene = (scene, cb) ->
 				map: textures.shark
 			)
 		).at(20, 0, 0)
-		createModel(
-			geometry: models.shark
-			material: create('MeshPhongMaterial',
-				shininess: 10
-				color: 0x222222
-				specular: 0x333333
-				map: textures.shark
-			)
-		).at(-20, 0, 0).scaled(3)
 	)
 	camera = create('PerspectiveCamera', 60, windowRatio(), 1, 100000).at(0, 10, 25)
 	create('OrbitControls', camera)
 	cb(
 		scene: scene
 		camera: camera
-		renderer: create('WebGLRenderer').then('setSize', window.innerWidth, window.innerHeight)
+		renderer: create('WebGLRenderer', antialias: on)
+				.then('setSize', window.innerWidth, window.innerHeight)
+				.then('setPixelRatio', window.devicePixelRatio)
 		clock: create('Clock')
+		entities: entities
 	)
 
 

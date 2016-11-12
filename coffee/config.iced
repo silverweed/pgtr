@@ -5,6 +5,16 @@
 'use strict'
 
 CONF =
+	PLAYER:
+		SPEED: 100
+
+	CONTROLS:
+		FORWARD:  [ 87 ] # W
+		BACKWARD: [ 83 ] # S
+		RIGHT:    [ 68 ] # D
+		LEFT:     [ 65 ] # A
+		JUMP:     [ 32 ] # Space(?)
+		
 	SKYBOX:
 		URLS: [
 			'textures/skybox/px.jpg'
