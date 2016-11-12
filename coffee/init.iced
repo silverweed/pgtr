@@ -18,7 +18,7 @@ createDOM = ->
 return unless requireWebgl()
 
 l 'Starting program'
-await buildScene(create('Scene'), defer world)
+await asyncBuildScene(create('Scene'), defer world)
 # Insert the canvas inside the <div>
 createDOM().appendChild(world.renderer.domElement)
 renderLoop(world)

@@ -9,7 +9,7 @@ cache =
 	models: {}
 
 # Asynchronously load a texture, cache it and return the object that will contain it
-loadAsyncTexture = (name, cb) ->
+asyncLoadTexture = (name, cb) ->
 	unless name in cache.textures
 		l "Loading texture #{name}"
 		await create('TextureLoader').load("textures/#{name}.png", defer tex)
@@ -17,7 +17,7 @@ loadAsyncTexture = (name, cb) ->
 	cb(cache.textures[name])
 
 # Asynchronously load a model, cache it and return the object that will contain it
-loadAsyncGeometry = (name, cb) ->
+asyncLoadGeometry = (name, cb) ->
 	unless name in cache.models
 		l "Loading model #{name}"
 		await create('JSONLoader').load("models/#{name}.json", defer mod)
@@ -26,18 +26,18 @@ loadAsyncGeometry = (name, cb) ->
 
 # Asynchronously load all textures in `textures` and models in `models`, then
 # call `cb(loaded textures, loaded models)`
-loadAsyncTexturesAndModels = (textures, models, cb) ->
+asyncLoadTexturesAndModels = (textures, models, cb) ->
 	tex = {}
 	mod = {}
 	l "Start loading textures and models"
 	await
 		for texname in textures
-			loadAsyncTexture texname, defer tex[texname]
+			asyncLoadTexture texname, defer tex[texname]
 		for modname in models
-			loadAsyncGeometry modname, defer mod[modname]
+			asyncLoadGeometry modname, defer mod[modname]
 	l "Loaded textures and models."
 	cb(tex, mod)
 
 
 ## Exports
-window.loadAsyncTexturesAndModels = loadAsyncTexturesAndModels
+window.asyncLoadTexturesAndModels = asyncLoadTexturesAndModels

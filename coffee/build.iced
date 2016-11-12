@@ -11,7 +11,7 @@ addAll = (scene, objects...) ->
 loadObjects = (scene, textures, models) ->
 	null
 
-loadAsyncSkybox = (urls, size, cb) ->
+asyncLoadSkybox = (urls, size, cb) ->
 	l "Start loading sky"
 	await create('CubeTextureLoader').load(urls, defer cubemap)
 	cubemap.format = THREE.RGBFormat
@@ -31,11 +31,11 @@ loadAsyncSkybox = (urls, size, cb) ->
 
 # Takes an empty Scene, fills it with the content and returns an object
 # wrapping it along with its camera, renderer and clock
-buildScene = (scene, cb) ->
+asyncBuildScene = (scene, cb) ->
 	l "In buildScene(#{scene})"
 	await
-		loadAsyncTexturesAndModels(['shark'], ['shark'], defer(textures, models))
-		loadAsyncSkybox(CONF.SKYBOX.URLS, CONF.SKYBOX.SIZE, defer sky)
+		asyncLoadTexturesAndModels(['shark'], ['shark'], defer(textures, models))
+		asyncLoadSkybox(CONF.SKYBOX.URLS, CONF.SKYBOX.SIZE, defer sky)
 	addAll(scene,
 		sky
 		create('DirectionalLight', 0xffffff, 4).at(1000, 1000, 1000)
@@ -64,7 +64,7 @@ buildScene = (scene, cb) ->
 			geometry: models.shark
 			material: create('MeshPhongMaterial',
 				shininess: 10
-				color: 0xffffff
+				color: 0x222222
 				specular: 0x333333
 				map: textures.shark
 			)
@@ -81,4 +81,4 @@ buildScene = (scene, cb) ->
 
 
 ## Exports
-window.buildScene = buildScene
+window.asyncBuildScene = asyncBuildScene
