@@ -18,16 +18,21 @@ asyncLoadSkybox = (urls, size, cb) ->
 	shader = THREE.ShaderLib.cube
 	shader.uniforms.tCube.value = cubemap
 	l "Loaded sky"
-	cb(create('Mesh'
-		create('BoxGeometry', size, size, size)
-		create('ShaderMaterial',
-			fragmentShader: shader.fragmentShader
-			vertexShader: shader.vertexShader
-			uniforms: shader.uniforms
-			depthWrite: no
-			side: THREE.BackSide
+	cb(
+		# Sky mesh
+		create('Mesh'
+			create('BoxGeometry', size, size, size)
+			create('ShaderMaterial',
+				fragmentShader: shader.fragmentShader
+				vertexShader: shader.vertexShader
+				uniforms: shader.uniforms
+				depthWrite: no
+				side: THREE.BackSide
+			)
 		)
-	))
+		# Reflection cubemap
+		cubemap
+	)
 
 # Takes an empty Scene, fills it with the content and returns an object
 # wrapping it along with its camera, renderer and clock
@@ -35,46 +40,26 @@ asyncBuildScene = (scene, cb) ->
 	l "In buildScene(#{scene})"
 	await
 		asyncLoadTexturesAndModels(['shark'], ['shark'], defer(textures, models))
-		asyncLoadSkybox(CONF.SKYBOX.URLS, CONF.SKYBOX.SIZE, defer sky)
+		asyncLoadSkybox(CONF.SKYBOX.URLS, CONF.SKYBOX.SIZE, defer sky, cubemap)
 
 	entities = Entities.new(scene)
+	# Create the player
 	entities.add('player', createPlayer(
 		createModel(
 			geometry: models.shark
 			material: create('MeshPhongMaterial',
-				shininess: 10
+				shininess: 20
+				reflectivity: 0.4
 				color: 0x222222
-				specular: 0x333333
+				specular: 0x111111
 				map: textures.shark
+				envMap: cubemap
 			)
 		).at(-20, 0, 0).scaled(3)
 	))
-	addAll(scene,
-		sky
-		create('DirectionalLight', 0xffffff, 4).at(1000, 1000, 1000)
-			.then('rotateY', 20)
-			.then('rotateZ', 30)
-		create('DirectionalLight', 0xffffff, 5).at(-1000, -1000, 1000)
-		entities.player()
-		createModel(
-			geometry: create('BoxGeometry', 10, 10, 10)
-			material: create('MeshPhongMaterial',
-				shininess: 20
-				color: 0xffffff
-				specular: 0x999999
-				map: textures.shark
-			)
-		)
-		createModel(
-			geometry: create('BoxGeometry', 10, 10, 10)
-			material: create('MeshPhongMaterial',
-				shininess: 3
-				color: 0x44ff44
-				specular: 0x222299
-				map: textures.shark
-			)
-		).at(20, 0, 0)
-	)
+	# Add the objects
+	objects = SCENE.create(envMap: cubemap).objects
+	addAll(scene, sky, entities.player(), objects...)
 	camera = create('PerspectiveCamera', 60, windowRatio(), 1, 100000).at(0, 10, 25)
 	create('OrbitControls', camera)
 	cb(

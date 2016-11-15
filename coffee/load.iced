@@ -40,4 +40,5 @@ asyncLoadTexturesAndModels = (textures, models, cb) ->
 
 
 ## Exports
+window.cache = cache
 window.asyncLoadTexturesAndModels = asyncLoadTexturesAndModels
