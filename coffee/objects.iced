@@ -19,10 +19,8 @@ SCENE = {
 			createModel(
 				geometry: create('BoxGeometry', 10, 10, 10)
 				material: create('MeshLambertMaterial',
-					shininess: 3
 					reflectivity: 0.2
 					color: 0x44ff44
-					specular: 0x222299
 					map: cache.textures.shark
 					envMap: opts.envMap
 				)
