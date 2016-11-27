@@ -1,2 +1,2 @@
 #!/bin/sh
-iced --runtime inline -o js -cw coffee
+iced --runtime inline -o js -cw src 

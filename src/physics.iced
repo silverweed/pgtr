@@ -58,9 +58,8 @@ class Physics
 			transform = new Ammo.btTransform()
 			body.getMotionState().getWorldTransform(transform)
 			origin = transform.getOrigin()
-			pos = [origin.x(), origin.y(), origin.z()]
 			rot = transform.getRotation()
-			obj.position.set(pos...)
+			obj.position.set(origin.x(), origin.y(), origin.z())
 			obj.quaternion = new THREE.Quaternion(
 						rot.x(),
 						rot.y(),

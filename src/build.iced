@@ -11,38 +11,18 @@ addAll = (scene, objects...) ->
 loadObjects = (scene, textures, models) ->
 	null
 
-asyncLoadSkybox = (urls, size, cb) ->
-	l "Start loading sky"
-	await create('CubeTextureLoader').load(urls, defer cubemap)
-	cubemap.format = THREE.RGBFormat
-	shader = THREE.ShaderLib.cube
-	shader.uniforms.tCube.value = cubemap
-	l "Loaded sky"
-	cb(
-		# Sky mesh
-		create('Mesh'
-			create('BoxGeometry', size, size, size)
-			create('ShaderMaterial',
-				fragmentShader: shader.fragmentShader
-				vertexShader: shader.vertexShader
-				uniforms: shader.uniforms
-				depthWrite: no
-				side: THREE.BackSide
-			)
-		)
-		# Reflection cubemap
-		cubemap
-	)
-
 # Takes an empty Scene, fills it with the content and returns an object
 # wrapping it along with its camera, renderer and clock
 asyncBuildScene = (scene, cb) ->
 	l "In buildScene(#{scene})"
+
 	await
-		asyncLoadTexturesAndModels(['shark'], ['shark'], defer(textures, models))
+		asyncLoadTexturesAndModels(['shark', 'white', 'black'], ['shark'], defer(textures, models))
 		asyncLoadSkybox(CONF.SKYBOX.URLS, CONF.SKYBOX.SIZE, defer sky, cubemap)
+		asyncLoadMultiMaterial(['white', 'black', 'black', 'black', 'black', 'black'], defer(cubemat))
 
 	entities = Entities.new(scene)
+
 	# Create the player
 	entities.add('player', createPlayer(
 		createModel(
@@ -57,8 +37,9 @@ asyncBuildScene = (scene, cb) ->
 			)
 		).at(-20, 0, 0).scaled(3)
 	))
+
 	# Add the objects
-	objects = SCENE.create(envMap: cubemap).objects
+	objects = SCENE.create(envMap: cubemap, cubemat: cubemat).objects
 	addAll(scene, sky, entities.player(), objects...)
 	camera = create('PerspectiveCamera', 60, windowRatio(), 1, 100000).at(0, 10, 25)
 	create('OrbitControls', camera)
