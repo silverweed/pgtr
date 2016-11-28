@@ -9,11 +9,13 @@ CONF =
 		SPEED: 100
 
 	CONTROLS:
-		FORWARD:  [ 87 ] # W
-		BACKWARD: [ 83 ] # S
-		RIGHT:    [ 68 ] # D
-		LEFT:     [ 65 ] # A
-		JUMP:     [ 32 ] # Space(?)
+		forward:  [ 87 ] # W
+		backward: [ 83 ] # S
+		righT:    [ 68 ] # D
+		left:     [ 65 ] # A
+		jump:     [ 32 ] # Space(?)
+		sunPitchRaise: [ 107 ] # Numpad+
+		sunPitchLower: [ 109 ] # Numpad-
 		
 	SKYBOX:
 		URLS: [
@@ -25,6 +27,10 @@ CONF =
 			'textures/skybox/nz.jpg'
 		]
 		SIZE: 10000
+	
+	OCEAN:
+		URL: 'textures/waternormals.jpg'
+		Z: -50
 
 Object.freeze(CONF)
 

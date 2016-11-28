@@ -16,10 +16,19 @@ loadObjects = (scene, textures, models) ->
 asyncBuildScene = (scene, cb) ->
 	l "In buildScene(#{scene})"
 
+	camera = create('PerspectiveCamera', 60, windowRatio(), 1, 100000).at(0, 10, 25)
+	create('OrbitControls', camera)
+	renderer = create('WebGLRenderer', antialias: on)
+				.then('setSize', window.innerWidth, window.innerHeight)
+				.then('setPixelRatio', window.devicePixelRatio)
+
 	await
 		asyncLoadTexturesAndModels(['shark', 'white', 'black'], ['shark'], defer(textures, models))
 		asyncLoadSkybox(CONF.SKYBOX.URLS, CONF.SKYBOX.SIZE, defer sky, cubemap)
-		asyncLoadMultiMaterial(['white', 'black', 'black', 'black', 'black', 'black'], defer(cubemat))
+		#asyncLoadMultiMaterial(['white', 'black', 'black', 'black', 'black', 'black'], defer(cubemat))
+
+	objects = SCENE.create(envMap: cubemap)
+	await asyncLoadOcean(CONF.OCEAN.URL, renderer, camera, scene, objects.sunlight, defer(water, ocean))
 
 	entities = Entities.new(scene)
 
@@ -39,18 +48,15 @@ asyncBuildScene = (scene, cb) ->
 	))
 
 	# Add the objects
-	objects = SCENE.create(envMap: cubemap, cubemat: cubemat).objects
-	addAll(scene, sky, entities.player(), objects...)
-	camera = create('PerspectiveCamera', 60, windowRatio(), 1, 100000).at(0, 10, 25)
-	create('OrbitControls', camera)
+	addAll(scene, sky, ocean, entities.player(), objects.objects...)
 	cb(
 		scene: scene
+		water: water
 		camera: camera
-		renderer: create('WebGLRenderer', antialias: on)
-				.then('setSize', window.innerWidth, window.innerHeight)
-				.then('setPixelRatio', window.devicePixelRatio)
+		renderer: renderer
 		clock: create('Clock')
 		entities: entities
+		objects: objects
 	)
 
 

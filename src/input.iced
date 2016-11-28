@@ -4,20 +4,17 @@
 
 'use strict'
 
-Input =
-	forward: off
-	backward: off
-	right: off
-	left: off
-
-Object.seal(Input)
+# This object will contain all the keys appearing in CONF.CONTROLS
+# with value `true` or `false` depending on whether that key is currently
+# pressed or not.
+Input = {}
 
 hdKey = (down) ->
 	(e) ->
 		for key, val of CONF.CONTROLS
 			if `e.keyCode == val`
-				l "setting Input[#{key.toLowerCase()}]"
-				Input[key.toLowerCase()] = down
+				l "setting Input[#{key}]"
+				Input[key] = down
 				return
 
 window.addEventListener('keydown', hdKey(true), false)

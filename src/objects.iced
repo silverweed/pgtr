@@ -1,22 +1,25 @@
 SCENE = {
 	create: (opts) ->
 		sunlight = create('DirectionalLight', 0xffdf80, 12).at(-1000, 600, 1000)
-				.then('rotateY', 0)
+				.then('rotateY', -2)
 				.then('rotateZ', 0)
+		sunlight.gizmo = createModel(
+			geometry: create('BoxGeometry', 10, 10, 10)
+			material: create('MeshLambertMaterial'
+				color: 0xffff00
+				emissive: 0xffff00
+			)
+		)	.at(-50, 50, 50)
+			.scaled(3, 3, 3)
+			.then('rotateX', sunlight.rotation.x)
+			.then('rotateY', sunlight.rotation.y)
+			.then('rotateZ', sunlight.rotation.z)
 		lights = [
 			sunlight
-			create('DirectionalLight', 0xffd480, 2).at(-1000, -1000, 1000)
+			create('AmbientLight', 0xffdf80, 3)
 		]
 		misc = [
-			# Sunlight gizmo
-			createModel(
-				geometry: create('BoxGeometry', 10, 10, 10)
-				material: opts.cubemat
-			)	.at(-50, 50, 50)
-				.scaled(5, 5, 5)
-				.then('rotateX', sunlight.rotation.x)
-				.then('rotateY', sunlight.rotation.y)
-				.then('rotateZ', sunlight.rotation.z)
+			sunlight.gizmo
 			createModel(
 				geometry: create('BoxGeometry', 10, 10, 10)
 				material: create('MeshPhongMaterial',
@@ -41,6 +44,7 @@ SCENE = {
 				lights...
 				misc...
 			]
+			sunlight: sunlight
 		}
 }
 

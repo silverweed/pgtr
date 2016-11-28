@@ -65,24 +65,49 @@ asyncLoadSkybox = (urls, size, cb) ->
 		cubemap
 	)
 
-asyncLoadMultiMaterial = (urls, cb) ->
-	loader = create('TextureLoader')
-	materials = []
-	await
-		for url in urls
-			l "Loading #{texpath url}"
-			loader.load(texpath(url), defer texture)
-			l texture
-			materials.push(create('MeshLambertMaterial',
-				emissiveMap: texture
-				emissiveIntensity: 100
-				color: 0x000000
-			))
-			l "Done loading #{url}"
-	cb(create('MultiMaterial', materials))
+asyncLoadOcean = (waternormal_url, renderer, camera, scene, sunlight, cb) -> 
+	await create('TextureLoader').load(waternormal_url, defer waternormal)
+	waternormal.wrapS = waternormal.wrapT = THREE.RepeatWrapping
+	water = create('Water', renderer, camera, scene,
+		textureWidth: 512
+		textureHeight: 512
+		waterNormals: waternormal
+		alpha: 1.0
+		sunDirection: sunlight.position.clone().normalize()
+		sunColor: sunlight.color.getHex()
+		waterColor: 0x001e0f
+		distortionScale: 50.0
+	)
+	mirrorMesh = create('Mesh'
+		create('PlaneBufferGeometry'
+			10000
+			10000
+		)
+		water.material
+	)	.then('rotateX', -Math.PI / 2.0)
+		.add(water)
+	water.position.z = -1000
+	cb(water, mirrorMesh)
+
+#asyncLoadMultiMaterial = (urls, cb) ->
+	#loader = create('TextureLoader')
+	#materials = []
+	#await
+		#for url in urls
+			#l "Loading #{texpath url}"
+			#loader.load(texpath(url), defer texture)
+			#l texture
+			#materials.push(create('MeshLambertMaterial',
+				#emissiveMap: texture
+				#emissiveIntensity: 100
+				#color: 0x000000
+			#))
+			#l "Done loading #{url}"
+	#cb(create('MultiMaterial', materials))
 
 ## Exports
 window.cache = cache
 window.asyncLoadTexturesAndModels = asyncLoadTexturesAndModels
 window.asyncLoadSkybox = asyncLoadSkybox
-window.asyncLoadMultiMaterial = asyncLoadMultiMaterial
+window.asyncLoadOcean = asyncLoadOcean
+#window.asyncLoadMultiMaterial = asyncLoadMultiMaterial
