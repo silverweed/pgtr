@@ -12,9 +12,10 @@ renderLoop = (opts) ->
 		# Update player
 		opts.entities?.player()?.update(delta)
 		# Update debug input
-		opts.debug?.forEach (e) -> e.update && e.update(delta)
+		opts.debug?.forEach (e) -> e?.update? && e.update(delta)
 		# Render scene
 		opts.water.material.uniforms.time.value += delta
+		opts.physics.step(delta, CONF.PHYSICS.SUBSTEPS) if opts.physics.enabled
 		opts.water.render()
 		opts.renderer.render(opts.scene, opts.camera)
 		opts.stats?.end()

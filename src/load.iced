@@ -75,7 +75,7 @@ asyncLoadOcean = (waternormal_url, renderer, camera, scene, sunlight, cb) ->
 		alpha: 1.0
 		sunDirection: sunlight.position.clone().normalize()
 		sunColor: sunlight.color.getHex()
-		waterColor: 0x001e0f
+		waterColor: 0x535b23 #0x001e0f 
 		distortionScale: 50.0
 	)
 	mirrorMesh = create('Mesh'
@@ -84,7 +84,8 @@ asyncLoadOcean = (waternormal_url, renderer, camera, scene, sunlight, cb) ->
 			10000
 		)
 		water.material
-	)	.then('rotateX', -Math.PI / 2.0)
+	)	.at(0, CONF.OCEAN.Y, 0)
+		.then('rotateX', -Math.PI / 2.0)
 		.add(water)
 	water.position.z = -1000
 	cb(water, mirrorMesh)

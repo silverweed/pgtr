@@ -5,7 +5,7 @@ window.l = console.log
 window.createSunlightControls = (sunlight) ->
 	{
 		# FIXME
-		update: (delta) ->
+		update: (_delta) ->
 			if Input.sunPitchLower
 				l "pitch lower"
 				sunlight.rotateZ(delta)
@@ -17,3 +17,10 @@ window.createSunlightControls = (sunlight) ->
 				sunlight.gizmo?.rotateZ(-delta)
 				sunlight.updateMatrixWorld()
 	}
+
+window.createTogglePhysicsControls = (physics) ->
+	window.addEventListener('keyup', (e) ->
+		if `e.keyCode == CONF.CONTROLS.togglePhysics`
+			physics.enabled = !physics.enabled
+		true
+	)

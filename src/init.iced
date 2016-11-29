@@ -22,7 +22,7 @@ l 'Starting program'
 await asyncBuildScene(create('Scene'), defer world)
 # Add stats
 world.stats = createStats()
-world.debug = [createSunlightControls(world.objects.sunlight)]
+world.debug = [createSunlightControls(world.objects.sunlight), createTogglePhysicsControls(world.physics)]
 # Insert the canvas inside the <div>
 createDOM(world.renderer.domElement, world.stats.domElement)
 renderLoop(world)

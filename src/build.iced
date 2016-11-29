@@ -44,8 +44,12 @@ asyncBuildScene = (scene, cb) ->
 				map: textures.shark
 				envMap: cubemap
 			)
-		).at(-20, 0, 0).scaled(3)
+		).at(-20, 5, 0).scaled(3)
 	))
+
+	physics = new Physics()
+	physics	.createGround()
+		.addRigidBody(entities.player())
 
 	# Add the objects
 	addAll(scene, sky, ocean, entities.player(), objects.objects...)
@@ -57,6 +61,7 @@ asyncBuildScene = (scene, cb) ->
 		clock: create('Clock')
 		entities: entities
 		objects: objects
+		physics: physics
 	)
 
 
