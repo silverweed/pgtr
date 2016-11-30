@@ -1,3 +1,3 @@
-js/*.js
+#js/*.js
 lib/three.js/examples
 *.swp
