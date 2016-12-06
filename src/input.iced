@@ -17,7 +17,14 @@ hdKey = (down) ->
 				Input[key] = down
 				return
 
+resizeHandler = (camera, controls, renderer) ->
+	->
+		camera.aspect = window.innerWidth / window.innerHeight
+		camera.updateProjectionMatrix()
+		renderer.setSize(window.innerWidth, window.innerHeight)
+
 window.addEventListener('keydown', hdKey(true), false)
 window.addEventListener('keyup', hdKey(false), false)
 
 window.Input = Input
+window.resizeHandler = resizeHandler

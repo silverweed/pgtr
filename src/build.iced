@@ -16,8 +16,12 @@ loadObjects = (scene, textures, models) ->
 asyncBuildScene = (scene, cb) ->
 	l "In buildScene(#{scene})"
 
-	camera = create('PerspectiveCamera', 60, windowRatio(), 1, 100000).at(0, 10, 25)
-	create('OrbitControls', camera)
+	camera = create('PerspectiveCamera', 60, windowRatio(), 1, 100000).at(0, 10, -30)
+		.then('rotateY', Math.PI)
+		.then('rotateX', -0.3)
+	controls = create('FirstPersonControls', camera)
+				.with('movementSpeed', CONF.PLAYER.SPEED)
+				.with('lookSpeed', 0)
 	renderer = create('WebGLRenderer', antialias: on)
 				.then('setSize', window.innerWidth, window.innerHeight)
 				.then('setPixelRatio', window.devicePixelRatio)
@@ -46,6 +50,7 @@ asyncBuildScene = (scene, cb) ->
 			)
 		).at(-20, 5, 0).scaled(3)
 	))
+	entities.player().add(camera)
 
 	physics = new Physics()
 	physics	.createGround()
@@ -62,6 +67,7 @@ asyncBuildScene = (scene, cb) ->
 		entities: entities
 		objects: objects
 		physics: physics
+		controls: controls
 	)
 
 

@@ -50,27 +50,13 @@ class Physics
 						inertia)
 		rb = new Ammo.btRigidBody(rbCI)
 		rb.setDamping(CONF.PHYSICS.DFLT_LIN_DAMPING, CONF.PHYSICS.DFLT_ANG_DAMPING)
+		# Restrict rotation along Y axis
+		rb.setAngularFactor(new Ammo.btVector3(0, 1, 0))
 		# Add the rigidbody to the threejs object for easy access
 		threeObj.rigidbody = rb
 		@dynamicsWorld.addRigidBody(rb)
 		@bodies.push [rb, threeObj]
 		this
-
-		# TODO
-		#fallShape = new Ammo.btSphereShape(1)
-		#fallMotionState = new Ammo.btDefaultMotionState(new btTransform(
-		#				new Ammo.btQuaternion(0, 0, 0, 1),
-		#				new Ammo.btVector3(0, 50, 0)))
-		#fallMass = 1
-		#fallInertia = new Ammo.btVector3(0, 0, 0)
-		#fallShape.calculateLocalInertia(fallMass, fallInertia)
-		#fallRigidBodyCI = new Ammo.btRigidBodyConstructionInfo(
-		#				fallMass,
-		#				fallMotionState,
-		#				fallShape,
-		#				fallInertia)
-		#fallRigidBody = new Ammo.btRigidBody(fallRigidBodyCI)
-		#dynamicsWorld.addRigidBody(fallRigidBody)
 
 	#http://www.bulletphysics.org/mediawiki-1.5.8/index.php/Stepping_The_World#fixedTimeStep_resolution
 	step: (timeStep, subdivisions = 1, fixedTimeStep = 1/60.0) ->

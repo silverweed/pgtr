@@ -23,6 +23,8 @@ await asyncBuildScene(create('Scene'), defer world)
 # Add stats
 world.stats = createStats()
 world.debug = [createSunlightControls(world.objects.sunlight), createTogglePhysicsControls(world.physics)]
+# Add resize listener
+window.addEventListener('resize', resizeHandler(world.camera, world.controls, world.renderer))
 # Insert the canvas inside the <div>
 createDOM(world.renderer.domElement, world.stats.domElement)
 renderLoop(world)

@@ -10,6 +10,8 @@ renderLoop = (opts) ->
 		requestAnimationFrame(animate)
 		delta = opts.clock.getDelta()
 		# Update player
+		#opts.controls?.update(delta)
+		#opts.camera.lookAt(opts.entities.player())
 		opts.entities?.player()?.update(delta)
 		# Update debug input
 		opts.debug?.forEach (e) -> e?.update? && e.update(delta)

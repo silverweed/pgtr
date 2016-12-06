@@ -18,8 +18,10 @@ create = (objname, opts...) ->
 		this
 	# Calls a method of this object and returns self
 	constr.prototype.then = (name, args...) ->
-		l "Calling #{name} on #{obj} with args #{args}"
 		this[name](args...)
+		this
+	constr.prototype.with = (attr, val) ->
+		this[name] = val
 		this
 	obj = new constr(opts...)
 	l "Created #{objname} with params #{opts}"

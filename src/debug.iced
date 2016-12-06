@@ -5,7 +5,7 @@ window.l = console.log
 window.createSunlightControls = (sunlight) ->
 	{
 		# FIXME
-		update: (_delta) ->
+		update: (delta) ->
 			if Input.sunPitchLower
 				l "pitch lower"
 				sunlight.rotateZ(delta)
