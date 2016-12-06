@@ -1,6 +1,6 @@
 SCENE = {
 	create: (opts) ->
-		sunlight = create('DirectionalLight', 0xffdf80, 12).at(-1000, 600, 1000)
+		sunlight = create('DirectionalLight', CONF.SUN.COLOR, 12).at(-1000, 600, 1000)
 				.then('rotateY', -2)
 				.then('rotateZ', 0)
 		sunlight.gizmo = createModel(
@@ -16,7 +16,7 @@ SCENE = {
 			.then('rotateZ', sunlight.rotation.z)
 		lights = [
 			sunlight
-			create('AmbientLight', 0xffdf80, 3)
+			create('AmbientLight', CONF.SUN.COLOR, 3)
 		]
 		misc = [
 			sunlight.gizmo

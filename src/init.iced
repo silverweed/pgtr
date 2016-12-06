@@ -27,4 +27,5 @@ world.debug = [createSunlightControls(world.objects.sunlight), createTogglePhysi
 window.addEventListener('resize', resizeHandler(world.camera, world.controls, world.renderer))
 # Insert the canvas inside the <div>
 createDOM(world.renderer.domElement, world.stats.domElement)
+world.postprocess = postProcessInit()
 renderLoop(world)

@@ -39,6 +39,9 @@ CONF =
 		SUBSTEPS: 7
 		DFLT_LIN_DAMPING: 0.7
 		DFLT_ANG_DAMPING: 0.99999
+	
+	SUN:
+		COLOR: 0xffdf80
 
 Object.freeze(CONF)
 

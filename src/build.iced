@@ -8,9 +8,6 @@ addAll = (scene, objects...) ->
 	scene.add(obj) for obj in objects
 	null
 
-loadObjects = (scene, textures, models) ->
-	null
-
 # Takes an empty Scene, fills it with the content and returns an object
 # wrapping it along with its camera, renderer and clock
 asyncBuildScene = (scene, cb) ->
@@ -19,6 +16,7 @@ asyncBuildScene = (scene, cb) ->
 	camera = create('PerspectiveCamera', 60, windowRatio(), 1, 100000).at(0, 10, -30)
 		.then('rotateY', Math.PI)
 		.then('rotateX', -0.3)
+	# XXX: Currently unused
 	controls = create('FirstPersonControls', camera)
 				.with('movementSpeed', CONF.PLAYER.SPEED)
 				.with('lookSpeed', 0)
