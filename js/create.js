@@ -27,8 +27,11 @@
     constr.prototype.then = function() {
       var args, name;
       name = arguments[0], args = 2 <= arguments.length ? __slice.call(arguments, 1) : [];
-      l("Calling " + name + " on " + obj + " with args " + args);
       this[name].apply(this, args);
+      return this;
+    };
+    constr.prototype["with"] = function(attr, val) {
+      this[name] = val;
       return this;
     };
     obj = (function(func, args, ctor) {

@@ -41,6 +41,7 @@
       rbCI = new Ammo.btRigidBodyConstructionInfo(mass, motionState, shape, inertia);
       rb = new Ammo.btRigidBody(rbCI);
       rb.setDamping(CONF.PHYSICS.DFLT_LIN_DAMPING, CONF.PHYSICS.DFLT_ANG_DAMPING);
+      rb.setAngularFactor(new Ammo.btVector3(0, 1, 0));
       threeObj.rigidbody = rb;
       this.dynamicsWorld.addRigidBody(rb);
       this.bodies.push([rb, threeObj]);

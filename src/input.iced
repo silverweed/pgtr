@@ -23,8 +23,18 @@ resizeHandler = (camera, controls, renderer) ->
 		camera.updateProjectionMatrix()
 		renderer.setSize(window.innerWidth, window.innerHeight)
 
+window.createPostProcessControls = (world) ->
+	window.addEventListener('keyup', (e) ->
+		if `e.keyCode == CONF.CONTROLS.togglePostProcess`
+			world.postprocess.enabled = !world.postprocess.enabled
+			world.renderer.clear()
+		l "Postprocessing is now #{world.postprocess.enabled}"
+		true
+	)
 window.addEventListener('keydown', hdKey(true), false)
 window.addEventListener('keyup', hdKey(false), false)
 
+
+## Exports ##
 window.Input = Input
 window.resizeHandler = resizeHandler

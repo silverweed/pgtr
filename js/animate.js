@@ -11,7 +11,7 @@
   renderLoop = function(opts) {
     var animate;
     animate = function() {
-      var delta, _ref, _ref1, _ref2, _ref3, _ref4;
+      var delta, _ref, _ref1, _ref2, _ref3, _ref4, _ref5;
       if ((_ref = opts.stats) != null) {
         _ref.begin();
       }
@@ -32,8 +32,12 @@
         opts.physics.step(delta, CONF.PHYSICS.SUBSTEPS);
       }
       opts.water.render();
-      opts.renderer.render(opts.scene, opts.camera);
-      return (_ref4 = opts.stats) != null ? _ref4.end() : void 0;
+      if ((_ref4 = opts.postprocess) != null ? _ref4.enabled : void 0) {
+        opts.postprocess.composer.render(delta);
+      } else {
+        opts.renderer.render(opts.scene, opts.camera);
+      }
+      return (_ref5 = opts.stats) != null ? _ref5.end() : void 0;
     };
     animate();
     return null;

@@ -7,7 +7,7 @@
 CONF =
 	PLAYER:
 		SPEED: 100
-		JUMP_FORCE: 10
+		JUMP_FORCE: 100
 
 	CONTROLS:
 		forward:  [ 87 ] # W
@@ -17,7 +17,8 @@ CONF =
 		jump:     [ 32 ] # Space(?)
 		sunPitchRaise: [ 107 ] # Numpad+
 		sunPitchLower: [ 109 ] # Numpad-
-		togglePhysics: [ 80 ] # P
+		togglePhysics: [ 70 ] # F
+		togglePostProcess: [ 80 ] # P
 		
 	SKYBOX:
 		URLS: [
@@ -35,7 +36,7 @@ CONF =
 		Y: 0
 	
 	PHYSICS:
-		GRAVITY: -10
+		GRAVITY: -100
 		SUBSTEPS: 7
 		DFLT_LIN_DAMPING: 0.7
 		DFLT_ANG_DAMPING: 0.99999

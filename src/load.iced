@@ -87,7 +87,7 @@ asyncLoadOcean = (waternormal_url, renderer, camera, scene, sunlight, cb) ->
 	)	.at(0, CONF.OCEAN.Y, 0)
 		.then('rotateX', -Math.PI / 2.0)
 		.add(water)
-	water.position.z = -1000
+	#water.position.z = -1000
 	cb(water, mirrorMesh)
 
 #asyncLoadMultiMaterial = (urls, cb) ->

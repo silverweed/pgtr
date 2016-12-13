@@ -6,7 +6,7 @@
   SCENE = {
     create: function(opts) {
       var lights, misc, sunlight;
-      sunlight = create('DirectionalLight', 0xffdf80, 12).at(-1000, 600, 1000).then('rotateY', -2).then('rotateZ', 0);
+      sunlight = create('DirectionalLight', CONF.SUN.COLOR, 12).at(-1000, 600, 1000).then('rotateY', -2).then('rotateZ', 0);
       sunlight.gizmo = createModel({
         geometry: create('BoxGeometry', 10, 10, 10),
         material: create('MeshLambertMaterial', {
@@ -14,7 +14,7 @@
           emissive: 0xffff00
         })
       }).at(-50, 50, 50).scaled(3, 3, 3).then('rotateX', sunlight.rotation.x).then('rotateY', sunlight.rotation.y).then('rotateZ', sunlight.rotation.z);
-      lights = [sunlight, create('AmbientLight', 0xffdf80, 3)];
+      lights = [sunlight, create('AmbientLight', CONF.SUN.COLOR, 3)];
       misc = [
         sunlight.gizmo, createModel({
           geometry: create('BoxGeometry', 10, 10, 10),

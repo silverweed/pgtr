@@ -5,7 +5,7 @@
 
   window.createSunlightControls = function(sunlight) {
     return {
-      update: function(_delta) {
+      update: function(delta) {
         var _ref, _ref1;
         if (Input.sunPitchLower) {
           l("pitch lower");
@@ -27,7 +27,7 @@
     };
   };
 
-  window.createTogglePhysicsControls = function(physics) {
+  window.createPhysicsControls = function(physics) {
     return window.addEventListener('keyup', function(e) {
       if (e.keyCode == CONF.CONTROLS.togglePhysics) {
         physics.enabled = !physics.enabled;

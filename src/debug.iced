@@ -18,7 +18,7 @@ window.createSunlightControls = (sunlight) ->
 				sunlight.updateMatrixWorld()
 	}
 
-window.createTogglePhysicsControls = (physics) ->
+window.createPhysicsControls = (physics) ->
 	window.addEventListener('keyup', (e) ->
 		if `e.keyCode == CONF.CONTROLS.togglePhysics`
 			physics.enabled = !physics.enabled

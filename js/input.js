@@ -6,7 +6,7 @@
 
 (function() {
   'use strict';
-  var Input, hdKey;
+  var Input, hdKey, resizeHandler;
 
   Input = {};
 
@@ -25,10 +25,31 @@
     };
   };
 
+  resizeHandler = function(camera, controls, renderer) {
+    return function() {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      return renderer.setSize(window.innerWidth, window.innerHeight);
+    };
+  };
+
+  window.createPostProcessControls = function(world) {
+    return window.addEventListener('keyup', function(e) {
+      if (e.keyCode == CONF.CONTROLS.togglePostProcess) {
+        world.postprocess.enabled = !world.postprocess.enabled;
+        world.renderer.clear();
+      }
+      l("Postprocessing is now " + world.postprocess.enabled);
+      return true;
+    });
+  };
+
   window.addEventListener('keydown', hdKey(true), false);
 
   window.addEventListener('keyup', hdKey(false), false);
 
   window.Input = Input;
+
+  window.resizeHandler = resizeHandler;
 
 }).call(this);

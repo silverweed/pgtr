@@ -19,13 +19,22 @@ createDOM = (children...) ->
 return unless requireWebgl()
 
 l 'Starting program'
-await asyncBuildScene(create('Scene'), defer world)
-# Add stats
+
+await asyncBuildScene(defer world)
+
+# Add stats and debug
 world.stats = createStats()
-world.debug = [createSunlightControls(world.objects.sunlight), createTogglePhysicsControls(world.physics)]
-# Add resize listener
-window.addEventListener('resize', resizeHandler(world.camera, world.controls, world.renderer))
+world.debug = [createSunlightControls(world.objects.sunlight), createPhysicsControls(world.physics)]
+
 # Insert the canvas inside the <div>
 createDOM(world.renderer.domElement, world.stats.domElement)
-world.postprocess = postProcessInit()
+
+# Add postprocessing
+world.postprocess = postProcessInit(world.scene, world.camera, world.renderer)
+
+# Add listeners
+window.addEventListener('resize', resizeHandler(world.camera, world.controls, world.renderer))
+#createPostProcessControls(world)
+
+# Start simulation
 renderLoop(world)

@@ -20,7 +20,9 @@ renderLoop = (opts) ->
 		opts.physics.step(delta, CONF.PHYSICS.SUBSTEPS) if opts.physics.enabled
 		opts.water.render()
 		if opts.postprocess?.enabled
-			postProcessRender(opts.postprocess, opts.renderer, opts.camera, opts.objects.sunlight.position)
+			opts.postprocess.composer.render(delta)
+			#postProcessRender(opts.scene, opts.renderer, opts.camera,
+				#opts.postprocess, opts.objects.sunlight.position)
 		else
 			opts.renderer.render(opts.scene, opts.camera)
 		opts.stats?.end()

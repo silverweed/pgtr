@@ -20,38 +20,33 @@
         value: updatePlayer,
         writable: false,
         enumerable: false
-      },
-      tSinceJump: {
-        value: 2,
-        writable: true,
-        enumerable: false
       }
     });
     return player;
   };
 
   updatePlayer = function(deltaTime) {
-    var fwd, q, right, v;
-    fwd = Input.forward - Input.backward;
+    var f, fwd, p, q, right, _ref, _ref1, _ref2, _ref3;
+    this.canJump = this.position.y < 2.2;
+    fwd = ((_ref = Input.forward) != null ? _ref : 0) - ((_ref1 = Input.backward) != null ? _ref1 : 0);
     if (fwd > 0 || fwd < 0) {
       this.rigidbody.activate();
-      v = new Ammo.btVector3(0, 0, this.speed * fwd);
       q = this.rigidbody.getWorldTransform().getRotation();
-      v.rotate(new Ammo.btVector3(0, 1, 0), q.angle);
-      this.rigidbody.applyCentralForce(new Ammo.btVector3(v.x, v.y, v.z));
+      p = new Ammo.btQuaternion(0, 1, 0, 0);
+      p.setRotation(q.getAxis(), q.getAngle() * 2);
+      f = p.op_mul(this.speed * fwd);
+      this.rigidbody.applyCentralForce(new Ammo.btVector3(f.y(), f.z(), f.w()));
     }
-    right = Input.right - Input.left;
+    right = ((_ref2 = Input.right) != null ? _ref2 : 0) - ((_ref3 = Input.left) != null ? _ref3 : 0);
     if (right > 0 || right < 0) {
       this.rigidbody.activate();
-      this.rigidbody.applyTorque(new Ammo.btVector3(0, this.speed * right, 0));
+      this.rigidbody.applyTorque(new Ammo.btVector3(0, this.speed * -right, 0));
       q = this.rigidbody.getWorldTransform().getRotation();
-      l("rot = " + (q.x()) + ", " + (q.y()) + ", " + (q.z()) + ", " + (q.w()));
     }
-    this.tSinceJump += deltaTime;
-    if (Input.jump && this.tSinceJump > 1) {
+    if (Input.jump && this.canJump) {
       this.rigidbody.activate();
-      this.rigidbody.applyCentralImpulse(new Ammo.btVector3(0, 0, -CONF.PLAYER.JUMP_FORCE));
-      return this.tSinceJump = 0;
+      this.rigidbody.applyCentralImpulse(new Ammo.btVector3(0, CONF.PLAYER.JUMP_FORCE, 0));
+      return this.canJump = false;
     }
   };
 

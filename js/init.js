@@ -78,23 +78,25 @@
   (function(_this) {
     return (function(__iced_k) {
       __iced_deferrals = new iced.Deferrals(__iced_k, {
-        filename: "/home/jacktommy/jack/inf/pgtr/proj/src/init.iced"
+        filename: "/home/jp/jack/inf/pgtr/proj/src/init.iced"
       });
-      asyncBuildScene(create('Scene'), __iced_deferrals.defer({
+      asyncBuildScene(__iced_deferrals.defer({
         assign_fn: (function() {
           return function() {
             return world = arguments[0];
           };
         })(),
-        lineno: 21
+        lineno: 22
       }));
       __iced_deferrals._fulfill();
     });
   })(this)((function(_this) {
     return function() {
       world.stats = createStats();
-      world.debug = [createSunlightControls(world.objects.sunlight), createTogglePhysicsControls(world.physics)];
+      world.debug = [createSunlightControls(world.objects.sunlight), createPhysicsControls(world.physics)];
       createDOM(world.renderer.domElement, world.stats.domElement);
+      world.postprocess = postProcessInit(world.scene, world.camera, world.renderer);
+      window.addEventListener('resize', resizeHandler(world.camera, world.controls, world.renderer));
       return renderLoop(world);
     };
   })(this));
