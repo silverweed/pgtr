@@ -44,6 +44,10 @@ CONF =
 	SUN:
 		COLOR: 0xffdf80
 
+	FOG:
+		COLOR: 0xffdf80
+		DENSITY: 0.0055
+
 Object.freeze(CONF)
 
 

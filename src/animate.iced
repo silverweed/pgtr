@@ -17,6 +17,7 @@ renderLoop = (opts) ->
 		opts.debug?.forEach (e) -> e?.update? && e.update(delta)
 		# Render scene
 		opts.water.material.uniforms.time.value += delta
+		#opts.water.material.uniforms.ripple
 		opts.physics.step(delta, CONF.PHYSICS.SUBSTEPS) if opts.physics.enabled
 		opts.water.render()
 		if opts.postprocess?.enabled

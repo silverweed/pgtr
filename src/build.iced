@@ -12,15 +12,17 @@ addAll = (scene, objects...) ->
 # wrapping it along with its camera, renderer and clock
 asyncBuildScene = (cb) ->
 	scene = create('Scene')
+	scene.fog = create('FogExp2', CONF.FOG.COLOR, CONF.FOG.DENSITY)
 	l "In buildScene(#{scene})"
 
 	camera = create('PerspectiveCamera', 60, windowRatio(), 1, 100000).at(0, 10, -30)
 		.then('rotateY', Math.PI)
 		.then('rotateX', -0.3)
 	# XXX: Currently unused
-	controls = create('FirstPersonControls', camera)
-				.with('movementSpeed', CONF.PLAYER.SPEED)
-				.with('lookSpeed', 0)
+	#controls = create('FirstPersonControls', camera)
+				#.with('movementSpeed', CONF.PLAYER.SPEED)
+				#.with('lookSpeed', 0)
+	controls = create('OrbitControls', camera)
 	renderer = create('WebGLRenderer', antialias: on)
 				.then('setSize', window.innerWidth, window.innerHeight)
 				.then('setPixelRatio', window.devicePixelRatio)
