@@ -6,7 +6,7 @@
 
 (function() {
   'use strict';
-  var asyncLoadGeometry, asyncLoadOcean, asyncLoadSkybox, asyncLoadTexture, asyncLoadTexturesAndModels, cache, iced, modpath, texpath, __iced_k, __iced_k_noop,
+  var asyncLoadGeometry, asyncLoadOcean, asyncLoadPlayerPlane, asyncLoadSkybox, asyncLoadTexture, asyncLoadTexturesAndModels, cache, iced, modpath, texpath, __iced_k, __iced_k_noop,
     __slice = [].slice,
     __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
@@ -76,7 +76,7 @@
           (function(__iced_k) {
             __iced_deferrals = new iced.Deferrals(__iced_k, {
               parent: ___iced_passed_deferral,
-              filename: "/home/jp/jack/inf/pgtr/proj/src/load.iced"
+              filename: "/home/jacktommy/jack/inf/pgtr/proj/src/load.iced"
             });
             create('TextureLoader').load(texpath(name), __iced_deferrals.defer({
               assign_fn: (function() {
@@ -112,7 +112,7 @@
           (function(__iced_k) {
             __iced_deferrals = new iced.Deferrals(__iced_k, {
               parent: ___iced_passed_deferral,
-              filename: "/home/jp/jack/inf/pgtr/proj/src/load.iced"
+              filename: "/home/jacktommy/jack/inf/pgtr/proj/src/load.iced"
             });
             create('JSONLoader').load(modpath(name), __iced_deferrals.defer({
               assign_fn: (function() {
@@ -149,7 +149,7 @@
         var _i, _j, _len, _len1;
         __iced_deferrals = new iced.Deferrals(__iced_k, {
           parent: ___iced_passed_deferral,
-          filename: "/home/jp/jack/inf/pgtr/proj/src/load.iced"
+          filename: "/home/jacktommy/jack/inf/pgtr/proj/src/load.iced"
         });
         for (_i = 0, _len = textures.length; _i < _len; _i++) {
           texname = textures[_i];
@@ -192,7 +192,7 @@
       return (function(__iced_k) {
         __iced_deferrals = new iced.Deferrals(__iced_k, {
           parent: ___iced_passed_deferral,
-          filename: "/home/jp/jack/inf/pgtr/proj/src/load.iced"
+          filename: "/home/jacktommy/jack/inf/pgtr/proj/src/load.iced"
         });
         create('CubeTextureLoader').load(urls, __iced_deferrals.defer({
           assign_fn: (function() {
@@ -229,7 +229,7 @@
       return (function(__iced_k) {
         __iced_deferrals = new iced.Deferrals(__iced_k, {
           parent: ___iced_passed_deferral,
-          filename: "/home/jp/jack/inf/pgtr/proj/src/load.iced"
+          filename: "/home/jacktommy/jack/inf/pgtr/proj/src/load.iced"
         });
         create('TextureLoader').load(waternormal_url, __iced_deferrals.defer({
           assign_fn: (function() {
@@ -260,6 +260,45 @@
     })(this));
   };
 
+  asyncLoadPlayerPlane = function(waternormal_url, renderer, camera, scene, sunlight, cb) {
+    var mirrorMesh, water, waternormal, ___iced_passed_deferral, __iced_deferrals, __iced_k;
+    __iced_k = __iced_k_noop;
+    ___iced_passed_deferral = iced.findDeferral(arguments);
+    (function(_this) {
+      return (function(__iced_k) {
+        __iced_deferrals = new iced.Deferrals(__iced_k, {
+          parent: ___iced_passed_deferral,
+          filename: "/home/jacktommy/jack/inf/pgtr/proj/src/load.iced"
+        });
+        create('TextureLoader').load(waternormal_url, __iced_deferrals.defer({
+          assign_fn: (function() {
+            return function() {
+              return waternormal = arguments[0];
+            };
+          })(),
+          lineno: 93
+        }));
+        __iced_deferrals._fulfill();
+      });
+    })(this)((function(_this) {
+      return function() {
+        waternormal.wrapS = waternormal.wrapT = THREE.RepeatWrapping;
+        water = create('WaterRippled', renderer, camera, scene, {
+          textureWidth: 512,
+          textureHeight: 512,
+          waterNormals: waternormal,
+          alpha: 1.0,
+          sunDirection: sunlight.position.clone().normalize(),
+          sunColor: sunlight.color.getHex(),
+          waterColor: 0x535b23,
+          distortionScale: 50.0
+        });
+        mirrorMesh = create('Mesh', create('PlaneBufferGeometry', 300, 300, 1000, 1000), water.material).at(0, CONF.OCEAN.Y - 1, 0).then('rotateX', -Math.PI / 2.0).add(water);
+        return cb(water, mirrorMesh);
+      };
+    })(this));
+  };
+
   window.cache = cache;
 
   window.asyncLoadTexturesAndModels = asyncLoadTexturesAndModels;
@@ -267,5 +306,7 @@
   window.asyncLoadSkybox = asyncLoadSkybox;
 
   window.asyncLoadOcean = asyncLoadOcean;
+
+  window.asyncLoadPlayerPlane = asyncLoadPlayerPlane;
 
 }).call(this);

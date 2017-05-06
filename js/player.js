@@ -26,7 +26,7 @@
   };
 
   updatePlayer = function(deltaTime) {
-    var f, fwd, p, q, right, _ref, _ref1, _ref2, _ref3;
+    var f, fwd, p, q, right, _ref, _ref1, _ref2, _ref3, _ref4;
     this.canJump = this.position.y < 2.2;
     fwd = ((_ref = Input.forward) != null ? _ref : 0) - ((_ref1 = Input.backward) != null ? _ref1 : 0);
     if (fwd > 0 || fwd < 0) {
@@ -46,8 +46,9 @@
     if (Input.jump && this.canJump) {
       this.rigidbody.activate();
       this.rigidbody.applyCentralImpulse(new Ammo.btVector3(0, CONF.PLAYER.JUMP_FORCE, 0));
-      return this.canJump = false;
+      this.canJump = false;
     }
+    return (_ref4 = this.plane) != null ? _ref4.position.set(this.position.x, this.plane.position.y, this.position.z) : void 0;
   };
 
   window.createPlayer = createPlayer;

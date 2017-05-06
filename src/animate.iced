@@ -19,7 +19,7 @@ renderLoop = (world) ->
 		# Render scene
 		world.water.material.uniforms.time.value += delta
 		player.plane.material.uniforms.time.value += delta
-		player.plane.material.uniforms.playerPos.value = player.position
+		updateRipples(player, delta)
 		#world.water.material.uniforms.ripple
 		world.physics.step(delta, CONF.PHYSICS.SUBSTEPS) if world.physics.enabled
 		world.water.render()
@@ -33,6 +33,13 @@ renderLoop = (world) ->
 	animate()
 	null
 
+updateRipplesTimer = 0
+updateRipples = (player, delta) ->
+	updateRipplesTimer += delta
+	player.planeWater.tickRippleTimes(delta)
+	if updateRipplesTimer > CONF.OCEAN.RIPPLES.UPDATE_DELAY
+		updateRipplesTimer = 0
+		player.planeWater.pushRippleSrc(player.position)
 
 ## Exports
 window.renderLoop = renderLoop

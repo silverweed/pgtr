@@ -13,6 +13,9 @@
     var constr, obj, objname, opts;
     objname = arguments[0], opts = 2 <= arguments.length ? __slice.call(arguments, 1) : [];
     constr = THREE[objname];
+    if (constr == null) {
+      console.error("" + objname + " is undefined!");
+    }
     constr.prototype || (constr.prototype = {});
     constr.prototype.at = function() {
       var args, _ref;

@@ -30,7 +30,11 @@
     },
     OCEAN: {
       URL: 'textures/waternormals.jpg',
-      Y: 0
+      Y: 0,
+      RIPPLES: {
+        UPDATE_DELAY: 0.1,
+        LIFETIME: 3
+      }
     },
     PHYSICS: {
       GRAVITY: -100,
@@ -40,6 +44,10 @@
     },
     SUN: {
       COLOR: 0xffdf80
+    },
+    FOG: {
+      COLOR: 0xffdf80,
+      DENSITY: 0.0055
     }
   };
 

@@ -62,13 +62,14 @@
   };
 
   asyncBuildScene = function(cb) {
-    var camera, controls, cubemap, entities, models, objects, ocean, physics, renderer, scene, sky, textures, water, ___iced_passed_deferral, __iced_deferrals, __iced_k;
+    var camera, controls, cubemap, entities, models, objects, ocean, pPlane, pPlaneWater, physics, renderer, scene, sky, textures, water, ___iced_passed_deferral, __iced_deferrals, __iced_k;
     __iced_k = __iced_k_noop;
     ___iced_passed_deferral = iced.findDeferral(arguments);
     scene = create('Scene');
+    scene.fog = create('FogExp2', CONF.FOG.COLOR, CONF.FOG.DENSITY);
     l("In buildScene(" + scene + ")");
     camera = create('PerspectiveCamera', 60, windowRatio(), 1, 100000).at(0, 10, -30).then('rotateY', Math.PI).then('rotateX', -0.3);
-    controls = create('FirstPersonControls', camera)["with"]('movementSpeed', CONF.PLAYER.SPEED)["with"]('lookSpeed', 0);
+    controls = create('OrbitControls', camera);
     renderer = create('WebGLRenderer', {
       antialias: true
     }).then('setSize', window.innerWidth, window.innerHeight).then('setPixelRatio', window.devicePixelRatio);
@@ -76,7 +77,7 @@
       return (function(__iced_k) {
         __iced_deferrals = new iced.Deferrals(__iced_k, {
           parent: ___iced_passed_deferral,
-          filename: "/home/jp/jack/inf/pgtr/proj/src/build.iced"
+          filename: "/home/jacktommy/jack/inf/pgtr/proj/src/build.iced"
         });
         asyncLoadTexturesAndModels(['shark', 'white', 'black'], ['shark'], __iced_deferrals.defer({
           assign_fn: (function() {
@@ -85,7 +86,7 @@
               return models = arguments[1];
             };
           })(),
-          lineno: 28
+          lineno: 30
         }));
         asyncLoadSkybox(CONF.SKYBOX.URLS, CONF.SKYBOX.SIZE, __iced_deferrals.defer({
           assign_fn: (function() {
@@ -94,7 +95,7 @@
               return cubemap = arguments[1];
             };
           })(),
-          lineno: 29
+          lineno: 31
         }));
         __iced_deferrals._fulfill();
       });
@@ -106,7 +107,7 @@
         (function(__iced_k) {
           __iced_deferrals = new iced.Deferrals(__iced_k, {
             parent: ___iced_passed_deferral,
-            filename: "/home/jp/jack/inf/pgtr/proj/src/build.iced"
+            filename: "/home/jacktommy/jack/inf/pgtr/proj/src/build.iced"
           });
           asyncLoadOcean(CONF.OCEAN.URL, renderer, camera, scene, objects.sunlight, __iced_deferrals.defer({
             assign_fn: (function() {
@@ -115,7 +116,16 @@
                 return ocean = arguments[1];
               };
             })(),
-            lineno: 33
+            lineno: 36
+          }));
+          asyncLoadPlayerPlane(CONF.OCEAN.URL, renderer, camera, scene, objects.sunlight, __iced_deferrals.defer({
+            assign_fn: (function() {
+              return function() {
+                pPlaneWater = arguments[0];
+                return pPlane = arguments[1];
+              };
+            })(),
+            lineno: 37
           }));
           __iced_deferrals._fulfill();
         })(function() {
@@ -132,9 +142,11 @@
             })
           }).at(-20, 5, 0).scaled(3)));
           entities.player().add(camera);
+          entities.player().plane = pPlane;
+          entities.player().planeWater = pPlaneWater;
           physics = new Physics();
           physics.createGround().addRigidBody(entities.player());
-          addAll.apply(null, [scene, sky, ocean, entities.player()].concat(__slice.call(objects.objects)));
+          addAll.apply(null, [scene, sky, ocean, entities.player(), pPlane].concat(__slice.call(objects.objects)));
           return cb({
             scene: scene,
             water: water,

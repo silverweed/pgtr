@@ -6,41 +6,47 @@
 
 (function() {
   'use strict';
-  var renderLoop;
+  var renderLoop, updateRipples, updateRipplesTimer;
 
-  renderLoop = function(opts) {
-    var animate;
+  renderLoop = function(world) {
+    var animate, player;
+    player = world.entities.player();
     animate = function() {
-      var delta, _ref, _ref1, _ref2, _ref3, _ref4, _ref5;
-      if ((_ref = opts.stats) != null) {
-        _ref.begin();
-      }
+      var delta, _ref;
+      world.stats.begin();
       requestAnimationFrame(animate);
-      delta = opts.clock.getDelta();
-      if ((_ref1 = opts.entities) != null) {
-        if ((_ref2 = _ref1.player()) != null) {
-          _ref2.update(delta);
-        }
+      delta = world.clock.getDelta();
+      player.update(delta);
+      world.debug.forEach(function(e) {
+        return ((e != null ? e.update : void 0) != null) && e.update(delta);
+      });
+      world.water.material.uniforms.time.value += delta;
+      player.plane.material.uniforms.time.value += delta;
+      updateRipples(player, delta);
+      if (world.physics.enabled) {
+        world.physics.step(delta, CONF.PHYSICS.SUBSTEPS);
       }
-      if ((_ref3 = opts.debug) != null) {
-        _ref3.forEach(function(e) {
-          return ((e != null ? e.update : void 0) != null) && e.update(delta);
-        });
-      }
-      opts.water.material.uniforms.time.value += delta;
-      if (opts.physics.enabled) {
-        opts.physics.step(delta, CONF.PHYSICS.SUBSTEPS);
-      }
-      opts.water.render();
-      if ((_ref4 = opts.postprocess) != null ? _ref4.enabled : void 0) {
-        opts.postprocess.composer.render(delta);
+      world.water.render();
+      if ((_ref = world.postprocess) != null ? _ref.enabled : void 0) {
+        world.postprocess.composer.render(delta);
       } else {
-        opts.renderer.render(opts.scene, opts.camera);
+        world.renderer.render(world.scene, world.camera);
       }
-      return (_ref5 = opts.stats) != null ? _ref5.end() : void 0;
+      return world.stats.end();
     };
     animate();
     return null;
+  };
+
+  updateRipplesTimer = 0;
+
+  updateRipples = function(player, delta) {
+    updateRipplesTimer += delta;
+    player.planeWater.tickRippleTimes(delta);
+    if (updateRipplesTimer > CONF.OCEAN.RIPPLES.UPDATE_DELAY) {
+      updateRipplesTimer = 0;
+      return player.planeWater.pushRippleSrc(player.position);
+    }
   };
 
   window.renderLoop = renderLoop;

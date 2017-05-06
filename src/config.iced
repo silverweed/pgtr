@@ -34,6 +34,9 @@ CONF =
 	OCEAN:
 		URL: 'textures/waternormals.jpg'
 		Y: 0
+		RIPPLES:
+			UPDATE_DELAY: 0.1
+			LIFETIME: 3
 	
 	PHYSICS:
 		GRAVITY: -100

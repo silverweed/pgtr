@@ -55,6 +55,7 @@ asyncBuildScene = (cb) ->
 	))
 	entities.player().add(camera)
 	entities.player().plane = pPlane
+	entities.player().planeWater = pPlaneWater
 
 	physics = new Physics()
 	physics	.createGround()
