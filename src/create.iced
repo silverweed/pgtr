@@ -6,6 +6,7 @@
 
 create = (objname, opts...) ->
 	constr = THREE[objname]
+	console.error("#{objname} is undefined!") unless constr?
 	# Inject some utility methods
 	constr.prototype ||= {}
 	# Sets the position of this object and returns self

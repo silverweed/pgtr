@@ -33,7 +33,9 @@ asyncBuildScene = (cb) ->
 		#asyncLoadMultiMaterial(['white', 'black', 'black', 'black', 'black', 'black'], defer(cubemat))
 
 	objects = SCENE.create(envMap: cubemap)
-	await asyncLoadOcean(CONF.OCEAN.URL, renderer, camera, scene, objects.sunlight, defer(water, ocean))
+	await
+		asyncLoadOcean(CONF.OCEAN.URL, renderer, camera, scene, objects.sunlight, defer(water, ocean))
+		asyncLoadPlayerPlane(CONF.OCEAN.URL, renderer, camera, scene, objects.sunlight, defer(pPlaneWater, pPlane))
 
 	entities = Entities.new(scene)
 
@@ -52,13 +54,14 @@ asyncBuildScene = (cb) ->
 		).at(-20, 5, 0).scaled(3)
 	))
 	entities.player().add(camera)
+	entities.player().plane = pPlane
 
 	physics = new Physics()
 	physics	.createGround()
 		.addRigidBody(entities.player())
 
 	# Add the objects
-	addAll(scene, sky, ocean, entities.player(), objects.objects...)
+	addAll(scene, sky, ocean, entities.player(), pPlane, objects.objects...)
 	cb(
 		scene: scene
 		water: water

@@ -4,29 +4,32 @@
 
 'use strict'
 
-renderLoop = (opts) ->
+renderLoop = (world) ->
+	player = world.entities.player()
 	animate = ->
-		opts.stats?.begin()
+		world.stats.begin()
 		requestAnimationFrame(animate)
-		delta = opts.clock.getDelta()
+		delta = world.clock.getDelta()
 		# Update player
-		#opts.controls?.update(delta)
-		opts.entities?.player()?.update(delta)
-		#opts.camera.lookAt(opts.entities.player().position)
+		#world.controls?.update(delta)
+		player.update(delta)
+		#world.camera.lookAt(world.entities.player().position)
 		# Update debug input
-		opts.debug?.forEach (e) -> e?.update? && e.update(delta)
+		world.debug.forEach (e) -> e?.update? && e.update(delta)
 		# Render scene
-		opts.water.material.uniforms.time.value += delta
-		#opts.water.material.uniforms.ripple
-		opts.physics.step(delta, CONF.PHYSICS.SUBSTEPS) if opts.physics.enabled
-		opts.water.render()
-		if opts.postprocess?.enabled
-			opts.postprocess.composer.render(delta)
-			#postProcessRender(opts.scene, opts.renderer, opts.camera,
-				#opts.postprocess, opts.objects.sunlight.position)
+		world.water.material.uniforms.time.value += delta
+		player.plane.material.uniforms.time.value += delta
+		player.plane.material.uniforms.playerPos.value = player.position
+		#world.water.material.uniforms.ripple
+		world.physics.step(delta, CONF.PHYSICS.SUBSTEPS) if world.physics.enabled
+		world.water.render()
+		if world.postprocess?.enabled
+			world.postprocess.composer.render(delta)
+			#postProcessRender(world.scene, world.renderer, world.camera,
+				#world.postprocess, world.objects.sunlight.position)
 		else
-			opts.renderer.render(opts.scene, opts.camera)
-		opts.stats?.end()
+			world.renderer.render(world.scene, world.camera)
+		world.stats.end()
 	animate()
 	null
 

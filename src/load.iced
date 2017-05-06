@@ -90,6 +90,33 @@ asyncLoadOcean = (waternormal_url, renderer, camera, scene, sunlight, cb) ->
 	#water.position.z = -1000
 	cb(water, mirrorMesh)
 
+asyncLoadPlayerPlane = (waternormal_url, renderer, camera, scene, sunlight, cb) -> 
+	await create('TextureLoader').load(waternormal_url, defer waternormal)
+	waternormal.wrapS = waternormal.wrapT = THREE.RepeatWrapping
+	water = create('WaterRippled', renderer, camera, scene,
+		textureWidth: 512
+		textureHeight: 512
+		waterNormals: waternormal
+		alpha: 1.0
+		sunDirection: sunlight.position.clone().normalize()
+		sunColor: sunlight.color.getHex()
+		waterColor: 0x535b23 #0x001e0f 
+		distortionScale: 50.0
+	)
+	mirrorMesh = create('Mesh'
+		create('PlaneBufferGeometry'
+			300
+			300
+			1000
+			1000
+		)
+		water.material
+	)	.at(0, CONF.OCEAN.Y - 1, 0)
+		.then('rotateX', -Math.PI / 2.0)
+		.add(water)
+	#water.position.z = -1000
+	cb(water, mirrorMesh)
+
 #asyncLoadMultiMaterial = (urls, cb) ->
 	#loader = create('TextureLoader')
 	#materials = []
@@ -111,4 +138,5 @@ window.cache = cache
 window.asyncLoadTexturesAndModels = asyncLoadTexturesAndModels
 window.asyncLoadSkybox = asyncLoadSkybox
 window.asyncLoadOcean = asyncLoadOcean
+window.asyncLoadPlayerPlane = asyncLoadPlayerPlane
 #window.asyncLoadMultiMaterial = asyncLoadMultiMaterial

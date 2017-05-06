@@ -40,5 +40,7 @@ updatePlayer = (deltaTime) ->
 		@rigidbody.applyCentralImpulse(new Ammo.btVector3(0, CONF.PLAYER.JUMP_FORCE, 0))
 		@canJump = false
 
+	@plane?.position.set(@position.x, @plane.position.y, @position.z)
+
 ## Exports
 window.createPlayer = createPlayer
