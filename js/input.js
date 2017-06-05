@@ -17,7 +17,6 @@
       for (key in _ref) {
         val = _ref[key];
         if (e.keyCode == val) {
-          l("setting Input[" + key + "]");
           Input[key] = down;
           return;
         }

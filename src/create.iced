@@ -14,15 +14,19 @@ create = (objname, opts...) ->
 		@position.set(args...)
 		this
 	# Sets the scale of this object and returns self
-	constr.prototype.scaled = (scale) ->
-		@scale.set(scale, scale, scale)
+	constr.prototype.scaled = (scale...) ->
+		if scale.length is 1
+			scale = scale[0]
+			@scale.set(scale, scale, scale)
+		else
+			@scale.set(scale...)
 		this
 	# Calls a method of this object and returns self
 	constr.prototype.then = (name, args...) ->
 		this[name](args...)
 		this
 	constr.prototype.with = (attr, val) ->
-		this[name] = val
+		this[attr] = val
 		this
 	obj = new constr(opts...)
 	l "Created #{objname} with params #{opts}"
@@ -31,7 +35,9 @@ create = (objname, opts...) ->
 
 # Create a model with class 'Object3D', adding a mesh with the given material and geometry
 createModel = (material: material, geometry: geometry) ->
-	create('Object3D').add(create('Mesh', geometry, material))
+	model = create('Object3D')
+	model.add(create('Mesh', geometry, material))
+	model
 
 
 ## Exports

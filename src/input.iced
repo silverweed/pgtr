@@ -13,7 +13,6 @@ hdKey = (down) ->
 	(e) ->
 		for key, val of CONF.CONTROLS
 			if `e.keyCode == val`
-				l "setting Input[#{key}]"
 				Input[key] = down
 				return
 

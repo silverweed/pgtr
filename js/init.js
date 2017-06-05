@@ -75,7 +75,7 @@
       return (function(__iced_k) {
         __iced_deferrals = new iced.Deferrals(__iced_k, {
           parent: ___iced_passed_deferral,
-          filename: "/home/jacktommy/jack/inf/pgtr/proj/src/init.iced"
+          filename: "/home/jp/jack/inf/pgtr/proj/src/init.iced"
         });
         asyncBuildScene(__iced_deferrals.defer({
           assign_fn: (function() {

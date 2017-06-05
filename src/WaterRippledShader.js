@@ -1,7 +1,8 @@
 /**
- * @author jbouny / https://github.com/jbouny
+ * @author Giacomo Parolini
  *
  * Work based on :
+ * @author jbouny / https://github.com/jbouny
  * @author Slayvin / http://slayvin.net : Flat mirror for three.js
  * @author Stemkoski / http://www.adelphi.edu/~stemkoski : An implementation of water shader based on the flat mirror
  * @author Jonas Wagner / http://29a.ch/ && http://29a.ch/slides/2012/webglwater/ : Water shader explanations in WebGL

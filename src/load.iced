@@ -14,7 +14,7 @@ modpath = (basename) -> "models/#{basename}.json"
 # Asynchronously load a texture, cache it and return the object that will contain it
 asyncLoadTexture = (name, cb) ->
 	unless name in cache.textures
-		l "Loading texture #{texpath name}"
+		l "Loading texture #{texpath(name)}"
 		await create('TextureLoader').load(texpath(name), defer tex)
 		cache.textures[name] = tex
 	cb(cache.textures[name])
@@ -90,7 +90,7 @@ asyncLoadOcean = (waternormal_url, renderer, camera, scene, sunlight, cb) ->
 	#water.position.z = -1000
 	cb(water, mirrorMesh)
 
-asyncLoadPlayerPlane = (waternormal_url, renderer, camera, scene, sunlight, cb) -> 
+asyncLoadPlayerPlane = (waternormal_url, renderer, camera, scene, sunlight, cb) ->
 	await create('TextureLoader').load(waternormal_url, defer waternormal)
 	waternormal.wrapS = waternormal.wrapT = THREE.RepeatWrapping
 	water = create('WaterRippled', renderer, camera, scene,
@@ -100,7 +100,7 @@ asyncLoadPlayerPlane = (waternormal_url, renderer, camera, scene, sunlight, cb) 
 		alpha: 1.0
 		sunDirection: sunlight.position.clone().normalize()
 		sunColor: sunlight.color.getHex()
-		waterColor: 0x535b23 #0x001e0f 
+		waterColor: 0x535b23 #0x001e0f
 		distortionScale: 50.0
 	)
 	mirrorMesh = create('Mesh'

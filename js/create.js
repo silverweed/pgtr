@@ -23,8 +23,15 @@
       (_ref = this.position).set.apply(_ref, args);
       return this;
     };
-    constr.prototype.scaled = function(scale) {
-      this.scale.set(scale, scale, scale);
+    constr.prototype.scaled = function() {
+      var scale, _ref;
+      scale = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+      if (scale.length === 1) {
+        scale = scale[0];
+        this.scale.set(scale, scale, scale);
+      } else {
+        (_ref = this.scale).set.apply(_ref, scale);
+      }
       return this;
     };
     constr.prototype.then = function() {
@@ -34,7 +41,7 @@
       return this;
     };
     constr.prototype["with"] = function(attr, val) {
-      this[name] = val;
+      this[attr] = val;
       return this;
     };
     obj = (function(func, args, ctor) {
@@ -47,9 +54,11 @@
   };
 
   createModel = function(_arg) {
-    var geometry, material;
+    var geometry, material, model;
     material = _arg.material, geometry = _arg.geometry;
-    return create('Object3D').add(create('Mesh', geometry, material));
+    model = create('Object3D');
+    model.add(create('Mesh', geometry, material));
+    return model;
   };
 
   window.create = create;

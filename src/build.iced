@@ -4,8 +4,11 @@
 
 'use strict'
 
-addAll = (scene, objects...) ->
-	scene.add(obj) for obj in objects
+addAll = (scene, physics, objects...) ->
+	for obj in objects
+		scene.add(obj)
+		console.log "physics #{obj.physics}"
+		physics.addRigidBody(obj, obj.physicsOpts) if obj.physics
 	null
 
 # Creates an empty Scene, fills it with the content and returns an object
@@ -29,40 +32,29 @@ asyncBuildScene = (cb) ->
 
 	await
 		asyncLoadTexturesAndModels(['shark', 'white', 'black'], ['shark'], defer(textures, models))
-		asyncLoadSkybox(CONF.SKYBOX.URLS, CONF.SKYBOX.SIZE, defer sky, cubemap)
+		asyncLoadSkybox(CONF.SKYBOX.URLS, CONF.SKYBOX.SIZE, defer(sky, cubemap))
 		#asyncLoadMultiMaterial(['white', 'black', 'black', 'black', 'black', 'black'], defer(cubemat))
 
 	objects = SCENE.create(envMap: cubemap)
+	for o in objects.objects
+		l "#{o}: physics #{o.physics}"
 	await
 		asyncLoadOcean(CONF.OCEAN.URL, renderer, camera, scene, objects.sunlight, defer(water, ocean))
 		asyncLoadPlayerPlane(CONF.OCEAN.URL, renderer, camera, scene, objects.sunlight, defer(pPlaneWater, pPlane))
 
 	entities = Entities.new(scene)
 
-	# Create the player
-	entities.add('player', createPlayer(
-		createModel(
-			geometry: models.shark
-			material: create('MeshPhongMaterial',
-				shininess: 20
-				reflectivity: 0.4
-				color: 0x222222
-				specular: 0x111111
-				map: textures.shark
-				envMap: cubemap
-			)
-		).at(-20, 5, 0).scaled(3)
-	))
-	entities.player().add(camera)
-	entities.player().plane = pPlane
-	entities.player().planeWater = pPlaneWater
+	player = objects.player
+	player.add(camera)
+	player.plane = pPlane
+	player.planeWater = pPlaneWater
+	entities.add('player', player)
 
 	physics = new Physics()
-	physics	.createGround()
-		.addRigidBody(entities.player())
+	physics.createGround()
 
 	# Add the objects
-	addAll(scene, sky, ocean, entities.player(), pPlane, objects.objects...)
+	addAll(scene, physics, sky, ocean, entities.player(), pPlane, objects.objects...)
 	cb(
 		scene: scene
 		water: water

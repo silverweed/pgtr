@@ -6,7 +6,8 @@
 
 (function() {
   'use strict';
-  var Physics;
+  var Physics,
+    __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
   Physics = (function() {
     function Physics() {
@@ -32,19 +33,38 @@
 
     Physics.prototype.addRigidBody = function(threeObj, opts) {
       var inertia, mass, motionState, pos, rb, rbCI, shape, _ref;
-      shape = new Ammo.btSphereShape(threeObj.scale.x);
+      shape = (function() {
+        switch (opts != null ? opts.collisionShape : void 0) {
+          case 'btBoxShape':
+            return new Ammo.btBoxShape(new Ammo.btVector3(threeObj.scale.x / 2, threeObj.scale.y / 2, threeObj.scale.z / 2));
+          case 'btSphereShape':
+          case void 0:
+            return new Ammo.btSphereShape(threeObj.scale.x);
+          default:
+            return new Ammo[opts.collisionShape](opts.collisionShapeArgs);
+        }
+      })();
       pos = threeObj.position;
       motionState = new Ammo.btDefaultMotionState(new Ammo.btTransform(new Ammo.btQuaternion(0, 0, 0, 1), new Ammo.btVector3(pos.x, pos.y, pos.z)));
-      mass = (_ref = opts != null ? opts.mass : void 0) != null ? _ref : 1;
+      mass = (opts != null ? opts["static"] : void 0) ? 0 : (_ref = opts != null ? opts.mass : void 0) != null ? _ref : 1;
       inertia = new Ammo.btVector3(0, 0, 0);
       shape.calculateLocalInertia(mass, inertia);
       rbCI = new Ammo.btRigidBodyConstructionInfo(mass, motionState, shape, inertia);
       rb = new Ammo.btRigidBody(rbCI);
-      rb.setDamping(CONF.PHYSICS.DFLT_LIN_DAMPING, CONF.PHYSICS.DFLT_ANG_DAMPING);
-      rb.setAngularFactor(new Ammo.btVector3(0, 1, 0));
+      if (opts != null ? opts["static"] : void 0) {
+        l("static. set " + Ammo.CF_STATIC_OBJECT + ". Mass is " + mass);
+        rb.setCollisionFlags(Ammo.CF_STATIC_OBJECT);
+      } else {
+        l("dynamic. Mass is " + mass);
+        rb.setDamping(CONF.PHYSICS.DFLT_LIN_DAMP, CONF.PHYSICS.DFLT_ANG_DAMP);
+        if ((opts != null ? opts.lockedAxes : void 0) != null) {
+          rb.setAngularFactor(new Ammo.btVector3(__indexOf.call(opts.lockedAxes, 'x') >= 0 ? 0 : 1, __indexOf.call(opts.lockedAxes, 'y') >= 0 ? 0 : 1, __indexOf.call(opts.lockedAxes, 'z') >= 0 ? 0 : 1));
+        }
+      }
       threeObj.rigidbody = rb;
       this.dynamicsWorld.addRigidBody(rb);
       this.bodies.push([rb, threeObj]);
+      l("Adding " + threeObj + " to physics world. Phys world size = " + this.bodies.length);
       return this;
     };
 
