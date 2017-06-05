@@ -16,6 +16,9 @@
       world.stats.begin();
       requestAnimationFrame(animate);
       delta = world.clock.getDelta();
+      if (delta > 1 / 10.0) {
+        delta = 1 / 30.0;
+      }
       player.update(delta);
       world.debug.forEach(function(e) {
         return ((e != null ? e.update : void 0) != null) && e.update(delta);
@@ -23,8 +26,9 @@
       world.water.material.uniforms.time.value += delta;
       player.plane.material.uniforms.time.value += delta;
       updateRipples(player, delta);
+      world.updateBuoyancy(delta);
       if (world.physics.enabled) {
-        world.physics.step(delta, CONF.PHYSICS.SUBSTEPS);
+        world.physics.step(delta, CONF.PHYSICS.SUBSTEPS, CONF.PHYSICS.FIXED_TIME_STEP);
       }
       world.water.render();
       if ((_ref = world.postprocess) != null ? _ref.enabled : void 0) {

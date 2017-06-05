@@ -4,10 +4,10 @@
 
 'use strict'
 
-addAll = (scene, physics, objects...) ->
+addAll = (scene, entities, physics, objects) ->
 	for obj in objects
 		scene.add(obj)
-		console.log "physics #{obj.physics}"
+		entities.add(obj.name, obj)
 		physics.addRigidBody(obj, obj.physicsOpts) if obj.physics
 	null
 
@@ -36,8 +36,6 @@ asyncBuildScene = (cb) ->
 		#asyncLoadMultiMaterial(['white', 'black', 'black', 'black', 'black', 'black'], defer(cubemat))
 
 	objects = SCENE.create(envMap: cubemap)
-	for o in objects.objects
-		l "#{o}: physics #{o.physics}"
 	await
 		asyncLoadOcean(CONF.OCEAN.URL, renderer, camera, scene, objects.sunlight, defer(water, ocean))
 		asyncLoadPlayerPlane(CONF.OCEAN.URL, renderer, camera, scene, objects.sunlight, defer(pPlaneWater, pPlane))
@@ -45,16 +43,16 @@ asyncBuildScene = (cb) ->
 	entities = Entities.new(scene)
 
 	player = objects.player
+	l "player name = #{player.name}"
 	player.add(camera)
 	player.plane = pPlane
 	player.planeWater = pPlaneWater
-	entities.add('player', player)
 
 	physics = new Physics()
-	physics.createGround()
+	#physics.createGround()
 
 	# Add the objects
-	addAll(scene, physics, sky, ocean, entities.player(), pPlane, objects.objects...)
+	addAll(scene, entities, physics, [sky, ocean, pPlane, player, objects.objects...])
 	cb(
 		scene: scene
 		water: water

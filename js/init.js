@@ -94,6 +94,27 @@
         world.debug = [createSunlightControls(world.objects.sunlight), createPhysicsControls(world.physics)];
         createDOM(world.renderer.domElement, world.stats.domElement);
         window.addEventListener('resize', resizeHandler(world.camera, world.controls, world.renderer));
+        world.updateBuoyancy = function(delta) {
+          var depth, name, obj, x, _ref, _ref1, _ref2, _results;
+          x = 0;
+          _ref = world.entities.entities;
+          _results = [];
+          for (name in _ref) {
+            obj = _ref[name];
+            if (!((obj.rigidbody != null) && obj.buoyant)) {
+              continue;
+            }
+            depth = CONF.PHYSICS.BUOYANCY_WATER_LEVEL - obj.position.y;
+            x++;
+            if (depth > 0) {
+              obj.rigidbody.activate();
+              _results.push(obj.rigidbody.applyCentralForce(new Ammo.btVector3(0, Math.pow(depth, 1.8) * ((_ref1 = (_ref2 = obj.physicsOpts) != null ? _ref2.mass : void 0) != null ? _ref1 : 1) * delta * CONF.PHYSICS.BUOYANCY, 0)));
+            } else {
+              _results.push(void 0);
+            }
+          }
+          return _results;
+        };
         return renderLoop(world);
       };
     })(this));

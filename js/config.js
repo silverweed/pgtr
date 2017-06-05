@@ -11,7 +11,7 @@
   CONF = {
     PLAYER: {
       SPEED: 100,
-      JUMP_FORCE: 100
+      JUMP_FORCE: 50
     },
     CONTROLS: {
       forward: [87],
@@ -37,10 +37,13 @@
       }
     },
     PHYSICS: {
+      FIXED_TIME_STEP: 1 / 60.0,
       GRAVITY: -100,
       SUBSTEPS: 7,
       DFLT_LIN_DAMP: 0.7,
-      DFLT_ANG_DAMP: 0.99999
+      DFLT_ANG_DAMP: 0.99999,
+      BUOYANCY: 10,
+      BUOYANCY_WATER_LEVEL: 25
     },
     SUN: {
       COLOR: 0xffdf80

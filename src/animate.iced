@@ -10,6 +10,8 @@ renderLoop = (world) ->
 		world.stats.begin()
 		requestAnimationFrame(animate)
 		delta = world.clock.getDelta()
+		if delta > 1/10.0
+			delta = 1/30.0
 		# Update player
 		#world.controls?.update(delta)
 		player.update(delta)
@@ -20,8 +22,8 @@ renderLoop = (world) ->
 		world.water.material.uniforms.time.value += delta
 		player.plane.material.uniforms.time.value += delta
 		updateRipples(player, delta)
-		#world.water.material.uniforms.ripple
-		world.physics.step(delta, CONF.PHYSICS.SUBSTEPS) if world.physics.enabled
+		world.updateBuoyancy(delta)
+		world.physics.step(delta, CONF.PHYSICS.SUBSTEPS, CONF.PHYSICS.FIXED_TIME_STEP) if world.physics.enabled
 		world.water.render()
 		if world.postprocess?.enabled
 			world.postprocess.composer.render(delta)

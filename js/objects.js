@@ -6,7 +6,7 @@
   SCENE = {
     create: function(opts) {
       var lights, misc, sunlight;
-      sunlight = create('DirectionalLight', CONF.SUN.COLOR, 12).at(-1000, 600, 1000).then('rotateY', -2).then('rotateZ', 0);
+      sunlight = create('DirectionalLight', CONF.SUN.COLOR, 12).at(-1000, 600, 1000).then('rotateY', -2).then('rotateZ', 0)["with"]('name', 'sunlight');
       sunlight.gizmo = createModel({
         geometry: create('BoxGeometry', 10, 10, 10),
         material: create('MeshLambertMaterial', {
@@ -14,7 +14,7 @@
           emissive: 0xffff00
         })
       }).at(-50, 50, 50).scaled(3).then('rotateX', sunlight.rotation.x).then('rotateY', sunlight.rotation.y).then('rotateZ', sunlight.rotation.z);
-      lights = [sunlight, create('AmbientLight', CONF.SUN.COLOR, 3)];
+      lights = [sunlight, create('AmbientLight', CONF.SUN.COLOR, 3)["with"]('name', 'ambient_light')];
       misc = [
         sunlight.gizmo, createModel({
           geometry: create('BoxGeometry', 1, 1, 1),
@@ -24,18 +24,7 @@
             specular: 0x999999,
             envMap: opts.envMap
           })
-        }).scaled(10, 10, 10)["with"]('physics', true)["with"]('physicsOpts', {
-          mass: 1,
-          collisionShape: 'btBoxShape'
-        }), createModel({
-          geometry: create('BoxGeometry', 1, 1, 1),
-          material: create('MeshLambertMaterial', {
-            reflectivity: 0.2,
-            color: 0x44ff44,
-            map: cache.textures.shark,
-            envMap: opts.envMap
-          })
-        }).at(20, 0, 0).scaled(10, 10, 10)["with"]('physics', true)["with"]('physicsOpts', {
+        }).scaled(10, 100, 10)["with"]('name', 'cube_black1')["with"]('physics', true)["with"]('physicsOpts', {
           mass: 1,
           "static": true,
           collisionShape: 'btBoxShape'
@@ -47,8 +36,9 @@
             map: cache.textures.shark,
             envMap: opts.envMap
           })
-        }).at(20, 12, 0).scaled(10, 10, 10)["with"]('physics', true)["with"]('physicsOpts', {
+        }).at(20, 0, 0).scaled(10, 10, 10)["with"]('name', 'cube_shark1')["with"]('physics', true)["with"]('physicsOpts', {
           mass: 1,
+          "static": true,
           collisionShape: 'btBoxShape'
         }), createModel({
           geometry: create('BoxGeometry', 1, 1, 1),
@@ -58,8 +48,8 @@
             map: cache.textures.shark,
             envMap: opts.envMap
           })
-        }).at(20, 34, 0).scaled(10, 10, 10)["with"]('physics', true)["with"]('physicsOpts', {
-          mass: 1,
+        }).at(20, 12, 0).scaled(10, 10, 10)["with"]('name', 'cube_shark2')["with"]('physics', true)["with"]('physicsOpts', {
+          mass: 0.4,
           collisionShape: 'btBoxShape'
         }), createModel({
           geometry: create('BoxGeometry', 1, 1, 1),
@@ -69,7 +59,18 @@
             map: cache.textures.shark,
             envMap: opts.envMap
           })
-        }).at(20, 56, 0).scaled(10, 10, 10)["with"]('physics', true)["with"]('physicsOpts', {
+        }).at(20, 34, 0).scaled(10, 10, 10)["with"]('name', 'cube_shark3')["with"]('physics', true)["with"]('buoyant', true)["with"]('physicsOpts', {
+          mass: 0.1,
+          collisionShape: 'btBoxShape'
+        }), createModel({
+          geometry: create('BoxGeometry', 1, 1, 1),
+          material: create('MeshLambertMaterial', {
+            reflectivity: 0.2,
+            color: 0x44ff44,
+            map: cache.textures.shark,
+            envMap: opts.envMap
+          })
+        }).at(20, 56, 0).scaled(10, 10, 10)["with"]('name', 'cube_shark4')["with"]('buoyant', true)["with"]('physics', true)["with"]('physicsOpts', {
           mass: 1,
           collisionShape: 'btBoxShape'
         })
@@ -87,7 +88,7 @@
             map: cache.textures.shark,
             envMap: opts.envMap
           })
-        }).at(-20, 5, 0).scaled(3)["with"]('physics', true)["with"]('physicsOpts', {
+        }).at(-20, 5, 0).scaled(3)["with"]('name', 'player')["with"]('buoyant', true)["with"]('physics', true)["with"]('physicsOpts', {
           lockedAxes: ['x', 'z']
         }))
       };

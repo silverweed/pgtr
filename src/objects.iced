@@ -3,6 +3,7 @@ SCENE = {
 		sunlight = create('DirectionalLight', CONF.SUN.COLOR, 12).at(-1000, 600, 1000)
 				.then('rotateY', -2)
 				.then('rotateZ', 0)
+				.with('name', 'sunlight')
 		sunlight.gizmo = createModel(
 			geometry: create('BoxGeometry', 10, 10, 10)
 			material: create('MeshLambertMaterial'
@@ -16,7 +17,7 @@ SCENE = {
 			.then('rotateZ', sunlight.rotation.z)
 		lights = [
 			sunlight
-			create('AmbientLight', CONF.SUN.COLOR, 3)
+			create('AmbientLight', CONF.SUN.COLOR, 3).with('name', 'ambient_light')
 		]
 		misc = [
 			sunlight.gizmo
@@ -28,11 +29,12 @@ SCENE = {
 					specular: 0x999999
 					envMap: opts.envMap
 				)
-			)	.scaled(10, 10, 10)
+			)	.scaled(10, 100, 10)
+				.with('name', 'cube_black1')
 				.with('physics', on)
 				.with('physicsOpts', {
 					mass: 1,
-					#static: true,
+					static: true,
 					collisionShape: 'btBoxShape',
 				})
 			createModel(
@@ -45,6 +47,7 @@ SCENE = {
 				)
 			).at(20, 0, 0)
 				.scaled(10, 10, 10)
+				.with('name', 'cube_shark1')
 				.with('physics', on)
 				.with('physicsOpts', {
 					mass: 1,
@@ -61,9 +64,10 @@ SCENE = {
 				)
 			).at(20, 12, 0)
 				.scaled(10, 10, 10)
+				.with('name', 'cube_shark2')
 				.with('physics', on)
 				.with('physicsOpts', {
-					mass: 1,
+					mass: 0.4,
 					#static: true,
 					collisionShape: 'btBoxShape',
 				})
@@ -77,9 +81,11 @@ SCENE = {
 				)
 			).at(20, 34, 0)
 				.scaled(10, 10, 10)
+				.with('name', 'cube_shark3')
 				.with('physics', on)
+				.with('buoyant', true)
 				.with('physicsOpts', {
-					mass: 1,
+					mass: 0.1,
 					#static: true,
 					collisionShape: 'btBoxShape',
 				})
@@ -93,6 +99,8 @@ SCENE = {
 				)
 			).at(20, 56, 0)
 				.scaled(10, 10, 10)
+				.with('name', 'cube_shark4')
+				.with('buoyant', true)
 				.with('physics', on)
 				.with('physicsOpts', {
 					mass: 1,
@@ -119,6 +127,8 @@ SCENE = {
 			)
 				.at(-20, 5, 0)
 				.scaled(3)
+				.with('name', 'player')
+				.with('buoyant', true)
 				.with('physics', on)
 				.with('physicsOpts', {
 					lockedAxes: ['x', 'z']

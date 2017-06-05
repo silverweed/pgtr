@@ -7,9 +7,14 @@
 Entities =
 	new: (@scene) ->
 		@entities = {}
+		@_i = 0
 		this
 	add: (name, e) ->
-		destroy(name) if name in @entities
+		if typeof(name) != 'string' or name.length < 1
+			name = "object#{@_i}"
+			@_i += 1
+		return if @entities.hasOwnProperty(name)
+		l "adding #{name}"
 		@entities[name] = e
 		this
 	destroy: (name) ->

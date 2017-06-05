@@ -51,13 +51,12 @@
   };
   __iced_k = __iced_k_noop = function() {};
 
-  addAll = function() {
-    var obj, objects, physics, scene, _i, _len;
-    scene = arguments[0], physics = arguments[1], objects = 3 <= arguments.length ? __slice.call(arguments, 2) : [];
+  addAll = function(scene, entities, physics, objects) {
+    var obj, _i, _len;
     for (_i = 0, _len = objects.length; _i < _len; _i++) {
       obj = objects[_i];
       scene.add(obj);
-      console.log("physics " + obj.physics);
+      entities.add(obj.name, obj);
       if (obj.physics) {
         physics.addRigidBody(obj, obj.physicsOpts);
       }
@@ -66,7 +65,7 @@
   };
 
   asyncBuildScene = function(cb) {
-    var camera, controls, cubemap, entities, models, o, objects, ocean, pPlane, pPlaneWater, physics, player, renderer, scene, sky, textures, water, ___iced_passed_deferral, __iced_deferrals, __iced_k;
+    var camera, controls, cubemap, entities, models, objects, ocean, pPlane, pPlaneWater, physics, player, renderer, scene, sky, textures, water, ___iced_passed_deferral, __iced_deferrals, __iced_k;
     __iced_k = __iced_k_noop;
     ___iced_passed_deferral = iced.findDeferral(arguments);
     scene = create('Scene');
@@ -105,15 +104,9 @@
       });
     })(this)((function(_this) {
       return function() {
-        var _i, _len, _ref;
         objects = SCENE.create({
           envMap: cubemap
         });
-        _ref = objects.objects;
-        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-          o = _ref[_i];
-          l("" + o + ": physics " + o.physics);
-        }
         (function(__iced_k) {
           __iced_deferrals = new iced.Deferrals(__iced_k, {
             parent: ___iced_passed_deferral,
@@ -126,7 +119,7 @@
                 return ocean = arguments[1];
               };
             })(),
-            lineno: 41
+            lineno: 39
           }));
           asyncLoadPlayerPlane(CONF.OCEAN.URL, renderer, camera, scene, objects.sunlight, __iced_deferrals.defer({
             assign_fn: (function() {
@@ -135,19 +128,18 @@
                 return pPlane = arguments[1];
               };
             })(),
-            lineno: 42
+            lineno: 40
           }));
           __iced_deferrals._fulfill();
         })(function() {
           entities = Entities["new"](scene);
           player = objects.player;
+          l("player name = " + player.name);
           player.add(camera);
           player.plane = pPlane;
           player.planeWater = pPlaneWater;
-          entities.add('player', player);
           physics = new Physics();
-          physics.createGround();
-          addAll.apply(null, [scene, physics, sky, ocean, entities.player(), pPlane].concat(__slice.call(objects.objects)));
+          addAll(scene, entities, physics, [sky, ocean, pPlane, player].concat(__slice.call(objects.objects)));
           return cb({
             scene: scene,
             water: water,

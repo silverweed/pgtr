@@ -6,19 +6,24 @@
 
 (function() {
   'use strict';
-  var Entities,
-    __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
+  var Entities;
 
   Entities = {
     "new": function(scene) {
       this.scene = scene;
       this.entities = {};
+      this._i = 0;
       return this;
     },
     add: function(name, e) {
-      if (__indexOf.call(this.entities, name) >= 0) {
-        destroy(name);
+      if (typeof name !== 'string' || name.length < 1) {
+        name = "object" + this._i;
+        this._i += 1;
       }
+      if (this.entities.hasOwnProperty(name)) {
+        return;
+      }
+      l("adding " + name);
       this.entities[name] = e;
       return this;
     },

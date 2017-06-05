@@ -34,6 +34,19 @@ initWorld = ->
 	window.addEventListener('resize', resizeHandler(world.camera, world.controls, world.renderer))
 	#createPostProcessControls(world)
 
+	world.updateBuoyancy = (delta) ->
+		x = 0
+		for name, obj of world.entities.entities
+			continue unless obj.rigidbody? and obj.buoyant
+			depth = CONF.PHYSICS.BUOYANCY_WATER_LEVEL - obj.position.y
+			x++
+			if depth > 0
+				obj.rigidbody.activate()
+				obj.rigidbody.applyCentralForce(new Ammo.btVector3(
+					0,
+					Math.pow(depth, 1.8) * (obj.physicsOpts?.mass ? 1 ) * delta * CONF.PHYSICS.BUOYANCY,
+					0
+				))
 	# Start simulation
 	renderLoop(world)
 
