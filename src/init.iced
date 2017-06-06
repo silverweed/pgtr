@@ -3,20 +3,20 @@
 requireWebgl = ->
 	if !Detector.webgl
 		Detector.addGetWebGLMessage()
-		false
-	true
+		return false
+	return true
 
 createDOM = (children...) ->
 	# Create the scene container
 	container = document.createElement('div')
 	container.appendChild(child) for child in children
 	document.body.appendChild(container)
-	container
+	return container
 
 initWorld = ->
 	l 'Starting program'
 
-	await asyncBuildScene(defer world)
+	await asyncBuildScene(defer(world))
 
 	document.getElementById('loading-text').style.display = 'none'
 
@@ -28,11 +28,12 @@ initWorld = ->
 	createDOM(world.renderer.domElement, world.stats.domElement)
 
 	# Add postprocessing
-	#world.postprocess = postProcessInit(world.scene, world.camera, world.renderer)
-
+	world.postprocess = postProcessInit(world.scene, world.camera, world.renderer)
+	world.postprocess.enabled = true
+	
 	# Add listeners
 	window.addEventListener('resize', resizeHandler(world.camera, world.controls, world.renderer))
-	#createPostProcessControls(world)
+	createPostProcessControls(world)
 
 	world.updateBuoyancy = (delta) ->
 		x = 0

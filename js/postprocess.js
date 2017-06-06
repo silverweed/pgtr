@@ -194,7 +194,7 @@ postProcessRender = (scene, renderer, camera, postprocessing, sunPosition) ->
     bokehPass = create('BokehPass', scene, camera, {
       focus: 1.0,
       aperture: 0.025,
-      maxblur: 1.0,
+      maxblur: 100.0,
       width: window.innerWidth,
       height: window.innerHeight
     })["with"]('renderToScreen', true);

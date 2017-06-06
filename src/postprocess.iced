@@ -184,11 +184,16 @@ postProcessRender = (scene, renderer, camera, postprocessing, sunPosition) ->
 ###
 
 init = (scene, camera, renderer) ->
+	#FIXME	
+	target = create("WebGLRenderTarget", window.innerWidth, window.innerHeight)
+	target.depthBuffer = true
+	target.depthTexture = create("DepthTexture")
+ 
 	renderPass = create('RenderPass', scene, camera)
 	bokehPass = create('BokehPass', scene, camera,
 		focus: 1.0
 		aperture: 0.025
-		maxblur: 1.0
+		maxblur: 100.0
 		width: window.innerWidth 
 		height: window.innerHeight 
 	).with('renderToScreen', on)

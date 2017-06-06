@@ -49,7 +49,7 @@
   requireWebgl = function() {
     if (!Detector.webgl) {
       Detector.addGetWebGLMessage();
-      false;
+      return false;
     }
     return true;
   };
@@ -75,7 +75,7 @@
       return (function(__iced_k) {
         __iced_deferrals = new iced.Deferrals(__iced_k, {
           parent: ___iced_passed_deferral,
-          filename: "/home/jp/jack/inf/pgtr/proj/src/init.iced"
+          filename: "/home/air/Documents/pgtr/src/init.iced"
         });
         asyncBuildScene(__iced_deferrals.defer({
           assign_fn: (function() {
@@ -93,7 +93,10 @@
         world.stats = createStats();
         world.debug = [createSunlightControls(world.objects.sunlight), createPhysicsControls(world.physics)];
         createDOM(world.renderer.domElement, world.stats.domElement);
+        world.postprocess = postProcessInit(world.scene, world.camera, world.renderer);
+        world.postprocess.enabled = true;
         window.addEventListener('resize', resizeHandler(world.camera, world.controls, world.renderer));
+        createPostProcessControls(world);
         world.updateBuoyancy = function(delta) {
           var depth, name, obj, x, _ref, _ref1, _ref2, _results;
           x = 0;
