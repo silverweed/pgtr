@@ -9,7 +9,7 @@
       sunlight = OBJECTS.createSunlight();
       lights = [sunlight, create('AmbientLight', CONF.SUN.COLOR, 3)["with"]('name', 'ambient_light')];
       misc = [
-        sunlight.gizmo, sunlight.target, createModel({
+        sunlight.gizmo, sunlight.targetGizmo, createModel({
           geometry: create('BoxGeometry', 1, 1, 1),
           material: create('MeshPhongMaterial', {
             shininess: 30,
@@ -89,26 +89,34 @@
       };
     },
     createSunlight: function() {
-      var sunlight;
-      sunlight = create('DirectionalLight', CONF.SUN.COLOR, 12).at(0, 0, 0).then('rotateY', -2).then('rotateZ', 0)["with"]('name', 'sunlight');
-      sunlight.gizmo = createModel({
+      var sp, sunlight;
+      sunlight = create('DirectionalLight', CONF.SUN.COLOR, 12).at(0, 100, 0).then('rotateY', -2).then('rotateZ', 0)["with"]('name', 'sunlight');
+      sunlight.targetGizmo = createModel({
         geometry: create('BoxGeometry', 10, 10, 10),
         material: create('MeshLambertMaterial', {
           color: 0xffff00,
           emissive: 0xffff00
         })
       }).scaled(3);
-      sunlight.gizmo.position = sunlight.position.clone().add((new THREE.Vector3(1, 0, 0)).multiplyScalar(200));
+      sunlight.gizmo = createModel({
+        geometry: create('SphereGeometry', 10),
+        material: create('MeshLambertMaterial', {
+          color: 0xffff00,
+          emissive: 0xffff00
+        })
+      });
+      sp = sunlight.position;
+      sunlight.gizmo.position.set(sp.x, sp.y, sp.z);
+      sunlight.targetGizmo.position.set(sp.x, sp.y, sp.z).add((new THREE.Vector3(1, 0, 0)).normalize().multiplyScalar(200));
       sunlight._direction = [0, 0, 0];
-      sunlight.target = sunlight.gizmo;
+      sunlight.target = sunlight.targetGizmo;
       sunlight.setDirection = function(ax, ay, az) {
         var v;
         v = new THREE.Vector3(Math.cos(ax) * Math.cos(az), Math.sin(ax) * Math.cos(az), Math.sin(az));
-        l("v = " + v);
-        l(sunlight.target.position);
         sunlight.target.position.set(sunlight.position.x + 200 * v.x, sunlight.position.y + 200 * v.y, sunlight.position.z + 200 * v.z);
         l("sunlight position = " + sunlight.target.position.x);
-        return sunlight._direction = [ax, ay, az];
+        sunlight._direction = [ax, ay, az];
+        return l("direction = " + sunlight._direction);
       };
       sunlight.rotate = function(ax, ay, az) {
         var x, y, z, _ref;

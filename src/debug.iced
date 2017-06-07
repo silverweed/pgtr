@@ -7,19 +7,13 @@ window.createSunlightControls = (sunlight) ->
 		update: (delta) ->
 			shift = 1
 			if Input.sunPitchLower
-				l "pitch lower"
-				sunlight.rotate(0, 0, -shift * delta)
-				#sunlight.target.position.add(new THREE.Vector3(0, 0, -shift * delta))
-				#sunlight.rotateZ(delta)
-				#sunlight.gizmo?.rotateZ(delta)
-				#sunlight.updateMatrixWorld()
+				sunlight.rotate(-shift * delta, 0, 0)
 			if Input.sunPitchRaise
-				l "pitch raise"
+				sunlight.rotate(shift * delta, 0, 0)
+			if Input.sunRotateCW
 				sunlight.rotate(0, 0, shift * delta)
-				#sunlight.target.position.add(new THREE.Vector3(0, 0, shift * delta))
-				#sunlight.rotateZ(-delta)
-				#sunlight.gizmo?.rotateZ(-delta)
-				#sunlight.updateMatrixWorld()
+			if Input.sunRotateCCW
+				sunlight.rotate(0, 0, -shift * delta)
 	}
 
 window.createPhysicsControls = (physics) ->

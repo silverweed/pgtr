@@ -17,7 +17,9 @@ CONF =
 		jump:     [ 32 ] # Space(?)
 		sunPitchRaise: [ 107 ] # Numpad+
 		sunPitchLower: [ 109 ] # Numpad-
-		togglePhysics: [ 70 ] # F
+		sunRotateCW:   [ 102 ] # Numpad6
+		sunRotateCCW:  [ 100 ] # Numpad4
+		togglePhysics: [ 70  ] # F
 		togglePostProcess: [ 80 ] # P
 		
 	SKYBOX:

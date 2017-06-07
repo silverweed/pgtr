@@ -9,12 +9,16 @@
         var shift;
         shift = 1;
         if (Input.sunPitchLower) {
-          l("pitch lower");
-          sunlight.rotate(0, 0, -shift * delta);
+          sunlight.rotate(-shift * delta, 0, 0);
         }
         if (Input.sunPitchRaise) {
-          l("pitch raise");
-          return sunlight.rotate(0, 0, shift * delta);
+          sunlight.rotate(shift * delta, 0, 0);
+        }
+        if (Input.sunRotateCW) {
+          sunlight.rotate(0, 0, shift * delta);
+        }
+        if (Input.sunRotateCCW) {
+          return sunlight.rotate(0, 0, -shift * delta);
         }
       }
     };

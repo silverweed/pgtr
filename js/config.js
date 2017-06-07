@@ -21,6 +21,8 @@
       jump: [32],
       sunPitchRaise: [107],
       sunPitchLower: [109],
+      sunRotateCW: [102],
+      sunRotateCCW: [100],
       togglePhysics: [70],
       togglePostProcess: [80]
     },

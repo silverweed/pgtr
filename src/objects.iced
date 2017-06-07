@@ -7,7 +7,7 @@ OBJECTS = {
 		]
 		misc = [
 			sunlight.gizmo
-			sunlight.target
+			sunlight.targetGizmo
 			createModel(
 				geometry: create('BoxGeometry', 1, 1, 1)
 				material: create('MeshPhongMaterial',
@@ -128,30 +128,36 @@ OBJECTS = {
 		}
 
 	createSunlight: ->
-		sunlight = create('DirectionalLight', CONF.SUN.COLOR, 12).at(0, 0, 0)
+		sunlight = create('DirectionalLight', CONF.SUN.COLOR, 12).at(0, 100, 0)
 				.then('rotateY', -2)
 				.then('rotateZ', 0)
 				.with('name', 'sunlight')
-		sunlight.gizmo = createModel(
+		sunlight.targetGizmo = createModel(
 			geometry: create('BoxGeometry', 10, 10, 10)
 			material: create('MeshLambertMaterial'
 				color: 0xffff00
 				emissive: 0xffff00
 			)
 		).scaled(3)
-		# FIXME
-		sunlight.gizmo.position = sunlight.position.clone()
-						.add((new THREE.Vector3(1, 0, 0)).multiplyScalar(200))
+		sunlight.gizmo = createModel(
+			geometry: create('SphereGeometry', 10)
+			material: create('MeshLambertMaterial'
+				color: 0xffff00
+				emissive: 0xffff00
+			)
+		)
+		sp = sunlight.position
+		sunlight.gizmo.position.set(sp.x, sp.y, sp.z)
+		sunlight.targetGizmo.position.set(sp.x, sp.y, sp.z)
+			.add((new THREE.Vector3(1, 0, 0)).normalize().multiplyScalar(200))
 		sunlight._direction = [0, 0, 0]
-		sunlight.target = sunlight.gizmo
+		sunlight.target = sunlight.targetGizmo
 		sunlight.setDirection = (ax, ay, az) ->
 			v = new THREE.Vector3(
 				Math.cos(ax) * Math.cos(az)
 				Math.sin(ax) * Math.cos(az)
 				Math.sin(az)
 			)
-			l "v = #{v}"
-			l sunlight.target.position
 			sunlight.target.position.set(
 				sunlight.position.x + 200 * v.x
 				sunlight.position.y + 200 * v.y
@@ -159,6 +165,7 @@ OBJECTS = {
 			)
 			l "sunlight position = #{sunlight.target.position.x}"
 			sunlight._direction = [ax, ay, az]
+			l "direction = #{sunlight._direction}"
 		sunlight.rotate = (ax, ay, az) ->
 			[x, y, z] = sunlight._direction
 			sunlight.setDirection(x + ax, y + ay, z + az)
