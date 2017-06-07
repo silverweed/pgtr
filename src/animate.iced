@@ -25,6 +25,7 @@ renderLoop = (world) ->
 		world.updateBuoyancy(delta)
 		world.physics.step(delta, CONF.PHYSICS.SUBSTEPS, CONF.PHYSICS.FIXED_TIME_STEP) if world.physics.enabled
 		world.water.render()
+		world.postprocess.enabled = true
 		if world.postprocess?.enabled
 			world.postprocess.composer.render(delta)
 			#postProcessRender(world.scene, world.renderer, world.camera,

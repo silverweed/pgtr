@@ -17,7 +17,6 @@ asyncLoadShader = (name, cb) ->
 	unless name in cache.shaders
 		l "Loading shader #{shadpath(name)}"
 		await create('FileLoader').load(shadpath(name), defer shad)
-		l shad
 		cache.shaders[name] = shad
 	cb(cache.shaders[name])
 

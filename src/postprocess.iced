@@ -183,26 +183,42 @@ postProcessRender = (scene, renderer, camera, postprocessing, sunPosition) ->
 	postprocessing.scene.overrideMaterial = null
 ###
 
-init = (scene, camera, renderer) ->
-	#FIXME	
+
+
+init = (world, scene, camera,  cb) ->
+
+	await asyncLoadShader("toonshading.vert", defer toonvert)
+	await asyncLoadShader("toonshading.frag", defer toonfrag)
+	
+	toonLighting = create("ShaderMaterial",{
+		uniforms:{
+			nBands : 3,
+			directionalLight : {
+				direction: { x:0,y:0,z:-1}
+#(world.scene.sunlight.target.position - world.scene.sunlight.position).normalize(),
+				color: world.objects.sunlight.color,
+				intensity: world.objects.sunlight.intensity
+			}
+		},
+		vertexShader : toonvert,
+		fragmentShader : toonfrag
+		})
+	
 	target = create("WebGLRenderTarget", window.innerWidth, window.innerHeight)
 	target.depthBuffer = true
 	target.depthTexture = create("DepthTexture")
-
-	renderPass = create('RenderPass', scene, camera)
-	bokehPass = create('BokehPass', scene, camera,
-		focus: 1.0
-		aperture: 0.025
-		maxblur: 100.0
-		width: window.innerWidth
-		height: window.innerHeight
-	).with('renderToScreen', on)
-	composer = create('EffectComposer', renderer)
-			.then('addPass', renderPass)
-			.then('addPass', bokehPass)
-	{
-		composer: composer
-	}
+	renderer = create("WebGLRenderer")
+		.then('setSize', window.innerWidth, window.innerHeight )
+	#renderPass = create('RenderPass', scene, camera)
+	#composer = create('EffectComposer', renderer)
+	#		.then('addPass', renderPass)
+	#FIXME
+	tcomposer = {}	
+	tcomposer.render =  (delta) ->
+		scene.overrideMaterial = toonLighting
+		renderer.render(scene, camera)
+	tcomposer.enabled = false	
+	cb ( {composer:tcomposer} )	
 
 ## Exports ##
 window.postProcessInit = init

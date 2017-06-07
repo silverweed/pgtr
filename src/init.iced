@@ -28,7 +28,8 @@ initWorld = ->
 	createDOM(world.renderer.domElement, world.stats.domElement)
 
 	# Add postprocessing
-	world.postprocess = postProcessInit(world.scene, world.camera, world.renderer)
+	await postProcessInit(world, world.scene, world.camera,  defer pp)
+	world.postprocess = pp
 	world.postprocess.enabled = true
 	
 	# Add listeners
