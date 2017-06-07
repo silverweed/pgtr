@@ -1,4 +1,7 @@
 #js/*.js
+lib/three.js.old/
+lib/three.js/docs/
+lib/three.js/test/
 lib/three.js/examples/models
 lib/three.js/examples/textures
 lib/three.js/examples/obj

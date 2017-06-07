@@ -7,9 +7,19 @@
 cache =
 	textures: {}
 	models: {}
+	shaders: {}
 
 texpath = (basename) -> "textures/#{basename}.png"
+shadpath = (basename) -> "src/shaders/#{basename}"
 modpath = (basename) -> "models/#{basename}.json"
+
+asyncLoadShader = (name, cb) ->
+	unless name in cache.shaders
+		l "Loading shader #{shadpath(name)}"
+		await create('FileLoader').load(shadpath(name), defer shad)
+		l shad
+		cache.shaders[name] = shad
+	cb(cache.shaders[name])
 
 # Asynchronously load a texture, cache it and return the object that will contain it
 asyncLoadTexture = (name, cb) ->
@@ -93,7 +103,7 @@ asyncLoadOcean = (waternormal_url, renderer, camera, scene, sunlight, cb) ->
 asyncLoadPlayerPlane = (waternormal_url, renderer, camera, scene, sunlight, cb) ->
 	await create('TextureLoader').load(waternormal_url, defer waternormal)
 	waternormal.wrapS = waternormal.wrapT = THREE.RepeatWrapping
-	water = create('WaterRippled', renderer, camera, scene,
+	water = create('Water', renderer, camera, scene,
 		textureWidth: 512
 		textureHeight: 512
 		waterNormals: waternormal
@@ -139,4 +149,5 @@ window.asyncLoadTexturesAndModels = asyncLoadTexturesAndModels
 window.asyncLoadSkybox = asyncLoadSkybox
 window.asyncLoadOcean = asyncLoadOcean
 window.asyncLoadPlayerPlane = asyncLoadPlayerPlane
+window.asyncLoadShader = asyncLoadShader
 #window.asyncLoadMultiMaterial = asyncLoadMultiMaterial

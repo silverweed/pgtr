@@ -31,21 +31,16 @@
 			a:hover {
 				color: #0080ff;
 			}
-
-			#stats { position: absolute; top:0; left: 0 }
-			#stats #fps { background: transparent !important }
-			#stats #fps #fpsText { color: #aaa !important }
-			#stats #fps #fpsGraph { display: none }
 		</style>
 	</head>
 
 	<body>
 		<div id="info">
-			<a href="http://threejs.org" target="_blank">three.js</a> - lensflares -
+			<a href="http://threejs.org" target="_blank" rel="noopener">three.js</a> - lensflares -
 			textures from <a href="http://ro.me">ro.me</a> - fly with WASD/RF/QE + mouse
 		</div>
 
-		<script src="../build/three.min.js"></script>
+		<script src="../build/three.js"></script>
 
 		<script src="js/controls/FlyControls.js"></script>
 
@@ -56,6 +51,7 @@
 			var container, stats;
 
 			var camera, scene, renderer;
+			var controls;
 
 			var clock = new THREE.Clock();
 
@@ -177,7 +173,7 @@
 				// stats
 
 				stats = new Stats();
-				container.appendChild( stats.domElement );
+				container.appendChild( stats.dom );
 
 				// events
 

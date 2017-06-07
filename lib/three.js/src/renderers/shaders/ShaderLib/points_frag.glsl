@@ -2,13 +2,17 @@ uniform vec3 diffuse;
 uniform float opacity;
 
 #include <common>
+#include <packing>
 #include <color_pars_fragment>
 #include <map_particle_pars_fragment>
 #include <fog_pars_fragment>
 #include <shadowmap_pars_fragment>
 #include <logdepthbuf_pars_fragment>
+#include <clipping_planes_pars_fragment>
 
 void main() {
+
+	#include <clipping_planes_fragment>
 
 	vec3 outgoingLight = vec3( 0.0 );
 	vec4 diffuseColor = vec4( diffuse, opacity );

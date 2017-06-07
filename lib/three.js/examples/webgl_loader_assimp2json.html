@@ -24,22 +24,17 @@
 			}
 
 			a { color: red }
-
-			#stats { position: absolute; top:0; left: 0 }
-			#stats #fps { background: transparent !important }
-			#stats #fps #fpsText { color: #aaa !important }
-			#stats #fps #fpsGraph { display: none }
 		</style>
 	</head>
 
 	<body>
 		<div id="info">
-			<a href="http://threejs.org" target="_blank">three.js</a> -
+			<a href="http://threejs.org" target="_blank" rel="noopener">three.js</a> -
 			Jeep by Psionic, interior from
-			<a href="http://assimp.sf.net" target="_blank">Assimp</a>
+			<a href="http://assimp.sf.net" target="_blank" rel="noopener">Assimp</a>
 		</div>
 
-		<script src="../build/three.min.js"></script>
+		<script src="../build/three.js"></script>
 
 		<script src="js/loaders/AssimpJSONLoader.js"></script>
 
@@ -141,7 +136,7 @@
 
 				// Stats
 				stats = new Stats();
-				container.appendChild( stats.domElement );
+				container.appendChild( stats.dom );
 
 				// Events
 				window.addEventListener( 'resize', onWindowResize, false );

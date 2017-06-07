@@ -109,6 +109,7 @@ SCENE = {
 				})
 		]
 		{
+			lights: lights
 			objects: [
 				lights...
 				misc...

@@ -23,14 +23,13 @@
 	<body>
 		<canvas id="debug" style="position:absolute; left:100px"></canvas>
 
-		<div id="info"><a href="http://threejs.org" target="_blank">three.js</a> - NURBS curve and surface example</div>
+		<div id="info"><a href="http://threejs.org" target="_blank" rel="noopener">three.js</a> - NURBS curve and surface example</div>
 
-		<script src="../build/three.min.js"></script>
+		<script src="../build/three.js"></script>
 		<script src="js/curves/NURBSCurve.js"></script>
 		<script src="js/curves/NURBSSurface.js"></script>
 		<script src="js/curves/NURBSUtils.js"></script>
 		<script src="js/libs/stats.min.js"></script>
-
 
 		<script>
 
@@ -155,11 +154,13 @@
 				map.wrapS = map.wrapT = THREE.RepeatWrapping;
 				map.anisotropy = 16;
 
-				getSurfacePoint = function(u, v) {
-					return nurbsSurface.getPoint(u, v);
-				};
+				function getSurfacePoint(u, v) {
 
-				var geometry = new THREE.ParametricGeometry( getSurfacePoint, 20, 20 );
+					return nurbsSurface.getPoint(u, v);
+
+				}
+
+				var geometry = new THREE.ParametricBufferGeometry( getSurfacePoint, 20, 20 );
 				var material = new THREE.MeshLambertMaterial( { map: map, side: THREE.DoubleSide } );
 				var object = new THREE.Mesh( geometry, material );
 				object.position.set( - 200, 100, 0 );
@@ -175,9 +176,7 @@
 				container.appendChild( renderer.domElement );
 
 				stats = new Stats();
-				stats.domElement.style.position = 'absolute';
-				stats.domElement.style.top = '0px';
-				container.appendChild( stats.domElement );
+				container.appendChild( stats.dom );
 
 				document.addEventListener( 'mousedown', onDocumentMouseDown, false );
 				document.addEventListener( 'touchstart', onDocumentTouchStart, false );

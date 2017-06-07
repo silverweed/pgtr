@@ -55,5 +55,7 @@ initWorld = ->
 
 return unless requireWebgl()
 
+await asyncLoadShader('toonshading.vert', defer sh)
+
 # Wait for async scripts
 document.getElementById('ammojs').addEventListener('load', initWorld)

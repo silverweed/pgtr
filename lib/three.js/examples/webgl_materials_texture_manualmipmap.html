@@ -37,7 +37,7 @@
 
 	<body>
 		<div id="info">
-			<a href="http://threejs.org" target="_blank">three.js</a> - texture manual mipmapping example
+			<a href="http://threejs.org" target="_blank" rel="noopener">three.js</a> - texture manual mipmapping example
 			- painting by <a href="http://en.wikipedia.org/wiki/Basket_of_Fruit_%28Caravaggio%29">Caravaggio</a>
 		</div>
 
@@ -61,7 +61,7 @@
 		min: <span class="c">Nearest</span>
 		</div>
 
-		<script src="../build/three.min.js"></script>
+		<script src="../build/three.js"></script>
 
 		<script src="js/Detector.js"></script>
 		<script src="js/libs/stats.min.js"></script>
@@ -137,8 +137,8 @@
 				textureCanvas2.magFilter = THREE.NearestFilter;
 				textureCanvas2.minFilter = THREE.NearestMipMapNearestFilter;
 
-				materialCanvas1 = new THREE.MeshBasicMaterial( { map: textureCanvas1 } );
-				materialCanvas2 = new THREE.MeshBasicMaterial( { color: 0xffccaa, map: textureCanvas2 } );
+				var materialCanvas1 = new THREE.MeshBasicMaterial( { map: textureCanvas1 } );
+				var materialCanvas2 = new THREE.MeshBasicMaterial( { color: 0xffccaa, map: textureCanvas2 } );
 
 				var geometry = new THREE.PlaneBufferGeometry( 100, 100 );
 
@@ -177,10 +177,10 @@
 
 						zscene.add( zmesh );
 
-						var meshFrame = new THREE.Mesh( geometry, new THREE.MeshBasicMaterial( { color: 0x000000, polygonOffset: true, polygonOffsetFactor: 1, polygonOffsetUnits: 5 } ) );
+						var meshFrame = new THREE.Mesh( geometry, new THREE.MeshBasicMaterial( { color: 0x000000 } ) );
+						meshFrame.position.z = - 10.0;
 						meshFrame.scale.x = 1.1 * image.width / 100;
 						meshFrame.scale.y = 1.1 * image.height / 100;
-
 						zscene.add( meshFrame );
 
 						var meshShadow = new THREE.Mesh( geometry, new THREE.MeshBasicMaterial( { color: 0x000000, opacity: 0.75, transparent: true } ) );
@@ -218,10 +218,7 @@
 				container.appendChild( renderer.domElement );
 
 				stats = new Stats();
-				stats.domElement.style.position = 'absolute';
-				stats.domElement.style.top = '0px';
-				stats.domElement.style.zIndex = 100;
-				//container.appendChild( stats.domElement );
+				//container.appendChild( stats.dom );
 
 				document.addEventListener( 'mousemove', onDocumentMouseMove, false );
 

@@ -3,7 +3,9 @@
 	<head>
 		<title>three.js webvr - video</title>
 		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+		<!-- Origin Trial Token, feature = WebVR, origin = https://threejs.org, expires = 2017-06-13 -->
+		<meta http-equiv="origin-trial" data-feature="WebVR" data-expires="2017-06-13" content="ApAQvHfiHMQB7SmRhfvCUX61adJaTA6pAu0Ry439jjeipa5lGm1RcTQynFoHGGcaSJkWfMOv7qK6pwSUb95ClQgAAABKeyJvcmlnaW4iOiJodHRwczovL3RocmVlanMub3JnOjQ0MyIsImZlYXR1cmUiOiJXZWJWUiIsImV4cGlyeSI6MTQ5NzMxMjAwMH0=">
 		<style>
 			body {
 				font-family: Monospace;
@@ -26,23 +28,23 @@
 	<body>
 		<div id="container"></div>
 		<div id="info">
-			<a href="http://threejs.org" target="_blank">three.js</a> webgl - vr video<br />
-			stereoscopic panoramic render by <a href="http://pedrofe.com/rendering-for-oculus-rift-with-arnold/" target="_blank">pedrofe</a>. scene from <a href="http://www.meryproject.com/" target="_blank">mery project</a>.
+			<a href="http://threejs.org" target="_blank" rel="noopener">three.js</a> webgl - vr video<br />
+			stereoscopic panoramic render by <a href="http://pedrofe.com/rendering-for-oculus-rift-with-arnold/" target="_blank" rel="noopener">pedrofe</a>. scene from <a href="http://www.meryproject.com/" target="_blank" rel="noopener">mery project</a>.
 		</div>
 
-		<script src="../build/three.min.js"></script>
+		<script src="../build/three.js"></script>
 
-		<script src="js/WebVR.js"></script>
-		<script src="js/effects/VREffect.js"></script>
 		<script src="js/controls/VRControls.js"></script>
+		<script src="js/effects/VREffect.js"></script>
+		<script src="js/vr/WebVR.js"></script>
 
 		<script>
 
-			if ( WEBVR.isLatestAvailable() === false ) {
+			WEBVR.checkAvailability().catch( function( message ) {
 
-				document.body.appendChild( WEBVR.getMessage() );
+				document.body.appendChild( WEBVR.getMessageContainer( message ) );
 
-			}
+			} );
 
 			//
 
@@ -70,11 +72,14 @@
 
 				video = document.createElement( 'video' );
 				video.loop = true;
+				video.muted = true;
 				video.src = 'textures/MaryOculus.webm';
+				video.setAttribute( 'webkit-playsinline', 'webkit-playsinline' );
 				video.play();
 
 				texture = new THREE.VideoTexture( video );
-				texture.minFilter = THREE.LinearFilter;
+				texture.minFilter = THREE.NearestFilter;
+				texture.maxFilter = THREE.NearestFilter;
 				texture.format = THREE.RGBFormat;
 				texture.generateMipmaps = false;
 
@@ -145,11 +150,11 @@
 				effect.scale = 0; // video doesn't need eye separation
 				effect.setSize( window.innerWidth, window.innerHeight );
 
-				if ( WEBVR.isAvailable() === true ) {
+				WEBVR.getVRDisplay( function ( display ) {
 
-					document.body.appendChild( WEBVR.getButton( effect ) );
+					document.body.appendChild( WEBVR.getButton( display, renderer.domElement ) );
 
-				}
+				} );
 
 
 				//
@@ -169,7 +174,7 @@
 
 			function animate() {
 
-				requestAnimationFrame( animate );
+				effect.requestAnimationFrame( animate );
 				render();
 
 			}

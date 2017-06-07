@@ -15,7 +15,7 @@
 	</head>
 
 	<body>
-		<script src="../build/three.min.js"></script>
+		<script src="../build/three.js"></script>
 
 		<script>
 
@@ -68,6 +68,8 @@
 					var x = Math.random() - 0.5;
 					var y = Math.random() - 0.5;
 					var z = Math.random() - 0.5;
+
+					var material;
 
 					if ( z < 0 ) {
 
@@ -140,7 +142,7 @@
 
 			}
 
-			function updateHUDSprites () {
+			function updateHUDSprites() {
 
 				var width = window.innerWidth / 2;
 				var height = window.innerHeight / 2;

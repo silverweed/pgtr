@@ -4,7 +4,6 @@ uniform float tFlip;
 varying vec3 vWorldPosition;
 
 #include <common>
-#include <logdepthbuf_pars_fragment>
 
 void main() {
 
@@ -14,7 +13,5 @@ void main() {
 	sampleUV.y = saturate( tFlip * direction.y * -0.5 + 0.5 );
 	sampleUV.x = atan( direction.z, direction.x ) * RECIPROCAL_PI2 + 0.5;
 	gl_FragColor = texture2D( tEquirect, sampleUV );
-
-	#include <logdepthbuf_fragment>
 
 }

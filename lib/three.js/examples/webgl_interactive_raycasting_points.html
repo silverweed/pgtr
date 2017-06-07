@@ -29,9 +29,9 @@
 
 	<body>
 		<div id="container"></div>
-		<div id="info"><a href="http://threejs.org" target="_blank">three.js</a> webgl - interactive - raycasting - points </div>
+		<div id="info"><a href="http://threejs.org" target="_blank" rel="noopener">three.js</a> webgl - interactive - raycasting - points </div>
 
-		<script src="../build/three.min.js"></script>
+		<script src="../build/three.js"></script>
 
 		<script src="js/Detector.js"></script>
 		<script src="js/libs/stats.min.js"></script>
@@ -160,7 +160,7 @@
 				}
 
 				geometry.setIndex( new THREE.BufferAttribute( indices, 1 ) );
-				geometry.addDrawCall( 0, indices.length );
+				geometry.addGroup( 0, indices.length );
 
 				var material = new THREE.PointsMaterial( { size: pointSize, vertexColors: THREE.VertexColors } );
 				var pointcloud = new THREE.Points( geometry, material );
@@ -187,13 +187,9 @@
 						var y = ( Math.cos( u * Math.PI * 8 ) + Math.sin( v * Math.PI * 8) ) / 20;
 						var z = v - 0.5;
 						var v = new THREE.Vector3( x,y,z );
+						geometry.vertices.push( v );
 
 						var intensity = ( y + 0.1 ) * 7;
-						colors[ 3 * k ] = color.r * intensity;
-						colors[ 3 * k + 1 ] = color.g * intensity;
-						colors[ 3 * k + 2 ] = color.b * intensity;
-
-						geometry.vertices.push( v );
 						colors[ k ] = ( color.clone().multiplyScalar( intensity ) );
 
 						k++;
@@ -276,9 +272,7 @@
 				//
 
 				stats = new Stats();
-				stats.domElement.style.position = 'absolute';
-				stats.domElement.style.top = '0px';
-				container.appendChild( stats.domElement );
+				container.appendChild( stats.dom );
 
 				//
 

@@ -31,11 +31,11 @@
 
 		<div id="container"></div>
 		<div id="info">
-			<a href="http://threejs.org" target="_blank">three.js webgl</a> - equirectangular panorama demo. photo by <a href="http://www.flickr.com/photos/jonragnarsson/2294472375/" target="_blank">Jón Ragnarsson</a>.<br />
+			<a href="http://threejs.org" target="_blank" rel="noopener">three.js webgl</a> - equirectangular panorama demo. photo by <a href="http://www.flickr.com/photos/jonragnarsson/2294472375/" target="_blank" rel="noopener">Jón Ragnarsson</a>.<br />
 			drag equirectangular texture into the page.
 		</div>
 
-		<script src="../build/three.min.js"></script>
+		<script src="../build/three.js"></script>
 
 		<script>
 
@@ -80,8 +80,7 @@
 				document.addEventListener( 'mousedown', onDocumentMouseDown, false );
 				document.addEventListener( 'mousemove', onDocumentMouseMove, false );
 				document.addEventListener( 'mouseup', onDocumentMouseUp, false );
-				document.addEventListener( 'mousewheel', onDocumentMouseWheel, false );
-				document.addEventListener( 'MozMousePixelScroll', onDocumentMouseWheel, false);
+				document.addEventListener( 'wheel', onDocumentMouseWheel, false );
 
 				//
 
@@ -169,26 +168,7 @@
 
 			function onDocumentMouseWheel( event ) {
 
-				// WebKit
-
-				if ( event.wheelDeltaY ) {
-
-					camera.fov -= event.wheelDeltaY * 0.05;
-
-				// Opera / Explorer 9
-
-				} else if ( event.wheelDelta ) {
-
-					camera.fov -= event.wheelDelta * 0.05;
-
-				// Firefox
-
-				} else if ( event.detail ) {
-
-					camera.fov += event.detail * 1.0;
-
-				}
-
+				camera.fov += event.deltaY * 0.05;
 				camera.updateProjectionMatrix();
 
 			}
