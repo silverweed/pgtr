@@ -23,16 +23,14 @@
       world.debug.forEach(function(e) {
         return ((e != null ? e.update : void 0) != null) && e.update(delta);
       });
-      world.water.material.uniforms.time.value += delta;
       player.plane.material.uniforms.time.value += delta;
       updateRipples(player, delta);
       world.updateBuoyancy(delta);
       if (world.physics.enabled) {
         world.physics.step(delta, CONF.PHYSICS.SUBSTEPS, CONF.PHYSICS.FIXED_TIME_STEP);
       }
-      world.water.render();
       if ((_ref = world.postprocess) != null ? _ref.enabled : void 0) {
-        world.postprocess.composer.render(delta);
+        world.postprocess.composer.render(world.scene, world.camera);
       } else {
         world.renderer.render(world.scene, world.camera);
       }

@@ -81,7 +81,7 @@
           (function(__iced_k) {
             __iced_deferrals = new iced.Deferrals(__iced_k, {
               parent: ___iced_passed_deferral,
-              filename: "/home/jacktommy/jack/inf/pgtr/proj/src/load.iced"
+              filename: "/home/jp/jack/inf/pgtr/proj/src/load.iced"
             });
             create('FileLoader').load(shadpath(name), __iced_deferrals.defer({
               assign_fn: (function() {
@@ -93,7 +93,6 @@
             }));
             __iced_deferrals._fulfill();
           })(function() {
-            l(shad);
             return __iced_k(cache.shaders[name] = shad);
           });
         } else {
@@ -118,7 +117,7 @@
           (function(__iced_k) {
             __iced_deferrals = new iced.Deferrals(__iced_k, {
               parent: ___iced_passed_deferral,
-              filename: "/home/jacktommy/jack/inf/pgtr/proj/src/load.iced"
+              filename: "/home/jp/jack/inf/pgtr/proj/src/load.iced"
             });
             create('TextureLoader').load(texpath(name), __iced_deferrals.defer({
               assign_fn: (function() {
@@ -126,7 +125,7 @@
                   return tex = arguments[0];
                 };
               })(),
-              lineno: 27
+              lineno: 26
             }));
             __iced_deferrals._fulfill();
           })(function() {
@@ -154,7 +153,7 @@
           (function(__iced_k) {
             __iced_deferrals = new iced.Deferrals(__iced_k, {
               parent: ___iced_passed_deferral,
-              filename: "/home/jacktommy/jack/inf/pgtr/proj/src/load.iced"
+              filename: "/home/jp/jack/inf/pgtr/proj/src/load.iced"
             });
             create('JSONLoader').load(modpath(name), __iced_deferrals.defer({
               assign_fn: (function() {
@@ -162,7 +161,7 @@
                   return mod = arguments[0];
                 };
               })(),
-              lineno: 35
+              lineno: 34
             }));
             __iced_deferrals._fulfill();
           })(function() {
@@ -191,7 +190,7 @@
         var _i, _j, _len, _len1;
         __iced_deferrals = new iced.Deferrals(__iced_k, {
           parent: ___iced_passed_deferral,
-          filename: "/home/jacktommy/jack/inf/pgtr/proj/src/load.iced"
+          filename: "/home/jp/jack/inf/pgtr/proj/src/load.iced"
         });
         for (_i = 0, _len = textures.length; _i < _len; _i++) {
           texname = textures[_i];
@@ -201,7 +200,7 @@
                 return __slot_1[__slot_2] = arguments[0];
               };
             })(tex, texname),
-            lineno: 47
+            lineno: 46
           }));
         }
         for (_j = 0, _len1 = models.length; _j < _len1; _j++) {
@@ -212,7 +211,7 @@
                 return __slot_1[__slot_2] = arguments[0];
               };
             })(mod, modname),
-            lineno: 49
+            lineno: 48
           }));
         }
         __iced_deferrals._fulfill();
@@ -234,7 +233,7 @@
       return (function(__iced_k) {
         __iced_deferrals = new iced.Deferrals(__iced_k, {
           parent: ___iced_passed_deferral,
-          filename: "/home/jacktommy/jack/inf/pgtr/proj/src/load.iced"
+          filename: "/home/jp/jack/inf/pgtr/proj/src/load.iced"
         });
         create('CubeTextureLoader').load(urls, __iced_deferrals.defer({
           assign_fn: (function() {
@@ -242,7 +241,7 @@
               return cubemap = arguments[0];
             };
           })(),
-          lineno: 56
+          lineno: 55
         }));
         __iced_deferrals._fulfill();
       });
@@ -271,7 +270,7 @@
       return (function(__iced_k) {
         __iced_deferrals = new iced.Deferrals(__iced_k, {
           parent: ___iced_passed_deferral,
-          filename: "/home/jacktommy/jack/inf/pgtr/proj/src/load.iced"
+          filename: "/home/jp/jack/inf/pgtr/proj/src/load.iced"
         });
         create('TextureLoader').load(waternormal_url, __iced_deferrals.defer({
           assign_fn: (function() {
@@ -279,7 +278,7 @@
               return waternormal = arguments[0];
             };
           })(),
-          lineno: 78
+          lineno: 77
         }));
         __iced_deferrals._fulfill();
       });
@@ -310,7 +309,7 @@
       return (function(__iced_k) {
         __iced_deferrals = new iced.Deferrals(__iced_k, {
           parent: ___iced_passed_deferral,
-          filename: "/home/jacktommy/jack/inf/pgtr/proj/src/load.iced"
+          filename: "/home/jp/jack/inf/pgtr/proj/src/load.iced"
         });
         create('TextureLoader').load(waternormal_url, __iced_deferrals.defer({
           assign_fn: (function() {
@@ -318,7 +317,7 @@
               return waternormal = arguments[0];
             };
           })(),
-          lineno: 103
+          lineno: 102
         }));
         __iced_deferrals._fulfill();
       });

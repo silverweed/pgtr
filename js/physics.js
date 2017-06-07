@@ -52,10 +52,8 @@
       rbCI = new Ammo.btRigidBodyConstructionInfo(mass, motionState, shape, inertia);
       rb = new Ammo.btRigidBody(rbCI);
       if (opts != null ? opts["static"] : void 0) {
-        l("static. set " + Ammo.CF_STATIC_OBJECT + ". Mass is " + mass);
         rb.setCollisionFlags(Ammo.CF_STATIC_OBJECT);
       } else {
-        l("dynamic. Mass is " + mass);
         rb.setDamping(CONF.PHYSICS.DFLT_LIN_DAMP, CONF.PHYSICS.DFLT_ANG_DAMP);
         if ((opts != null ? opts.lockedAxes : void 0) != null) {
           rb.setAngularFactor(new Ammo.btVector3(__indexOf.call(opts.lockedAxes, 'x') >= 0 ? 0 : 1, __indexOf.call(opts.lockedAxes, 'y') >= 0 ? 0 : 1, __indexOf.call(opts.lockedAxes, 'z') >= 0 ? 0 : 1));

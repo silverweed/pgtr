@@ -187,21 +187,25 @@ postProcessRender = (scene, renderer, camera, postprocessing, sunPosition) ->
 
 init = (world, scene, camera,  cb) ->
 
-	await asyncLoadShader("toonshading.vert", defer toonvert)
-	await asyncLoadShader("toonshading.frag", defer toonfrag)
+	await
+		asyncLoadShader("toonshading.vert", defer toonvert)
+		asyncLoadShader("toonshading.frag", defer toonfrag)
 	
-	toonLighting = create("ShaderMaterial",{
-		uniforms:{
+	toonLighting = create("ShaderMaterial", {
+		uniforms: {
 			nBands : 3,
-			directionalLightDirection : (world.objects.sunlight.target.position.sub(
-				 world.objects.sunlight.position)).normalize(),
-			directionalLightColor : world.objects.sunlight.color,
-			directionalLightIntensity: 0.5
-			},
-		vertexShader : toonvert,
-		fragmentShader : toonfrag
-		})
-	
+			directionalLightDirection: { value: (world.objects.sunlight.target.position.sub(
+				world.objects.sunlight.position)).normalize() },
+			directionalLightColor: { value: world.objects.sunlight.color },
+			directionalLightIntensity: { value: 0.5 }
+		},
+		vertexShader: toonvert,
+		fragmentShader: toonfrag
+	})
+
+	dld = toonLighting.uniforms.directionalLightDirection.value
+	console.assert(typeof(dld.x) == 'number' and not isNaN(dld.x),
+		"directionalLightDirection = #{dld.x}, #{dld.y}, #{dld.z}")
 	target = create("WebGLRenderTarget", window.innerWidth, window.innerHeight)
 	target.depthBuffer = true
 	target.depthTexture = create("DepthTexture")
@@ -209,17 +213,17 @@ init = (world, scene, camera,  cb) ->
 	#composer = create('EffectComposer', renderer)
 	#		.then('addPass', renderPass)
 	#FIXME
-	tcomposer = {}	
+	tcomposer = {}
 	tcomposer.renderer = create('WebGLRenderer', antialias: on)
 				.then('setSize', window.innerWidth, window.innerHeight)
 				.then('setPixelRatio', window.devicePixelRatio)
 				.with('autoClear', true)
-	tcomposer.render =  (sc, cam) ->
-		scene.overrideMaterial = toonLighting
-		tcomposer.renderer.render(sc,cam)
+	tcomposer.render = (sc, cam) ->
+		#scene.overrideMaterial = toonLighting
+		tcomposer.renderer.render(sc, cam)
 		tcomposer.renderer
-		null	
-	return cb ( {composer:tcomposer} )	
+		null
+	cb({ composer: tcomposer })
 
 ## Exports ##
 window.postProcessInit = init

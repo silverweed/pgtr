@@ -95,6 +95,9 @@ OBJECTS = {
 					collisionShape: 'btBoxShape',
 				})
 		]
+		console.assert(typeof(sunlight.target.position.x) == 'number' and not isNaN(sunlight.target.position.x),
+			"sunlight.target.position = " +
+			"#{sunlight.target.position.x}, #{sunlight.target.position.y}, #{sunlight.target.position.z}")
 		{
 			lights: lights
 			objects: [
@@ -125,7 +128,7 @@ OBJECTS = {
 		}
 
 	createSunlight: ->
-		sunlight = create('DirectionalLight', CONF.SUN.COLOR, 12).at(-1000, 600, 1000)
+		sunlight = create('DirectionalLight', CONF.SUN.COLOR, 12).at(0, 0, 0)
 				.then('rotateY', -2)
 				.then('rotateZ', 0)
 				.with('name', 'sunlight')
@@ -137,7 +140,8 @@ OBJECTS = {
 			)
 		).scaled(3)
 		# FIXME
-		sunlight.gizmo.position.set(sunlight.position + 500 * (new THREE.Vector3(1, 0, 0)))
+		sunlight.gizmo.position = sunlight.position.clone()
+						.add((new THREE.Vector3(1, 0, 0)).multiplyScalar(200))
 		sunlight._direction = [0, 0, 0]
 		sunlight.target = sunlight.gizmo
 		sunlight.setDirection = (ax, ay, az) ->
@@ -146,14 +150,14 @@ OBJECTS = {
 				Math.sin(ax) * Math.cos(az)
 				Math.sin(az)
 			)
+			l "v = #{v}"
 			l sunlight.target.position
 			sunlight.target.position.set(
-				sunlight.position.x + 500 * v.x
-				sunlight.position.y + 500 * v.y
-				sunlight.position.z + 500 * v.z
+				sunlight.position.x + 200 * v.x
+				sunlight.position.y + 200 * v.y
+				sunlight.position.z + 200 * v.z
 			)
-			sunlight.gizmo.position.set(sunlight.target.position)
-			l sunlight.target.position
+			l "sunlight position = #{sunlight.target.position.x}"
 			sunlight._direction = [ax, ay, az]
 		sunlight.rotate = (ax, ay, az) ->
 			[x, y, z] = sunlight._direction

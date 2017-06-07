@@ -38,7 +38,6 @@
         world.postprocess.enabled = !world.postprocess.enabled;
         world.renderer.clear();
       }
-      l("Postprocessing is now " + world.postprocess.enabled);
       return true;
     });
   };

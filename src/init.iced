@@ -28,10 +28,9 @@ initWorld = ->
 	createDOM(world.renderer.domElement, world.stats.domElement)
 
 	# Add postprocessing
-	await postProcessInit(world, world.scene, world.camera,  defer pp)
-	world.postprocess = pp
-	world.postprocess.enabled = true
-
+	#await postProcessInit(world, world.scene, world.camera, defer pp)
+	#world.postprocess = pp
+	#world.postprocess.enabled = true
 	
 	# Add listeners
 	window.addEventListener('resize', resizeHandler(world.camera, world.controls, world.renderer))

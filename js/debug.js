@@ -6,22 +6,15 @@
   window.createSunlightControls = function(sunlight) {
     return {
       update: function(delta) {
-        var _ref, _ref1;
+        var shift;
+        shift = 1;
         if (Input.sunPitchLower) {
           l("pitch lower");
-          sunlight.rotateZ(delta);
-          if ((_ref = sunlight.gizmo) != null) {
-            _ref.rotateZ(delta);
-          }
-          sunlight.updateMatrixWorld();
+          sunlight.rotate(0, 0, -shift * delta);
         }
         if (Input.sunPitchRaise) {
           l("pitch raise");
-          sunlight.rotateZ(-delta);
-          if ((_ref1 = sunlight.gizmo) != null) {
-            _ref1.rotateZ(-delta);
-          }
-          return sunlight.updateMatrixWorld();
+          return sunlight.rotate(0, 0, shift * delta);
         }
       }
     };

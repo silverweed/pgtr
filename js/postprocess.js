@@ -186,25 +186,116 @@ postProcessRender = (scene, renderer, camera, postprocessing, sunPosition) ->
  */
 
 (function() {
-  var init;
+  var iced, init, __iced_k, __iced_k_noop,
+    __slice = [].slice;
 
-  init = function(scene, camera, renderer) {
-    var bokehPass, composer, renderPass, target;
-    target = create("WebGLRenderTarget", window.innerWidth, window.innerHeight);
-    target.depthBuffer = true;
-    target.depthTexture = create("DepthTexture");
-    renderPass = create('RenderPass', scene, camera);
-    bokehPass = create('BokehPass', scene, camera, {
-      focus: 1.0,
-      aperture: 0.025,
-      maxblur: 100.0,
-      width: window.innerWidth,
-      height: window.innerHeight
-    })["with"]('renderToScreen', true);
-    composer = create('EffectComposer', renderer).then('addPass', renderPass).then('addPass', bokehPass);
-    return {
-      composer: composer
-    };
+  iced = {
+    Deferrals: (function() {
+      function _Class(_arg) {
+        this.continuation = _arg;
+        this.count = 1;
+        this.ret = null;
+      }
+
+      _Class.prototype._fulfill = function() {
+        if (!--this.count) {
+          return this.continuation(this.ret);
+        }
+      };
+
+      _Class.prototype.defer = function(defer_params) {
+        ++this.count;
+        return (function(_this) {
+          return function() {
+            var inner_params, _ref;
+            inner_params = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+            if (defer_params != null) {
+              if ((_ref = defer_params.assign_fn) != null) {
+                _ref.apply(null, inner_params);
+              }
+            }
+            return _this._fulfill();
+          };
+        })(this);
+      };
+
+      return _Class;
+
+    })(),
+    findDeferral: function() {
+      return null;
+    },
+    trampoline: function(_fn) {
+      return _fn();
+    }
+  };
+  __iced_k = __iced_k_noop = function() {};
+
+  init = function(world, scene, camera, cb) {
+    var dld, target, tcomposer, toonLighting, toonfrag, toonvert, ___iced_passed_deferral, __iced_deferrals, __iced_k;
+    __iced_k = __iced_k_noop;
+    ___iced_passed_deferral = iced.findDeferral(arguments);
+    (function(_this) {
+      return (function(__iced_k) {
+        __iced_deferrals = new iced.Deferrals(__iced_k, {
+          parent: ___iced_passed_deferral,
+          filename: "/home/jp/jack/inf/pgtr/proj/src/postprocess.iced"
+        });
+        asyncLoadShader("toonshading.vert", __iced_deferrals.defer({
+          assign_fn: (function() {
+            return function() {
+              return toonvert = arguments[0];
+            };
+          })(),
+          lineno: 190
+        }));
+        asyncLoadShader("toonshading.frag", __iced_deferrals.defer({
+          assign_fn: (function() {
+            return function() {
+              return toonfrag = arguments[0];
+            };
+          })(),
+          lineno: 191
+        }));
+        __iced_deferrals._fulfill();
+      });
+    })(this)((function(_this) {
+      return function() {
+        toonLighting = create("ShaderMaterial", {
+          uniforms: {
+            nBands: 3,
+            directionalLightDirection: {
+              value: (world.objects.sunlight.target.position.sub(world.objects.sunlight.position)).normalize()
+            },
+            directionalLightColor: {
+              value: world.objects.sunlight.color
+            },
+            directionalLightIntensity: {
+              value: 0.5
+            }
+          },
+          vertexShader: toonvert,
+          fragmentShader: toonfrag
+        });
+        dld = toonLighting.uniforms.directionalLightDirection.value;
+        console.assert(typeof dld.x === 'number' && !isNaN(dld.x), "directionalLightDirection = " + dld.x + ", " + dld.y + ", " + dld.z);
+        target = create("WebGLRenderTarget", window.innerWidth, window.innerHeight);
+        target.depthBuffer = true;
+        target.depthTexture = create("DepthTexture");
+        tcomposer = {};
+        tcomposer.renderer = create('WebGLRenderer', {
+          antialias: true
+        }).then('setSize', window.innerWidth, window.innerHeight).then('setPixelRatio', window.devicePixelRatio)["with"]('autoClear', true);
+        tcomposer.render = function(sc, cam) {
+          tcomposer.renderer.render(sc, cam);
+          tcomposer.renderer;
+          return null;
+        };
+        return cb({
+          composer: tcomposer
+        });
+      };
+    })(this));
   };
 
   window.postProcessInit = init;

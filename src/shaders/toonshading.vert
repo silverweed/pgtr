@@ -20,8 +20,8 @@ struct AmbientLight{
 
 //uniform PointLight[] pointLights;
 uniform vec3 directionalLightDirection;
-uniform vec3 directionalLigthColor;
-uniform float direactionalLightIntensity;
+uniform vec3 directionalLightColor;
+uniform float directionalLightIntensity;
 //uniform AmbientLight ambientLight;
 varying vec3 vLightResult;
 
@@ -35,7 +35,7 @@ void main()
 			/** color * intensity * dot(normalize(pointLights[i].position - myPosition), myNormal);*/
 	/*}*/
 
-	lightResult += dot ( directionalLightDirection , myNormal )*directionalLigthColor*direactionalLightIntensity;
+	lightResult += dot ( directionalLightDirection , myNormal )*directionalLightColor*directionalLightIntensity;
 	//lightResult += ambientLight*intensity;
 
 	vLightResult = lightResult;
