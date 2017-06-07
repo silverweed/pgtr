@@ -6,16 +6,21 @@ window.createSunlightControls = (sunlight) ->
 	{
 		# FIXME
 		update: (delta) ->
+			shift = 10
 			if Input.sunPitchLower
 				l "pitch lower"
-				sunlight.rotateZ(delta)
-				sunlight.gizmo?.rotateZ(delta)
-				sunlight.updateMatrixWorld()
+				sunlight.rotate(0, 0, -shift * delta)
+				#sunlight.target.position.add(new THREE.Vector3(0, 0, -shift * delta))
+				#sunlight.rotateZ(delta)
+				#sunlight.gizmo?.rotateZ(delta)
+				#sunlight.updateMatrixWorld()
 			if Input.sunPitchRaise
 				l "pitch raise"
-				sunlight.rotateZ(-delta)
-				sunlight.gizmo?.rotateZ(-delta)
-				sunlight.updateMatrixWorld()
+				sunlight.rotate(0, 0, shift * delta)
+				#sunlight.target.position.add(new THREE.Vector3(0, 0, shift * delta))
+				#sunlight.rotateZ(-delta)
+				#sunlight.gizmo?.rotateZ(-delta)
+				#sunlight.updateMatrixWorld()
 	}
 
 window.createPhysicsControls = (physics) ->

@@ -27,7 +27,6 @@ window.createPostProcessControls = (world) ->
 		if `e.keyCode == CONF.CONTROLS.togglePostProcess`
 			world.postprocess.enabled = !world.postprocess.enabled
 			world.renderer.clear()
-		l "Postprocessing is now #{world.postprocess.enabled}"
 		true
 	)
 window.addEventListener('keydown', hdKey(true), false)

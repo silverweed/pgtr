@@ -35,7 +35,7 @@ asyncBuildScene = (cb) ->
 		asyncLoadSkybox(CONF.SKYBOX.URLS, CONF.SKYBOX.SIZE, defer(sky, cubemap))
 		#asyncLoadMultiMaterial(['white', 'black', 'black', 'black', 'black', 'black'], defer(cubemat))
 
-	objects = SCENE.create(envMap: cubemap)
+	objects = OBJECTS.create(envMap: cubemap)
 	await
 		asyncLoadOcean(CONF.OCEAN.URL, renderer, camera, scene, objects.sunlight, defer(water, ocean))
 		asyncLoadPlayerPlane(CONF.OCEAN.URL, renderer, camera, scene, objects.sunlight, defer(pPlaneWater, pPlane))
