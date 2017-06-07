@@ -193,13 +193,11 @@ init = (world, scene, camera,  cb) ->
 	toonLighting = create("ShaderMaterial",{
 		uniforms:{
 			nBands : 3,
-			directionalLight : {
-				direction: { x:0,y:0,z:-1}
-#(world.scene.sunlight.target.position - world.scene.sunlight.position).normalize(),
-				color: world.objects.sunlight.color,
-				intensity: world.objects.sunlight.intensity
-			}
-		},
+			directionalLightDirection : (world.objects.sunlight.target.position.sub(
+				 world.objects.sunlight.position)).normalize(),
+			directionalLightColor : world.objects.sunlight.color,
+			directionalLightIntensity: 0.5
+			},
 		vertexShader : toonvert,
 		fragmentShader : toonfrag
 		})
@@ -207,18 +205,21 @@ init = (world, scene, camera,  cb) ->
 	target = create("WebGLRenderTarget", window.innerWidth, window.innerHeight)
 	target.depthBuffer = true
 	target.depthTexture = create("DepthTexture")
-	renderer = create("WebGLRenderer")
-		.then('setSize', window.innerWidth, window.innerHeight )
 	#renderPass = create('RenderPass', scene, camera)
 	#composer = create('EffectComposer', renderer)
 	#		.then('addPass', renderPass)
 	#FIXME
 	tcomposer = {}	
-	tcomposer.render =  (delta) ->
+	tcomposer.renderer = create('WebGLRenderer', antialias: on)
+				.then('setSize', window.innerWidth, window.innerHeight)
+				.then('setPixelRatio', window.devicePixelRatio)
+				.with('autoClear', true)
+	tcomposer.render =  (sc, cam) ->
 		scene.overrideMaterial = toonLighting
-		renderer.render(scene, camera)
-	tcomposer.enabled = false	
-	cb ( {composer:tcomposer} )	
+		tcomposer.renderer.render(sc,cam)
+		tcomposer.renderer
+		null	
+	return cb ( {composer:tcomposer} )	
 
 ## Exports ##
 window.postProcessInit = init
