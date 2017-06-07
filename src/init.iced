@@ -29,7 +29,7 @@ initWorld = ->
 
 	# Add postprocessing
 	world.postprocess = postProcessInit(world.scene, world.camera, world.renderer)
-	world.postprocess.enabled = true
+	#world.postprocess.enabled = true
 	
 	# Add listeners
 	window.addEventListener('resize', resizeHandler(world.camera, world.controls, world.renderer))

@@ -189,7 +189,10 @@ postProcessRender = (scene, renderer, camera, postprocessing, sunPosition) ->
   var init;
 
   init = function(scene, camera, renderer) {
-    var bokehPass, composer, renderPass;
+    var bokehPass, composer, renderPass, target;
+    target = create("WebGLRenderTarget", window.innerWidth, window.innerHeight);
+    target.depthBuffer = true;
+    target.depthTexture = create("DepthTexture");
     renderPass = create('RenderPass', scene, camera);
     bokehPass = create('BokehPass', scene, camera, {
       focus: 1.0,

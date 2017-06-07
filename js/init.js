@@ -75,7 +75,7 @@
       return (function(__iced_k) {
         __iced_deferrals = new iced.Deferrals(__iced_k, {
           parent: ___iced_passed_deferral,
-          filename: "/home/air/Documents/pgtr/src/init.iced"
+          filename: "/home/jacktommy/jack/inf/pgtr/proj/src/init.iced"
         });
         asyncBuildScene(__iced_deferrals.defer({
           assign_fn: (function() {
@@ -94,7 +94,6 @@
         world.debug = [createSunlightControls(world.objects.sunlight), createPhysicsControls(world.physics)];
         createDOM(world.renderer.domElement, world.stats.domElement);
         world.postprocess = postProcessInit(world.scene, world.camera, world.renderer);
-        world.postprocess.enabled = true;
         window.addEventListener('resize', resizeHandler(world.camera, world.controls, world.renderer));
         createPostProcessControls(world);
         world.updateBuoyancy = function(delta) {

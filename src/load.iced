@@ -103,7 +103,7 @@ asyncLoadOcean = (waternormal_url, renderer, camera, scene, sunlight, cb) ->
 asyncLoadPlayerPlane = (waternormal_url, renderer, camera, scene, sunlight, cb) ->
 	await create('TextureLoader').load(waternormal_url, defer waternormal)
 	waternormal.wrapS = waternormal.wrapT = THREE.RepeatWrapping
-	water = create('Water', renderer, camera, scene,
+	water = create('WaterRippled', renderer, camera, scene,
 		textureWidth: 512
 		textureHeight: 512
 		waterNormals: waternormal
