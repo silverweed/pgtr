@@ -76,6 +76,7 @@
         })
       ];
       return {
+        lights: lights,
         objects: __slice.call(lights).concat(__slice.call(misc)),
         sunlight: sunlight,
         player: createPlayer(createModel({

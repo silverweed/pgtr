@@ -1,209 +1,18 @@
 /**
- * @author Giacomo Parolini
+ * @author jbouny / https://github.com/jbouny
  *
  * Work based on :
- * @author jbouny / https://github.com/jbouny
  * @author Slayvin / http://slayvin.net : Flat mirror for three.js
  * @author Stemkoski / http://www.adelphi.edu/~stemkoski : An implementation of water shader based on the flat mirror
  * @author Jonas Wagner / http://29a.ch/ && http://29a.ch/slides/2012/webglwater/ : Water shader explanations in WebGL
  */
-
-THREE.ShaderLib[ 'waterRippled' ] = {
-
-	uniforms: THREE.UniformsUtils.merge( [
-		THREE.UniformsLib[ "fog" ], {
-			"normalSampler":    { type: "t", value: null },
-			"mirrorSampler":    { type: "t", value: null },
-			"alpha":            { type: "f", value: 1.0 },
-			"time":             { type: "f", value: 0.0 },
-			"distortionScale":  { type: "f", value: 20.0 },
-			"noiseScale":       { type: "f", value: 1.0 },
-			"textureMatrix" :   { type: "m4", value: new THREE.Matrix4() },
-			"sunColor":         { type: "c", value: new THREE.Color( 0x7F7F7F ) },
-			"sunDirection":     { type: "v3", value: new THREE.Vector3( 0.70707, 0.70707, 0 ) },
-			"eye":              { type: "v3", value: new THREE.Vector3() },
-			"waterColor":       { type: "c", value: new THREE.Color( 0x555555 ) },
-			"nRipples":         { type: "i", value: 0 },
-			"rippleSrc1":       { type: "v3", value: new THREE.Vector3() },
-			"rippleSrc2":       { type: "v3", value: new THREE.Vector3() },
-			"rippleSrc3":       { type: "v3", value: new THREE.Vector3() },
-			"rippleSrc4":       { type: "v3", value: new THREE.Vector3() },
-			"rippleSrc5":       { type: "v3", value: new THREE.Vector3() },
-			"rippleSrc6":       { type: "v3", value: new THREE.Vector3() },
-			"rippleSrc7":       { type: "v3", value: new THREE.Vector3() },
-			"rippleSrc8":       { type: "v3", value: new THREE.Vector3() },
-			"rippleSrc9":       { type: "v3", value: new THREE.Vector3() },
-			"rippleSrc10":      { type: "v3", value: new THREE.Vector3() },
-			"rippleTime1":      { type: "f", value: 0.0 },
-			"rippleTime2":      { type: "f", value: 0.0 },
-			"rippleTime3":      { type: "f", value: 0.0 },
-			"rippleTime4":      { type: "f", value: 0.0 },
-			"rippleTime5":      { type: "f", value: 0.0 },
-			"rippleTime6":      { type: "f", value: 0.0 },
-			"rippleTime7":      { type: "f", value: 0.0 },
-			"rippleTime8":      { type: "f", value: 0.0 },
-			"rippleTime9":      { type: "f", value: 0.0 },
-			"rippleTime10":     { type: "f", value: 0.0 },
-		}
-	] ),
-
-	vertexShader: [
-		'uniform mat4 textureMatrix;',
-		'uniform float time;',
-		'uniform int nRipples;',
-		'uniform vec3 rippleSrc1;',
-		'uniform vec3 rippleSrc2;',
-		'uniform vec3 rippleSrc3;',
-		'uniform vec3 rippleSrc4;',
-		'uniform vec3 rippleSrc5;',
-		'uniform vec3 rippleSrc6;',
-		'uniform vec3 rippleSrc7;',
-		'uniform vec3 rippleSrc8;',
-		'uniform vec3 rippleSrc9;',
-		'uniform vec3 rippleSrc10;',
-		'uniform float rippleTime1;',
-		'uniform float rippleTime2;',
-		'uniform float rippleTime3;',
-		'uniform float rippleTime4;',
-		'uniform float rippleTime5;',
-		'uniform float rippleTime6;',
-		'uniform float rippleTime7;',
-		'uniform float rippleTime8;',
-		'uniform float rippleTime9;',
-		'uniform float rippleTime10;',
-
-		'varying vec4 mirrorCoord;',
-		'varying vec3 worldPosition;',
-		'varying float dist;',
-
-		'float calc_ripples(vec3 pos) {',
-			// special case: if we only have 1 ripple we're probably idle
-		'	float ampl = nRipples == 1 ? 10.0 : 5.0;',
-		'	float max_ampl = 20.0;',
-		'	float freq = 3.0;',
-		'	float delta = 0.0;',
-		'	if (nRipples < 1) return delta;',
-		'	float dist = length(pos - rippleSrc1);',
-		'	if (dist > 2.0) delta += ampl * sin(freq * rippleTime1 - dist) / dist;',
-		'	if (nRipples < 2) return min(max_ampl, delta);',
-		'	dist = length(pos - rippleSrc2);',
-		'	if (dist > 2.0) delta += ampl * sin(freq * rippleTime2 - dist) / dist;',
-		'	if (nRipples < 3) return min(max_ampl, delta);',
-		'	dist = length(pos - rippleSrc3);',
-		'	if (dist > 2.0) delta += ampl * sin(freq * rippleTime3 - dist) / dist;',
-		'	if (nRipples < 4) return min(max_ampl, delta);',
-		'	dist = length(pos - rippleSrc4);',
-		'	if (dist > 2.0) delta += ampl * sin(freq * rippleTime4 - dist) / dist;',
-		'	if (nRipples < 5) return min(max_ampl, delta);',
-		'	dist = length(pos - rippleSrc5);',
-		'	if (dist > 2.0) delta += ampl * sin(freq * rippleTime5 - dist) / dist;',
-		'	if (nRipples < 6) return min(max_ampl, delta);',
-		'	dist = length(pos - rippleSrc6);',
-		'	if (dist > 2.0) delta += ampl * sin(freq * rippleTime6 - dist) / dist;',
-		'	if (nRipples < 7) return min(max_ampl, delta);',
-		'	dist = length(pos - rippleSrc7);',
-		'	if (dist > 2.0) delta += ampl * sin(freq * rippleTime7 - dist) / dist;',
-		'	if (nRipples < 8) return min(max_ampl, delta);',
-		'	dist = length(pos - rippleSrc8);',
-		'	if (dist > 2.0) delta += ampl * sin(freq * rippleTime8 - dist) / dist;',
-		'	if (nRipples < 9) return min(max_ampl, delta);',
-		'	dist = length(pos - rippleSrc9);',
-		'	if (dist > 2.0) delta += ampl * sin(freq * rippleTime9 - dist) / dist;',
-		'	if (nRipples < 10) return min(max_ampl, delta);',
-		'	dist = length(pos - rippleSrc10);',
-		'	if (dist > 2.0) delta += ampl * sin(freq * rippleTime10 - dist) / dist;',
-		'	return min(max_ampl, delta);',
-		'}',
-
-		'void main()',
-		'{',
-		'	mirrorCoord = modelMatrix * vec4( position, 1.0 );',
-		'	worldPosition = mirrorCoord.xyz;',
-		'	mirrorCoord = textureMatrix * mirrorCoord;',
-		'	float delta = calc_ripples(worldPosition);',
-		//'	position = vec3(position.x, position.y, position.z + delta);',
-		'	gl_Position = projectionMatrix * modelViewMatrix * vec4( position.x, position.y, position.z + delta, 1.0 );',
-		'}'
-	].join( '\n' ),
-
-	fragmentShader: [
-		'precision highp float;',
-
-		'uniform sampler2D mirrorSampler;',
-		'uniform float alpha;',
-		'uniform float time;',
-		'uniform float distortionScale;',
-		'uniform sampler2D normalSampler;',
-		'uniform vec3 sunColor;',
-		'uniform vec3 sunDirection;',
-		'uniform vec3 eye;',
-		'uniform vec3 waterColor;',
-
-		'varying vec4 mirrorCoord;',
-		'varying vec3 worldPosition;',
-		'varying float dist;',
-
-		'vec4 getNoise( vec2 uv )',
-		'{',
-		'	vec2 uv0 = ( uv / 103.0 ) + vec2(time / 17.0, time / 29.0);',
-		'	vec2 uv1 = uv / 107.0-vec2( time / -19.0, time / 31.0 );',
-		'	vec2 uv2 = uv / vec2( 8907.0, 9803.0 ) + vec2( time / 101.0, time / 97.0 );',
-		'	vec2 uv3 = uv / vec2( 1091.0, 1027.0 ) - vec2( time / 109.0, time / -113.0 );',
-		'	vec4 noise = texture2D( normalSampler, uv0 ) +',
-		'		texture2D( normalSampler, uv1 ) +',
-		'		texture2D( normalSampler, uv2 ) +',
-		'		texture2D( normalSampler, uv3 );',
-		'	return noise * 0.5 - 1.0;',
-		'}',
-
-		'void sunLight( const vec3 surfaceNormal, const vec3 eyeDirection, float shiny, float spec, float diffuse, inout vec3 diffuseColor, inout vec3 specularColor )',
-		'{',
-		'	vec3 reflection = normalize( reflect( -sunDirection, surfaceNormal ) );',
-		'	float direction = max( 0.0, dot( eyeDirection, reflection ) );',
-		'	specularColor += pow( direction, shiny ) * sunColor * spec;',
-		'	diffuseColor += max( dot( sunDirection, surfaceNormal ), 0.0 ) * sunColor * diffuse;',
-		'}',
-
-		THREE.ShaderChunk[ "common" ],
-		THREE.ShaderChunk[ "fog_pars_fragment" ],
-
-		'void main()',
-		'{',
-		'	vec4 noise = getNoise( worldPosition.xz );',
-		'	vec3 surfaceNormal = normalize( noise.xzy * vec3( 1.5, 1.0, 1.5 ) );',
-
-		'	vec3 diffuseLight = vec3(0.0);',
-		'	vec3 specularLight = vec3(0.0);',
-
-		'	vec3 worldToEye = eye-worldPosition;',
-		'	vec3 eyeDirection = normalize( worldToEye );',
-		'	sunLight( surfaceNormal, eyeDirection, 100.0, 2.0, 0.5, diffuseLight, specularLight );',
-
-		'	float distance = length(worldToEye);',
-
-		'	vec2 distortion = surfaceNormal.xz * ( 0.001 + 1.0 / distance ) * distortionScale;',
-		'	vec3 reflectionSample = vec3( texture2D( mirrorSampler, mirrorCoord.xy / mirrorCoord.z + distortion ) );',
-
-		'	float theta = max( dot( eyeDirection, surfaceNormal ), 0.0 );',
-		'	float rf0 = 0.3;',
-		'	float reflectance = rf0 + ( 1.0 - rf0 ) * pow( ( 1.0 - theta ), 5.0 );',
-		'	vec3 scatter = max( 0.0, dot( surfaceNormal, eyeDirection ) ) * waterColor;',
-		'	vec3 albedo = mix( sunColor * diffuseLight * 0.3 + scatter, ( vec3( 0.1 ) + reflectionSample * 0.9 + reflectionSample * specularLight ), reflectance );',
-		'	vec3 outgoingLight = albedo;',
-			THREE.ShaderChunk[ "fog_fragment" ],
-		//'	gl_FragColor = vec4( outgoingLight, 0.5 * alpha );',
-		'	gl_FragColor = vec4(1.0, 1.0, 1.0, 0.3);',
-		'}'
-	].join( '\n' )
-
-};
 
 THREE.WaterRippled = function ( renderer, camera, scene, options ) {
 
 	THREE.Object3D.call( this );
 	this.name = 'waterRippled_' + this.id;
 
-	function optionalParameter ( value, defaultValue ) {
+	function optionalParameter( value, defaultValue ) {
 
 		return value !== undefined ? value : defaultValue;
 
@@ -237,9 +46,11 @@ THREE.WaterRippled = function ( renderer, camera, scene, options ) {
 	this.lookAtPosition = new THREE.Vector3( 0, 0, - 1 );
 	this.clipPlane = new THREE.Vector4();
 
-	if ( camera instanceof THREE.PerspectiveCamera )
+	if ( camera instanceof THREE.PerspectiveCamera ) {
+
 		this.camera = camera;
-	else {
+
+	} else {
 
 		this.camera = new THREE.PerspectiveCamera();
 		console.log( this.name + ': camera is not a Perspective Camera!' );
@@ -250,10 +61,203 @@ THREE.WaterRippled = function ( renderer, camera, scene, options ) {
 
 	this.mirrorCamera = this.camera.clone();
 
-	this.texture = new THREE.WebGLRenderTarget( width, height );
-	this.tempTexture = new THREE.WebGLRenderTarget( width, height );
+	this.renderTarget = new THREE.WebGLRenderTarget( width, height );
+	this.renderTarget2 = new THREE.WebGLRenderTarget( width, height );
 
-	var mirrorShader = THREE.ShaderLib[ "waterRippled" ];
+	var mirrorShader = {
+
+		uniforms: THREE.UniformsUtils.merge( [
+			THREE.UniformsLib[ 'fog' ],
+			{
+				normalSampler:    { value: null },
+				mirrorSampler:    { value: null },
+				alpha:            { value: 1.0 },
+				time:             { value: 0.0 },
+				distortionScale:  { value: 20.0 },
+				noiseScale:       { value: 1.0 },
+				textureMatrix:    { value: new THREE.Matrix4() },
+				sunColor:         { value: new THREE.Color( 0x7F7F7F ) },
+				sunDirection:     { value: new THREE.Vector3( 0.70707, 0.70707, 0 ) },
+				eye:              { value: new THREE.Vector3() },
+				waterColor:       { value: new THREE.Color( 0x555555 ) },
+				nRipples:         { value: 0 },
+				rippleSrc1:       { value: new THREE.Vector3() },
+				rippleSrc2:       { value: new THREE.Vector3() },
+				rippleSrc3:       { value: new THREE.Vector3() },
+				rippleSrc4:       { value: new THREE.Vector3() },
+				rippleSrc5:       { value: new THREE.Vector3() },
+				rippleSrc6:       { value: new THREE.Vector3() },
+				rippleSrc7:       { value: new THREE.Vector3() },
+				rippleSrc8:       { value: new THREE.Vector3() },
+				rippleSrc9:       { value: new THREE.Vector3() },
+				rippleSrc10:      { value: new THREE.Vector3() },
+				rippleTime1:      { value: 0.0 },
+				rippleTime2:      { value: 0.0 },
+				rippleTime3:      { value: 0.0 },
+				rippleTime4:      { value: 0.0 },
+				rippleTime5:      { value: 0.0 },
+				rippleTime6:      { value: 0.0 },
+				rippleTime7:      { value: 0.0 },
+				rippleTime8:      { value: 0.0 },
+				rippleTime9:      { value: 0.0 },
+				rippleTime10:     { value: 0.0 },
+			}
+		] ),
+
+		vertexShader: [
+			'uniform mat4 textureMatrix;',
+			'uniform float time;',
+			'uniform int nRipples;',
+			'uniform vec3 rippleSrc1;',
+			'uniform vec3 rippleSrc2;',
+			'uniform vec3 rippleSrc3;',
+			'uniform vec3 rippleSrc4;',
+			'uniform vec3 rippleSrc5;',
+			'uniform vec3 rippleSrc6;',
+			'uniform vec3 rippleSrc7;',
+			'uniform vec3 rippleSrc8;',
+			'uniform vec3 rippleSrc9;',
+			'uniform vec3 rippleSrc10;',
+			'uniform float rippleTime1;',
+			'uniform float rippleTime2;',
+			'uniform float rippleTime3;',
+			'uniform float rippleTime4;',
+			'uniform float rippleTime5;',
+			'uniform float rippleTime6;',
+			'uniform float rippleTime7;',
+			'uniform float rippleTime8;',
+			'uniform float rippleTime9;',
+			'uniform float rippleTime10;',
+
+			'varying vec4 mirrorCoord;',
+			'varying vec3 worldPosition;',
+			'varying float dist;',
+
+			THREE.ShaderChunk[ 'fog_pars_vertex' ],
+
+			'float calc_ripples(vec3 pos) {',
+				// special case: if we only have 1 ripple we're probably idle
+			'	float ampl = nRipples == 1 ? 10.0 : 5.0;',
+			'	float max_ampl = 20.0;',
+			'	float freq = 3.0;',
+			'	float delta = 0.0;',
+			'	if (nRipples < 1) return delta;',
+			'	float dist = length(pos - rippleSrc1);',
+			'	if (dist > 2.0) delta += ampl * sin(freq * rippleTime1 - dist) / dist;',
+			'	if (nRipples < 2) return min(max_ampl, delta);',
+			'	dist = length(pos - rippleSrc2);',
+			'	if (dist > 2.0) delta += ampl * sin(freq * rippleTime2 - dist) / dist;',
+			'	if (nRipples < 3) return min(max_ampl, delta);',
+			'	dist = length(pos - rippleSrc3);',
+			'	if (dist > 2.0) delta += ampl * sin(freq * rippleTime3 - dist) / dist;',
+			'	if (nRipples < 4) return min(max_ampl, delta);',
+			'	dist = length(pos - rippleSrc4);',
+			'	if (dist > 2.0) delta += ampl * sin(freq * rippleTime4 - dist) / dist;',
+			'	if (nRipples < 5) return min(max_ampl, delta);',
+			'	dist = length(pos - rippleSrc5);',
+			'	if (dist > 2.0) delta += ampl * sin(freq * rippleTime5 - dist) / dist;',
+			'	if (nRipples < 6) return min(max_ampl, delta);',
+			'	dist = length(pos - rippleSrc6);',
+			'	if (dist > 2.0) delta += ampl * sin(freq * rippleTime6 - dist) / dist;',
+			'	if (nRipples < 7) return min(max_ampl, delta);',
+			'	dist = length(pos - rippleSrc7);',
+			'	if (dist > 2.0) delta += ampl * sin(freq * rippleTime7 - dist) / dist;',
+			'	if (nRipples < 8) return min(max_ampl, delta);',
+			'	dist = length(pos - rippleSrc8);',
+			'	if (dist > 2.0) delta += ampl * sin(freq * rippleTime8 - dist) / dist;',
+			'	if (nRipples < 9) return min(max_ampl, delta);',
+			'	dist = length(pos - rippleSrc9);',
+			'	if (dist > 2.0) delta += ampl * sin(freq * rippleTime9 - dist) / dist;',
+			'	if (nRipples < 10) return min(max_ampl, delta);',
+			'	dist = length(pos - rippleSrc10);',
+			'	if (dist > 2.0) delta += ampl * sin(freq * rippleTime10 - dist) / dist;',
+			'	return min(max_ampl, delta);',
+			'}',
+
+			'void main()',
+			'{',
+			'	mirrorCoord = modelMatrix * vec4( position, 1.0 );',
+			'	worldPosition = mirrorCoord.xyz;',
+			'	mirrorCoord = textureMatrix * mirrorCoord;',
+			'	float delta = calc_ripples(worldPosition);',
+			//'	position = vec3(position.x, position.y, position.z + delta);',
+			'	gl_Position = projectionMatrix * modelViewMatrix * vec4( position.x, position.y, position.z + delta, 1.0 );',
+
+			THREE.ShaderChunk[ 'fog_vertex' ],
+
+			'}'
+		].join( '\n' ),
+
+		fragmentShader: [
+			'precision highp float;',
+
+			'uniform sampler2D mirrorSampler;',
+			'uniform float alpha;',
+			'uniform float time;',
+			'uniform float distortionScale;',
+			'uniform sampler2D normalSampler;',
+			'uniform vec3 sunColor;',
+			'uniform vec3 sunDirection;',
+			'uniform vec3 eye;',
+			'uniform vec3 waterColor;',
+
+			'varying vec4 mirrorCoord;',
+			'varying vec3 worldPosition;',
+
+			'vec4 getNoise( vec2 uv ) {',
+			'	vec2 uv0 = ( uv / 103.0 ) + vec2(time / 17.0, time / 29.0);',
+			'	vec2 uv1 = uv / 107.0-vec2( time / -19.0, time / 31.0 );',
+			'	vec2 uv2 = uv / vec2( 8907.0, 9803.0 ) + vec2( time / 101.0, time / 97.0 );',
+			'	vec2 uv3 = uv / vec2( 1091.0, 1027.0 ) - vec2( time / 109.0, time / -113.0 );',
+			'	vec4 noise = texture2D( normalSampler, uv0 ) +',
+			'		texture2D( normalSampler, uv1 ) +',
+			'		texture2D( normalSampler, uv2 ) +',
+			'		texture2D( normalSampler, uv3 );',
+			'	return noise * 0.5 - 1.0;',
+			'}',
+
+			'void sunLight( const vec3 surfaceNormal, const vec3 eyeDirection, float shiny, float spec, float diffuse, inout vec3 diffuseColor, inout vec3 specularColor ) {',
+			'	vec3 reflection = normalize( reflect( -sunDirection, surfaceNormal ) );',
+			'	float direction = max( 0.0, dot( eyeDirection, reflection ) );',
+			'	specularColor += pow( direction, shiny ) * sunColor * spec;',
+			'	diffuseColor += max( dot( sunDirection, surfaceNormal ), 0.0 ) * sunColor * diffuse;',
+			'}',
+
+			THREE.ShaderChunk[ 'common' ],
+			THREE.ShaderChunk[ 'fog_pars_fragment' ],
+
+			'void main() {',
+			'	vec4 noise = getNoise( worldPosition.xz );',
+			'	vec3 surfaceNormal = normalize( noise.xzy * vec3( 1.5, 1.0, 1.5 ) );',
+
+			'	vec3 diffuseLight = vec3(0.0);',
+			'	vec3 specularLight = vec3(0.0);',
+
+			'	vec3 worldToEye = eye-worldPosition;',
+			'	vec3 eyeDirection = normalize( worldToEye );',
+			'	sunLight( surfaceNormal, eyeDirection, 100.0, 2.0, 0.5, diffuseLight, specularLight );',
+
+			'	float distance = length(worldToEye);',
+
+			'	vec2 distortion = surfaceNormal.xz * ( 0.001 + 1.0 / distance ) * distortionScale;',
+			'	vec3 reflectionSample = vec3( texture2D( mirrorSampler, mirrorCoord.xy / mirrorCoord.z + distortion ) );',
+
+			'	float theta = max( dot( eyeDirection, surfaceNormal ), 0.0 );',
+			'	float rf0 = 0.3;',
+			'	float reflectance = rf0 + ( 1.0 - rf0 ) * pow( ( 1.0 - theta ), 5.0 );',
+			'	vec3 scatter = max( 0.0, dot( surfaceNormal, eyeDirection ) ) * waterColor;',
+			'	vec3 albedo = mix( sunColor * diffuseLight * 0.3 + scatter, ( vec3( 0.1 ) + reflectionSample * 0.9 + reflectionSample * specularLight ), reflectance );',
+			'	vec3 outgoingLight = albedo;',
+			//'	gl_FragColor = vec4( outgoingLight, alpha );',
+			'	gl_FragColor = vec4(1.0, 1.0, 1.0, 0.3);',
+
+			THREE.ShaderChunk[ 'fog_fragment' ],
+
+			'}'
+		].join( '\n' )
+
+	};
+
 	var mirrorUniforms = THREE.UniformsUtils.clone( mirrorShader.uniforms );
 
 	this.material = new THREE.ShaderMaterial( {
@@ -265,7 +269,7 @@ THREE.WaterRippled = function ( renderer, camera, scene, options ) {
 		fog: this.fog
 	} );
 
-	this.material.uniforms.mirrorSampler.value = this.texture;
+	this.material.uniforms.mirrorSampler.value = this.renderTarget.texture;
 	this.material.uniforms.textureMatrix.value = this.textureMatrix;
 	this.material.uniforms.alpha.value = this.alpha;
 	this.material.uniforms.time.value = this.time;
@@ -279,10 +283,10 @@ THREE.WaterRippled = function ( renderer, camera, scene, options ) {
 
 	if ( ! THREE.Math.isPowerOfTwo( width ) || ! THREE.Math.isPowerOfTwo( height ) ) {
 
-		this.texture.generateMipmaps = false;
-		this.texture.minFilter = THREE.LinearFilter;
-		this.tempTexture.generateMipmaps = false;
-		this.tempTexture.minFilter = THREE.LinearFilter;
+		this.renderTarget.texture.generateMipmaps = false;
+		this.renderTarget.texture.minFilter = THREE.LinearFilter;
+		this.renderTarget2.texture.generateMipmaps = false;
+		this.renderTarget2.texture.minFilter = THREE.LinearFilter;
 
 	}
 
@@ -317,8 +321,116 @@ THREE.WaterRippled = function ( renderer, camera, scene, options ) {
 
 };
 
-THREE.WaterRippled.prototype = Object.create( THREE.Mirror.prototype );
+THREE.WaterRippled.prototype = Object.create( THREE.Object3D.prototype );
 THREE.WaterRippled.prototype.constructor = THREE.WaterRippled;
+
+THREE.WaterRippled.prototype.render = function () {
+
+	if ( this.matrixNeedsUpdate ) this.updateTextureMatrix();
+
+	this.matrixNeedsUpdate = true;
+
+	// Render the mirrored view of the current scene into the target texture
+	var scene = this;
+
+	while ( scene.parent !== null ) {
+
+		scene = scene.parent;
+
+	}
+
+	if ( scene !== undefined && scene instanceof THREE.Scene ) {
+
+		this.material.visible = false;
+
+		this.renderer.render( scene, this.mirrorCamera, this.renderTarget, true );
+
+		this.material.visible = true;
+
+	}
+
+};
+
+
+THREE.WaterRippled.prototype.updateTextureMatrix = function () {
+
+	this.updateMatrixWorld();
+	this.camera.updateMatrixWorld();
+
+	this.mirrorWorldPosition.setFromMatrixPosition( this.matrixWorld );
+	this.cameraWorldPosition.setFromMatrixPosition( this.camera.matrixWorld );
+
+	this.rotationMatrix.extractRotation( this.matrixWorld );
+
+	this.normal.set( 0, 0, 1 );
+	this.normal.applyMatrix4( this.rotationMatrix );
+
+	var view = this.mirrorWorldPosition.clone().sub( this.cameraWorldPosition );
+	view.reflect( this.normal ).negate();
+	view.add( this.mirrorWorldPosition );
+
+	this.rotationMatrix.extractRotation( this.camera.matrixWorld );
+
+	this.lookAtPosition.set( 0, 0, - 1 );
+	this.lookAtPosition.applyMatrix4( this.rotationMatrix );
+	this.lookAtPosition.add( this.cameraWorldPosition );
+
+	var target = this.mirrorWorldPosition.clone().sub( this.lookAtPosition );
+	target.reflect( this.normal ).negate();
+	target.add( this.mirrorWorldPosition );
+
+	this.up.set( 0, - 1, 0 );
+	this.up.applyMatrix4( this.rotationMatrix );
+	this.up.reflect( this.normal ).negate();
+
+	this.mirrorCamera.position.copy( view );
+	this.mirrorCamera.up = this.up;
+	this.mirrorCamera.lookAt( target );
+	this.mirrorCamera.aspect = this.camera.aspect;
+
+	this.mirrorCamera.updateProjectionMatrix();
+	this.mirrorCamera.updateMatrixWorld();
+
+	// Update the texture matrix
+	this.textureMatrix.set(
+		0.5, 0.0, 0.0, 0.5,
+		0.0, 0.5, 0.0, 0.5,
+		0.0, 0.0, 0.5, 0.5,
+		0.0, 0.0, 0.0, 1.0
+	);
+	this.textureMatrix.multiply( this.mirrorCamera.projectionMatrix );
+	this.textureMatrix.multiply( this.mirrorCamera.matrixWorldInverse );
+
+	// Now update projection matrix with new clip plane, implementing code from: http://www.terathon.com/code/oblique.html
+	// Paper explaining this technique: http://www.terathon.com/lengyel/Lengyel-Oblique.pdf
+	this.mirrorPlane.setFromNormalAndCoplanarPoint( this.normal, this.mirrorWorldPosition );
+	this.mirrorPlane.applyMatrix4( this.mirrorCamera.matrixWorldInverse );
+
+	this.clipPlane.set( this.mirrorPlane.normal.x, this.mirrorPlane.normal.y, this.mirrorPlane.normal.z, this.mirrorPlane.constant );
+
+	var q = new THREE.Vector4();
+	var projectionMatrix = this.mirrorCamera.projectionMatrix;
+
+	q.x = ( Math.sign( this.clipPlane.x ) + projectionMatrix.elements[ 8 ] ) / projectionMatrix.elements[ 0 ];
+	q.y = ( Math.sign( this.clipPlane.y ) + projectionMatrix.elements[ 9 ] ) / projectionMatrix.elements[ 5 ];
+	q.z = - 1.0;
+	q.w = ( 1.0 + projectionMatrix.elements[ 10 ] ) / projectionMatrix.elements[ 14 ];
+
+	// Calculate the scaled plane vector
+	var c = this.clipPlane.multiplyScalar( 2.0 / this.clipPlane.dot( q ) );
+
+	// Replacing the third row of the projection matrix
+	projectionMatrix.elements[ 2 ] = c.x;
+	projectionMatrix.elements[ 6 ] = c.y;
+	projectionMatrix.elements[ 10 ] = c.z + 1.0 - this.clipBias;
+	projectionMatrix.elements[ 14 ] = c.w;
+
+	var worldCoordinates = new THREE.Vector3();
+	worldCoordinates.setFromMatrixPosition( this.camera.matrixWorld );
+	this.eye = worldCoordinates;
+	this.material.uniforms.eye.value = this.eye;
+
+};
 
 /* Shifts all ripples to the left, overwriting the 0-th ripple.
  * nRipple is decreased by 1.
@@ -367,89 +479,3 @@ THREE.WaterRippled.prototype.tickRippleTimes = function (delta) {
 		this.shiftRipples();
 
 }
-
-THREE.WaterRippled.prototype.updateTextureMatrix = function () {
-
-	function sign( x ) {
-
-		return x ? x < 0 ? - 1 : 1 : 0;
-
-	}
-
-	this.updateMatrixWorld();
-	this.camera.updateMatrixWorld();
-
-	this.mirrorWorldPosition.setFromMatrixPosition( this.matrixWorld );
-	this.cameraWorldPosition.setFromMatrixPosition( this.camera.matrixWorld );
-
-	this.rotationMatrix.extractRotation( this.matrixWorld );
-
-	this.normal.set( 0, 0, 1 );
-	this.normal.applyMatrix4( this.rotationMatrix );
-
-	var view = this.mirrorWorldPosition.clone().sub( this.cameraWorldPosition );
-	view.reflect( this.normal ).negate();
-	view.add( this.mirrorWorldPosition );
-
-	this.rotationMatrix.extractRotation( this.camera.matrixWorld );
-
-	this.lookAtPosition.set( 0, 0, - 1 );
-	this.lookAtPosition.applyMatrix4( this.rotationMatrix );
-	this.lookAtPosition.add( this.cameraWorldPosition );
-
-	var target = this.mirrorWorldPosition.clone().sub( this.lookAtPosition );
-	target.reflect( this.normal ).negate();
-	target.add( this.mirrorWorldPosition );
-
-	this.up.set( 0, - 1, 0 );
-	this.up.applyMatrix4( this.rotationMatrix );
-	this.up.reflect( this.normal ).negate();
-
-	this.mirrorCamera.position.copy( view );
-	this.mirrorCamera.up = this.up;
-	this.mirrorCamera.lookAt( target );
-	this.mirrorCamera.aspect = this.camera.aspect;
-
-	this.mirrorCamera.updateProjectionMatrix();
-	this.mirrorCamera.updateMatrixWorld();
-	this.mirrorCamera.matrixWorldInverse.getInverse( this.mirrorCamera.matrixWorld );
-
-	// Update the texture matrix
-	this.textureMatrix.set( 0.5, 0.0, 0.0, 0.5,
-							0.0, 0.5, 0.0, 0.5,
-							0.0, 0.0, 0.5, 0.5,
-							0.0, 0.0, 0.0, 1.0 );
-	this.textureMatrix.multiply( this.mirrorCamera.projectionMatrix );
-	this.textureMatrix.multiply( this.mirrorCamera.matrixWorldInverse );
-
-	// Now update projection matrix with new clip plane, implementing code from: http://www.terathon.com/code/oblique.html
-	// Paper explaining this technique: http://www.terathon.com/lengyel/Lengyel-Oblique.pdf
-	this.mirrorPlane.setFromNormalAndCoplanarPoint( this.normal, this.mirrorWorldPosition );
-	this.mirrorPlane.applyMatrix4( this.mirrorCamera.matrixWorldInverse );
-
-	this.clipPlane.set( this.mirrorPlane.normal.x, this.mirrorPlane.normal.y, this.mirrorPlane.normal.z, this.mirrorPlane.constant );
-
-	var q = new THREE.Vector4();
-	var projectionMatrix = this.mirrorCamera.projectionMatrix;
-
-	q.x = ( sign( this.clipPlane.x ) + projectionMatrix.elements[ 8 ] ) / projectionMatrix.elements[ 0 ];
-	q.y = ( sign( this.clipPlane.y ) + projectionMatrix.elements[ 9 ] ) / projectionMatrix.elements[ 5 ];
-	q.z = - 1.0;
-	q.w = ( 1.0 + projectionMatrix.elements[ 10 ] ) / projectionMatrix.elements[ 14 ];
-
-	// Calculate the scaled plane vector
-	var c = new THREE.Vector4();
-	c = this.clipPlane.multiplyScalar( 2.0 / this.clipPlane.dot( q ) );
-
-	// Replacing the third row of the projection matrix
-	projectionMatrix.elements[ 2 ] = c.x;
-	projectionMatrix.elements[ 6 ] = c.y;
-	projectionMatrix.elements[ 10 ] = c.z + 1.0 - this.clipBias;
-	projectionMatrix.elements[ 14 ] = c.w;
-
-	var worldCoordinates = new THREE.Vector3();
-	worldCoordinates.setFromMatrixPosition( this.camera.matrixWorld );
-	this.eye = worldCoordinates;
-	this.material.uniforms.eye.value = this.eye;
-
-};
