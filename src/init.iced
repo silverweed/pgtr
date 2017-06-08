@@ -16,7 +16,7 @@ createDOM = (children...) ->
 initWorld = ->
 	l 'Starting program'
 
-	await asyncBuildScene(defer(world))
+	await asyncBuildScene(defer world)
 
 	document.getElementById('loading-text').style.display = 'none'
 
@@ -28,10 +28,9 @@ initWorld = ->
 	createDOM(world.renderer.domElement, world.stats.domElement)
 
 	# Add postprocessing
-	await postProcessInit(world, world.scene, world.camera, defer pp)
-	world.postprocess = pp
-	
+	await asyncPostProcessInit(world, world.scene, world.camera, defer world.postprocess)
 	world.postprocess.enabled = true
+	createPostProcessControls(world)
 	
 	world.updateBuoyancy = (delta) ->
 		x = 0

@@ -28,17 +28,17 @@ varying vec3 vLightResult;
 void main()
 {
 	vec4 myPosition = projectionMatrix * viewMatrix * modelMatrix * vec4(position, 1.0);
-	vec3 lightResult = vec3(0,0,0);
+	vec3 lightResult = vec3(0.0,0.0,0.0);
 	vec3 myNormal = normalize( normalMatrix * normal );
 	/*for(int i =0;i<MAXLIGHTS;i++){*/
 		/*lightResult += (distance(pointLights[i].position,myPosition) / MAXDISTANCE)*/
 			/** color * intensity * dot(normalize(pointLights[i].position - myPosition), myNormal);*/
 	/*}*/
 
-	lightResult += dot ( directionalLightDirection , myNormal );//*directionalLightColor*directionalLightIntensity;
+	lightResult += dot( directionalLightDirection , myNormal ) * directionalLightColor*directionalLightIntensity;
 	//lightResult += ambientLight*intensity;
 
 	vLightResult = lightResult;
 
-    gl_Position = myPosition;
+	gl_Position = myPosition;
 }

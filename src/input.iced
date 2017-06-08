@@ -26,6 +26,10 @@ window.createPostProcessControls = (world) ->
 	window.addEventListener('keyup', (e) ->
 		if `e.keyCode == CONF.CONTROLS.togglePostProcess`
 			world.postprocess.enabled = !world.postprocess.enabled
+			if world.postprocess.enabled
+				world.scene.overrideMaterial = world.postprocess.overrideMaterial
+			else
+				world.scene.overrideMaterial = undefined
 			world.renderer.clear()
 		true
 	)
