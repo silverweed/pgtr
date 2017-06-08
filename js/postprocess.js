@@ -186,7 +186,7 @@ postProcessRender = (scene, renderer, camera, postprocessing, sunPosition) ->
  */
 
 (function() {
-  var iced, init, __iced_k, __iced_k_noop,
+  var iced, init, initTest, __iced_k, __iced_k_noop,
     __slice = [].slice;
 
   iced = {
@@ -232,14 +232,14 @@ postProcessRender = (scene, renderer, camera, postprocessing, sunPosition) ->
   __iced_k = __iced_k_noop = function() {};
 
   init = function(world, scene, camera, cb) {
-    var dld, target, tcomposer, toonLighting, toonfrag, toonvert, ___iced_passed_deferral, __iced_deferrals, __iced_k;
+    var dld, material, target, tcomposer, toonLighting, toonfrag, toonvert, ___iced_passed_deferral, __iced_deferrals, __iced_k;
     __iced_k = __iced_k_noop;
     ___iced_passed_deferral = iced.findDeferral(arguments);
     (function(_this) {
       return (function(__iced_k) {
         __iced_deferrals = new iced.Deferrals(__iced_k, {
           parent: ___iced_passed_deferral,
-          filename: "/home/jp/jack/inf/pgtr/proj/src/postprocess.iced"
+          filename: "/home/air/Documents/pgtr/src/postprocess.iced"
         });
         asyncLoadShader("toonshading.vert", __iced_deferrals.defer({
           assign_fn: (function() {
@@ -263,7 +263,9 @@ postProcessRender = (scene, renderer, camera, postprocessing, sunPosition) ->
       return function() {
         toonLighting = create("ShaderMaterial", {
           uniforms: {
-            nBands: 3,
+            nBands: {
+              value: 3
+            },
             directionalLightDirection: {
               value: (world.objects.sunlight.target.position.sub(world.objects.sunlight.position)).normalize()
             },
@@ -283,12 +285,15 @@ postProcessRender = (scene, renderer, camera, postprocessing, sunPosition) ->
         target.depthBuffer = true;
         target.depthTexture = create("DepthTexture");
         tcomposer = {};
-        tcomposer.renderer = create('WebGLRenderer', {
-          antialias: true
-        }).then('setSize', window.innerWidth, window.innerHeight).then('setPixelRatio', window.devicePixelRatio)["with"]('autoClear', true);
+        material = create('MeshPhongMaterial', {
+          shininess: 30,
+          color: 0x000000,
+          specular: 0x999999
+        });
+        tcomposer.renderer = world.renderer;
         tcomposer.render = function(sc, cam) {
+          scene.overrideMaterial = toonLighting;
           tcomposer.renderer.render(sc, cam);
-          tcomposer.renderer;
           return null;
         };
         return cb({
@@ -296,6 +301,19 @@ postProcessRender = (scene, renderer, camera, postprocessing, sunPosition) ->
         });
       };
     })(this));
+  };
+
+  initTest = function(world, scene, camera, cb) {
+    var composer;
+    composer = {};
+    composer.renderer = world.renderer;
+    composer.render = function(sc, cam) {
+      composer.renderer.render(sc, cam);
+      return null;
+    };
+    return cb({
+      composer: composer
+    });
   };
 
   window.postProcessInit = init;

@@ -193,7 +193,7 @@ init = (world, scene, camera,  cb) ->
 	
 	toonLighting = create("ShaderMaterial", {
 		uniforms: {
-			nBands : 3,
+			nBands : {value: 3},
 			directionalLightDirection: { value: (world.objects.sunlight.target.position.sub(
 				world.objects.sunlight.position)).normalize() },
 			directionalLightColor: { value: world.objects.sunlight.color },
@@ -214,16 +214,28 @@ init = (world, scene, camera,  cb) ->
 	#		.then('addPass', renderPass)
 	#FIXME
 	tcomposer = {}
-	tcomposer.renderer = create('WebGLRenderer', antialias: on)
-				.then('setSize', window.innerWidth, window.innerHeight)
-				.then('setPixelRatio', window.devicePixelRatio)
-				.with('autoClear', true)
+
+	material = create('MeshPhongMaterial',
+					shininess: 30
+					color: 0x000000
+					specular: 0x999999
+				)
+ 
+	tcomposer.renderer = world.renderer
 	tcomposer.render = (sc, cam) ->
-		#scene.overrideMaterial = toonLighting
+		scene.overrideMaterial= toonLighting
 		tcomposer.renderer.render(sc, cam)
-		tcomposer.renderer
 		null
 	cb({ composer: tcomposer })
+
+initTest = (world, scene, camera, cb) ->
+	composer = {}
+	composer.renderer = world.renderer
+	composer.render = (sc, cam) -> 
+		composer.renderer.render(sc, cam)
+		null
+	cb({ composer:composer})
+
 
 ## Exports ##
 window.postProcessInit = init

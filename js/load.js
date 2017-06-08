@@ -81,7 +81,7 @@
           (function(__iced_k) {
             __iced_deferrals = new iced.Deferrals(__iced_k, {
               parent: ___iced_passed_deferral,
-              filename: "/home/jp/jack/inf/pgtr/proj/src/load.iced"
+              filename: "/home/air/Documents/pgtr/src/load.iced"
             });
             create('FileLoader').load(shadpath(name), __iced_deferrals.defer({
               assign_fn: (function() {
@@ -117,7 +117,7 @@
           (function(__iced_k) {
             __iced_deferrals = new iced.Deferrals(__iced_k, {
               parent: ___iced_passed_deferral,
-              filename: "/home/jp/jack/inf/pgtr/proj/src/load.iced"
+              filename: "/home/air/Documents/pgtr/src/load.iced"
             });
             create('TextureLoader').load(texpath(name), __iced_deferrals.defer({
               assign_fn: (function() {
@@ -153,7 +153,7 @@
           (function(__iced_k) {
             __iced_deferrals = new iced.Deferrals(__iced_k, {
               parent: ___iced_passed_deferral,
-              filename: "/home/jp/jack/inf/pgtr/proj/src/load.iced"
+              filename: "/home/air/Documents/pgtr/src/load.iced"
             });
             create('JSONLoader').load(modpath(name), __iced_deferrals.defer({
               assign_fn: (function() {
@@ -190,7 +190,7 @@
         var _i, _j, _len, _len1;
         __iced_deferrals = new iced.Deferrals(__iced_k, {
           parent: ___iced_passed_deferral,
-          filename: "/home/jp/jack/inf/pgtr/proj/src/load.iced"
+          filename: "/home/air/Documents/pgtr/src/load.iced"
         });
         for (_i = 0, _len = textures.length; _i < _len; _i++) {
           texname = textures[_i];
@@ -233,7 +233,7 @@
       return (function(__iced_k) {
         __iced_deferrals = new iced.Deferrals(__iced_k, {
           parent: ___iced_passed_deferral,
-          filename: "/home/jp/jack/inf/pgtr/proj/src/load.iced"
+          filename: "/home/air/Documents/pgtr/src/load.iced"
         });
         create('CubeTextureLoader').load(urls, __iced_deferrals.defer({
           assign_fn: (function() {
@@ -270,7 +270,7 @@
       return (function(__iced_k) {
         __iced_deferrals = new iced.Deferrals(__iced_k, {
           parent: ___iced_passed_deferral,
-          filename: "/home/jp/jack/inf/pgtr/proj/src/load.iced"
+          filename: "/home/air/Documents/pgtr/src/load.iced"
         });
         create('TextureLoader').load(waternormal_url, __iced_deferrals.defer({
           assign_fn: (function() {
@@ -309,7 +309,7 @@
       return (function(__iced_k) {
         __iced_deferrals = new iced.Deferrals(__iced_k, {
           parent: ___iced_passed_deferral,
-          filename: "/home/jp/jack/inf/pgtr/proj/src/load.iced"
+          filename: "/home/air/Documents/pgtr/src/load.iced"
         });
         create('TextureLoader').load(waternormal_url, __iced_deferrals.defer({
           assign_fn: (function() {

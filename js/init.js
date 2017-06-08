@@ -67,7 +67,7 @@
   };
 
   initWorld = function() {
-    var world, ___iced_passed_deferral, __iced_deferrals, __iced_k;
+    var pp, world, ___iced_passed_deferral, __iced_deferrals, __iced_k;
     __iced_k = __iced_k_noop;
     ___iced_passed_deferral = iced.findDeferral(arguments);
     l('Starting program');
@@ -75,7 +75,7 @@
       return (function(__iced_k) {
         __iced_deferrals = new iced.Deferrals(__iced_k, {
           parent: ___iced_passed_deferral,
-          filename: "/home/jp/jack/inf/pgtr/proj/src/init.iced"
+          filename: "/home/air/Documents/pgtr/src/init.iced"
         });
         asyncBuildScene(__iced_deferrals.defer({
           assign_fn: (function() {
@@ -93,30 +93,46 @@
         world.stats = createStats();
         world.debug = [createSunlightControls(world.objects.sunlight), createPhysicsControls(world.physics)];
         createDOM(world.renderer.domElement, world.stats.domElement);
-        window.addEventListener('resize', resizeHandler(world.camera, world.controls, world.renderer));
-        createPostProcessControls(world);
-        world.updateBuoyancy = function(delta) {
-          var depth, name, obj, x, _ref, _ref1, _ref2, _results;
-          x = 0;
-          _ref = world.entities.entities;
-          _results = [];
-          for (name in _ref) {
-            obj = _ref[name];
-            if (!((obj.rigidbody != null) && obj.buoyant)) {
-              continue;
+        (function(__iced_k) {
+          __iced_deferrals = new iced.Deferrals(__iced_k, {
+            parent: ___iced_passed_deferral,
+            filename: "/home/air/Documents/pgtr/src/init.iced"
+          });
+          postProcessInit(world, world.scene, world.camera, __iced_deferrals.defer({
+            assign_fn: (function() {
+              return function() {
+                return pp = arguments[0];
+              };
+            })(),
+            lineno: 30
+          }));
+          __iced_deferrals._fulfill();
+        })(function() {
+          world.postprocess = pp;
+          world.postprocess.enabled = true;
+          world.updateBuoyancy = function(delta) {
+            var depth, name, obj, x, _ref, _ref1, _ref2, _results;
+            x = 0;
+            _ref = world.entities.entities;
+            _results = [];
+            for (name in _ref) {
+              obj = _ref[name];
+              if (!((obj.rigidbody != null) && obj.buoyant)) {
+                continue;
+              }
+              depth = CONF.PHYSICS.BUOYANCY_WATER_LEVEL - obj.position.y;
+              x++;
+              if (depth > 0) {
+                obj.rigidbody.activate();
+                _results.push(obj.rigidbody.applyCentralForce(new Ammo.btVector3(0, Math.pow(depth, 1.8) * ((_ref1 = (_ref2 = obj.physicsOpts) != null ? _ref2.mass : void 0) != null ? _ref1 : 1) * delta * CONF.PHYSICS.BUOYANCY, 0)));
+              } else {
+                _results.push(void 0);
+              }
             }
-            depth = CONF.PHYSICS.BUOYANCY_WATER_LEVEL - obj.position.y;
-            x++;
-            if (depth > 0) {
-              obj.rigidbody.activate();
-              _results.push(obj.rigidbody.applyCentralForce(new Ammo.btVector3(0, Math.pow(depth, 1.8) * ((_ref1 = (_ref2 = obj.physicsOpts) != null ? _ref2.mass : void 0) != null ? _ref1 : 1) * delta * CONF.PHYSICS.BUOYANCY, 0)));
-            } else {
-              _results.push(void 0);
-            }
-          }
-          return _results;
-        };
-        return renderLoop(world);
+            return _results;
+          };
+          return renderLoop(world);
+        });
       };
     })(this));
   };

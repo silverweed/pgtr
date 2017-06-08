@@ -28,14 +28,11 @@ initWorld = ->
 	createDOM(world.renderer.domElement, world.stats.domElement)
 
 	# Add postprocessing
-	#await postProcessInit(world, world.scene, world.camera, defer pp)
-	#world.postprocess = pp
-	#world.postprocess.enabled = true
+	await postProcessInit(world, world.scene, world.camera, defer pp)
+	world.postprocess = pp
 	
-	# Add listeners
-	window.addEventListener('resize', resizeHandler(world.camera, world.controls, world.renderer))
-	createPostProcessControls(world)
-
+	world.postprocess.enabled = true
+	
 	world.updateBuoyancy = (delta) ->
 		x = 0
 		for name, obj of world.entities.entities

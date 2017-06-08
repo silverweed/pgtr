@@ -35,7 +35,7 @@ void main()
 			/** color * intensity * dot(normalize(pointLights[i].position - myPosition), myNormal);*/
 	/*}*/
 
-	lightResult += dot ( directionalLightDirection , myNormal )*directionalLightColor*directionalLightIntensity;
+	lightResult += dot ( directionalLightDirection , myNormal );//*directionalLightColor*directionalLightIntensity;
 	//lightResult += ambientLight*intensity;
 
 	vLightResult = lightResult;
