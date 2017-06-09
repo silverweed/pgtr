@@ -36,6 +36,11 @@
     return window.addEventListener('keyup', function(e) {
       if (e.keyCode == CONF.CONTROLS.togglePostProcess) {
         world.postprocess.enabled = !world.postprocess.enabled;
+        if (world.postprocess.enabled) {
+          world.scene.overrideMaterial = world.postprocess.overrideMaterial;
+        } else {
+          world.scene.overrideMaterial = void 0;
+        }
         world.renderer.clear();
       }
       return true;

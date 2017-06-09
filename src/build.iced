@@ -18,7 +18,7 @@ asyncBuildScene = (cb) ->
 	scene.fog = create('FogExp2', CONF.FOG.COLOR, CONF.FOG.DENSITY)
 	l "In buildScene(#{scene})"
 
-	camera = create('PerspectiveCamera', 60, windowRatio(), 1, 100000).at(0, 10, -30)
+	camera = create('PerspectiveCamera', 60, windowRatio(), 1, 500).at(0, 10, -30)
 		.then('rotateY', Math.PI)
 		.then('rotateX', -0.3)
 	# XXX: Currently unused
@@ -29,6 +29,7 @@ asyncBuildScene = (cb) ->
 	renderer = create('WebGLRenderer', antialias: on)
 				.then('setSize', window.innerWidth, window.innerHeight)
 				.then('setPixelRatio', window.devicePixelRatio)
+				.with('logaritmicDepthBuffer', true)
 
 	await
 		asyncLoadTexturesAndModels(['shark', 'white', 'black'], ['shark'], defer(textures, models))

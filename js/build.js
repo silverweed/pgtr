@@ -71,11 +71,11 @@
     scene = create('Scene');
     scene.fog = create('FogExp2', CONF.FOG.COLOR, CONF.FOG.DENSITY);
     l("In buildScene(" + scene + ")");
-    camera = create('PerspectiveCamera', 60, windowRatio(), 1, 100000).at(0, 10, -30).then('rotateY', Math.PI).then('rotateX', -0.3);
+    camera = create('PerspectiveCamera', 60, windowRatio(), 1, 500).at(0, 10, -30).then('rotateY', Math.PI).then('rotateX', -0.3);
     controls = create('OrbitControls', camera);
     renderer = create('WebGLRenderer', {
       antialias: true
-    }).then('setSize', window.innerWidth, window.innerHeight).then('setPixelRatio', window.devicePixelRatio);
+    }).then('setSize', window.innerWidth, window.innerHeight).then('setPixelRatio', window.devicePixelRatio)["with"]('logaritmicDepthBuffer', true);
     (function(_this) {
       return (function(__iced_k) {
         __iced_deferrals = new iced.Deferrals(__iced_k, {
@@ -89,7 +89,7 @@
               return models = arguments[1];
             };
           })(),
-          lineno: 33
+          lineno: 34
         }));
         asyncLoadSkybox(CONF.SKYBOX.URLS, CONF.SKYBOX.SIZE, __iced_deferrals.defer({
           assign_fn: (function() {
@@ -98,7 +98,7 @@
               return cubemap = arguments[1];
             };
           })(),
-          lineno: 34
+          lineno: 35
         }));
         __iced_deferrals._fulfill();
       });
@@ -119,7 +119,7 @@
                 return ocean = arguments[1];
               };
             })(),
-            lineno: 39
+            lineno: 40
           }));
           asyncLoadPlayerPlane(CONF.OCEAN.URL, renderer, camera, scene, objects.sunlight, __iced_deferrals.defer({
             assign_fn: (function() {
@@ -128,7 +128,7 @@
                 return pPlane = arguments[1];
               };
             })(),
-            lineno: 40
+            lineno: 41
           }));
           __iced_deferrals._fulfill();
         })(function() {

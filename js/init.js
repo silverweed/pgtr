@@ -67,7 +67,7 @@
   };
 
   initWorld = function() {
-    var pp, world, ___iced_passed_deferral, __iced_deferrals, __iced_k;
+    var world, ___iced_passed_deferral, __iced_deferrals, __iced_k;
     __iced_k = __iced_k_noop;
     ___iced_passed_deferral = iced.findDeferral(arguments);
     l('Starting program');
@@ -98,18 +98,18 @@
             parent: ___iced_passed_deferral,
             filename: "/home/air/Documents/pgtr/src/init.iced"
           });
-          postProcessInit(world, world.scene, world.camera, __iced_deferrals.defer({
-            assign_fn: (function() {
+          asyncPostProcessInit(world, world.scene, world.camera, __iced_deferrals.defer({
+            assign_fn: (function(__slot_1) {
               return function() {
-                return pp = arguments[0];
+                return __slot_1.postprocess = arguments[0];
               };
-            })(),
+            })(world),
             lineno: 30
           }));
           __iced_deferrals._fulfill();
         })(function() {
-          world.postprocess = pp;
           world.postprocess.enabled = true;
+          createPostProcessControls(world);
           world.updateBuoyancy = function(delta) {
             var depth, name, obj, x, _ref, _ref1, _ref2, _results;
             x = 0;
