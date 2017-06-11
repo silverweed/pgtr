@@ -29,7 +29,7 @@ asyncBuildScene = (cb) ->
 	renderer = create('WebGLRenderer', antialias: on)
 				.then('setSize', window.innerWidth, window.innerHeight)
 				.then('setPixelRatio', window.devicePixelRatio)
-				.with('logaritmicDepthBuffer', true)
+				#.with('logaritmicDepthBuffer', true)
 
 	await
 		asyncLoadTexturesAndModels(['shark', 'white', 'black'], ['shark'], defer(textures, models))

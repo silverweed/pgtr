@@ -33,9 +33,10 @@ init = (world, scene, camera, cb) ->
 			renderedScene: {value : target.texture},
 			depthTexture: {value : target.depthTexture},
 			fogColor: { value : create("Vector4", 0.7,0.7,0.7,1.0)}
-			frustumLength: {value: world.camera.far - world.camera.near},
-			minVisionDepth: {value: 0.2},
-			maxVisionDepth: {value: 1.0}
+			near: {value: world.camera.near},
+			far : {value: world.camera.far},
+			minVisionDepth: {value: 60.0},
+			maxVisionDepth: {value: 200.0}
 			},
 		vertexShader: fogvert,
 		fragmentShader: fogfrag
