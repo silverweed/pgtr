@@ -1,4 +1,4 @@
-#js/*.js
+js/*.js
 lib/three.js.old/
 lib/three.js/docs/
 lib/three.js/test/
