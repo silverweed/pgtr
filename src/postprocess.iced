@@ -42,7 +42,7 @@ init = (world, scene, camera, cb) ->
 		fragmentShader: fogfrag
 	)
 
-		
+	l "camera far is: #{world.camera.far}"
 	
 	ppScene = {}
 	ppScene.camera = new THREE.OrthographicCamera( - 1, 1, 1, - 1, 0, 1 )
