@@ -32,7 +32,7 @@ asyncBuildScene = (cb) ->
 				#.with('logaritmicDepthBuffer', true)
 
 	await
-		asyncLoadTexturesAndModels(['shark', 'white', 'black'], ['shark'], defer(textures, models))
+		asyncLoadTexturesAndModels(['turtle', 'white', 'black'], ['turtle'], defer(textures, models))
 		asyncLoadSkybox(CONF.SKYBOX.URLS, CONF.SKYBOX.SIZE, defer(sky, cubemap))
 		#asyncLoadMultiMaterial(['white', 'black', 'black', 'black', 'black', 'black'], defer(cubemat))
 

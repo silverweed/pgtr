@@ -29,7 +29,7 @@ OBJECTS = {
 				material: create('MeshLambertMaterial',
 					reflectivity: 0.2
 					color: 0x44ff44
-					map: cache.textures.shark
+					map: cache.textures.turtle
 					envMap: opts.envMap
 				)
 			).at(20, 0, 0)
@@ -46,7 +46,7 @@ OBJECTS = {
 				material: create('MeshLambertMaterial',
 					reflectivity: 0.2
 					color: 0x44ff44
-					map: cache.textures.shark
+					map: cache.textures.turtle
 					envMap: opts.envMap
 				)
 			).at(20, 12, 0)
@@ -63,7 +63,7 @@ OBJECTS = {
 				material: create('MeshLambertMaterial',
 					reflectivity: 0.2
 					color: 0x44ff44
-					map: cache.textures.shark
+					map: cache.textures.turtle
 					envMap: opts.envMap
 				)
 			).at(20, 34, 0)
@@ -81,7 +81,7 @@ OBJECTS = {
 				material: create('MeshLambertMaterial',
 					reflectivity: 0.2
 					color: 0x44ff44
-					map: cache.textures.shark
+					map: cache.textures.turtle
 					envMap: opts.envMap
 				)
 			).at(20, 56, 0)
@@ -106,13 +106,13 @@ OBJECTS = {
 			]
 			sunlight: sunlight
 			player: createPlayer(createModel(
-				geometry: cache.models.shark
+				geometry: cache.models.turtle
 				material: create('MeshPhongMaterial',
 					shininess: 20
 					reflectivity: 0.4
 					color: 0x222222
 					specular: 0x111111
-					map: cache.textures.shark
+					map: cache.textures.turtle
 					envMap: opts.envMap
 				)
 			)

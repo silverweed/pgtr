@@ -25,6 +25,8 @@ asyncLoadTexture = (name, cb) ->
 	unless name in cache.textures
 		l "Loading texture #{texpath(name)}"
 		await create('TextureLoader').load(texpath(name), defer tex)
+		console.assert(tex, "tex is null!")
+		l "Loaded texture #{texpath(name)}"
 		cache.textures[name] = tex
 	cb(cache.textures[name])
 
@@ -33,6 +35,7 @@ asyncLoadGeometry = (name, cb) ->
 	unless name in cache.models
 		l "Loading model #{modpath name}"
 		await create('JSONLoader').load(modpath(name), defer mod)
+		console.assert(mod, "model is null!")
 		cache.models[name] = mod
 	cb(cache.models[name])
 
