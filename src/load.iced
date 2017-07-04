@@ -63,13 +63,13 @@ asyncLoadSkybox = (urls, size, cb) ->
 	l "Loaded sky"
 	cb(
 		# Sky mesh
-		create('Mesh'
+		create('Mesh',
 			create('BoxGeometry', size, size, size)
 			create('ShaderMaterial',
 				fragmentShader: shader.fragmentShader
 				vertexShader: shader.vertexShader
 				uniforms: shader.uniforms
-				depthWrite: off
+				depthWrite: false
 				side: THREE.BackSide
 			)
 		)

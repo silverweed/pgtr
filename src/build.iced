@@ -18,7 +18,7 @@ asyncBuildScene = (cb) ->
 	scene.fog = create('FogExp2', CONF.FOG.COLOR, CONF.FOG.DENSITY)
 	l "In buildScene(#{scene})"
 
-	camera = create('PerspectiveCamera', 60, windowRatio(), 1.0, 300.0).at(0, 10, -30)
+	camera = create('PerspectiveCamera', 60, windowRatio(), 1.0, 3000.0).at(0, 10, -30)
 		.then('rotateY', Math.PI)
 		.then('rotateX', -0.3)
 	# XXX: Currently unused
@@ -51,7 +51,6 @@ asyncBuildScene = (cb) ->
 
 	physics = new Physics()
 	#physics.createGround()
-
 	# Add the objects
 	addAll(scene, entities, physics, [sky, ocean, pPlane, player, objects.objects...])
 	cb(

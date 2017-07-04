@@ -51,12 +51,14 @@ init = (world, scene, camera, cb) ->
 	}
 	ppScene.quad.frustumCulled = false
 	ppScene.quad.material = depthShader
+
 	ppScene.scene.add(ppScene.quad)
 
 	tcomposer = {
 		ppScene : ppScene
 		renderer: world.renderer
 		render: (sc, cam) ->
+			tcomposer.renderer.render.autoClear = false 
 			tcomposer.renderer.render(sc, cam, target)
 			tcomposer.renderer.render(ppScene.scene, ppScene.camera)
 			null
