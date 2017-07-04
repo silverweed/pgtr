@@ -9,15 +9,15 @@ init = (world, scene, camera, cb) ->
 	
 	toonLighting = create("ShaderMaterial",
 		uniforms: {
-			nBands: { value: 3 },
+			nBands: { value: 3 }
 			directionalLightDirection: {
 				value: (world.objects.sunlight.target.position.sub(
 					world.objects.sunlight.position)).normalize()
-			},
-			directionalLightColor: { value: world.objects.sunlight.color },
+			}
+			directionalLightColor: { value: world.objects.sunlight.color }
 			directionalLightIntensity: { value: 0.5 }
-		},
-		vertexShader: toonvert,
+		}
+		vertexShader: toonvert
 		fragmentShader: toonfrag
 	)
 
@@ -29,28 +29,29 @@ init = (world, scene, camera, cb) ->
 	target.depthTexture = create("DepthTexture")
 	
 	depthShader = create("ShaderMaterial",
-		uniforms:{
-			renderedScene: {value : target.texture},
-			depthTexture: {value : target.depthTexture},
-			fogColor: { value : create("Vector4", 0.7,0.7,0.7,1.0)}
-			near: {value: world.camera.near},
-			far : {value: world.camera.far},
-			minVisionDepth: {value: 60.0},
-			maxVisionDepth: {value: 200.0}
-			},
-		vertexShader: fogvert,
+		uniforms: {
+			renderedScene:  { value: target.texture },
+			depthTexture:   { value: target.depthTexture },
+			fogColor:       { value: create("Vector4", 0.7,0.7,0.7,1.0) }
+			near:           { value: world.camera.near },
+			far:            { value: world.camera.far },
+			minVisionDepth: { value: 60.0 },
+			maxVisionDepth: { value: 200.0 }
+		}
+		vertexShader: fogvert
 		fragmentShader: fogfrag
 	)
 
 	l "camera far is: #{world.camera.far}"
 	
-	ppScene = {}
-	ppScene.camera = new THREE.OrthographicCamera( - 1, 1, 1, - 1, 0, 1 )
-	ppScene.scene = new THREE.Scene()
-	ppScene.quad = new THREE.Mesh( new THREE.PlaneBufferGeometry( 2, 2 ), null )
+	ppScene = {
+		camera: create('OrthographicCamera', -1, 1, 1, -1, 0, 1)
+		scene:  create('Scene')
+		quad:   create('Mesh', create('PlaneBufferGeometry', 2, 2), null)
+	}
 	ppScene.quad.frustumCulled = false
 	ppScene.quad.material = depthShader
-	ppScene.scene.add( ppScene.quad )
+	ppScene.scene.add(ppScene.quad)
 
 	tcomposer = {
 		ppScene : ppScene
