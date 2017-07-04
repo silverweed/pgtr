@@ -10,6 +10,14 @@ createPlayer = (object) ->
 		speed:  { value: CONF.PLAYER.SPEED, writable: yes, enumerable: yes }
 		update: { value: updatePlayer, writable: no, enumerable: no }
 	)
+	mesh = object.children[0].geometry
+	if mesh
+		console.assert(mesh.animations, 'Player mesh has no animations!')
+		player.anim = {
+			mixer: create('AnimationMixer', mesh)
+			clips: mesh.animations
+			updateAnimation: updateAnimation
+		}
 	player
 
 updatePlayer = (deltaTime) ->
@@ -41,6 +49,17 @@ updatePlayer = (deltaTime) ->
 		@canJump = false
 
 	@plane?.position.set(@position.x, @plane.position.y, @position.z)
+	# Animation
+	if @anim
+		updateAnimation(@anim, fwd)
+
+updateAnimation = (anim, fwd) ->
+	clip = THREE.AnimationClip.findByName(anim.clips, switch
+		when fwd < 0 then 'SwimBackwd'
+		when fwd > 0 then 'Swim'
+		else'Idle'
+	)
+	anim.mixer.clipAction(clip).play()
 
 ## Exports
 window.createPlayer = createPlayer

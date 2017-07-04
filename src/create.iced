@@ -36,7 +36,7 @@ create = (objname, opts...) ->
 # Create a model with class 'Object3D', adding a mesh with the given material and geometry
 createModel = (material: material, geometry: geometry) ->
 	model = create('Object3D')
-	model.add(create('Mesh', geometry, material))
+	model.add(create('SkinnedMesh', geometry, material))
 	model
 
 

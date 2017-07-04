@@ -24,18 +24,21 @@ asyncLoadShader = (name, cb) ->
 asyncLoadTexture = (name, cb) ->
 	unless name in cache.textures
 		l "Loading texture #{texpath(name)}"
-		await create('TextureLoader').load(texpath(name), defer tex)
-		console.assert(tex, "tex is null!")
-		l "Loaded texture #{texpath(name)}"
-		cache.textures[name] = tex
+		#await create('TextureLoader').load(texpath(name), defer tex)
+		create('TextureLoader').load(texpath(name), ((tex) ->
+			console.assert(tex, "tex is null!")
+			l "Loaded texture #{texpath(name)}"
+			cache.textures[name] = tex
+		), ((p) -> console.log(p)), (err) -> console.log(err))
 	cb(cache.textures[name])
 
 # Asynchronously load a model, cache it and return the object that will contain it
 asyncLoadGeometry = (name, cb) ->
 	unless name in cache.models
-		l "Loading model #{modpath name}"
+		l "Loading model #{modpath(name)}"
 		await create('JSONLoader').load(modpath(name), defer mod)
 		console.assert(mod, "model is null!")
+		l "Loaded model #{modpath(name)}"
 		cache.models[name] = mod
 	cb(cache.models[name])
 
@@ -47,9 +50,9 @@ asyncLoadTexturesAndModels = (textures, models, cb) ->
 	l "Start loading textures and models"
 	await
 		for texname in textures
-			asyncLoadTexture texname, defer tex[texname]
+			asyncLoadTexture(texname, defer tex[texname])
 		for modname in models
-			asyncLoadGeometry modname, defer mod[modname]
+			asyncLoadGeometry(modname, defer mod[modname])
 	l "Loaded textures and models."
 	cb(tex, mod)
 
