@@ -109,6 +109,9 @@ OBJECTS = {
 				geometry: cache.models.turtle
 				material: create('ShaderMaterial',
 					uniforms: {
+						directionalLightColor:{value: create('Vector4', 1.0,0.0,1.0,1.0)},
+						directionalLightDirection:{value:create('Vector3', sunlight._direction...)},
+						directionalLightIntensity:{value: 2.0},
 						shininess: {value:20}
 						reflectivity:{value: 0.4}
 						color: {value: create('Vector4', 34, 34, 34, 255)}

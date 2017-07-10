@@ -15,19 +15,22 @@ uniform float directionalLightIntensity;
 
 void main(){
 	float floatbands = float(nBands);
-
+	vec3 dirlightNorm = normalize(-directionalLightDirection);
 	vec3 V = normalize(-vPosition);
 	float specMultiplier = max(dot(
-				normalize(-directionalLightDirection + V),vNormal)
+				normalize(dirlightNorm + V),vNormal)
 			,0.0);
 	specMultiplier *= pow(specMultiplier, shininess);
 	specMultiplier = ceil(specMultiplier*floatbands)/floatbands;
 
-	vec4 lightres = dot(vNormal, directionalLightDirection)*directionalLightColor * directionalLightIntensity;
+	vec4 lightres = dot(vNormal, dirlightNorm)*directionalLightColor * directionalLightIntensity;
 	float lightMultiplier = ceil((length(lightres)*floatbands))/floatbands;
 
 	vec4 shadedColor = texture2D(map, vUv)*color*lightMultiplier;
 	vec4 shadedSpec = specular * specular;
-	gl_FragColor = shadedColor + shadedSpec;
+	//gl_FragColor = directionalLightColor;
+	gl_FragColor = vec4(dot(dirlightNorm ,V));
+	return;
+	//gl_FragColor = shadedColor + shadedSpec;
 
 }
