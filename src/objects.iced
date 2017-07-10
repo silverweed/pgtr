@@ -109,12 +109,12 @@ OBJECTS = {
 				geometry: cache.models.turtle
 				material: create('ShaderMaterial',
 					uniforms: {
-						shininess: {value:20},
-						reflectivity:{value: 0.4},
-						color: {value:0x222222FF},
-						specular: {value:0x111111FF},
-						nBands: {value:4},
-						map: value: cache.textures.turtle
+						shininess: {value:20}
+						reflectivity:{value: 0.4}
+						color: {value: create('Vector4', 34, 34, 34, 255)}
+						specular: {value: create('Vector4', 17, 17, 17, 255)}
+						nBands: {value:4}
+						map: {value: cache.textures.turtle}
 						#envMap: opts.envMap
 					},
 					vertexShader:window.cache.shaders["toonshading.vert"],
