@@ -4,11 +4,12 @@
 
 'use strict'
 
-asyncBuildShaderCache -> 
-	asyncLoadShader("toonshading.vert", defer _)
-	asyncLoadShader("toonshading.frag", defer _)
-	asyncLoadShader("depthfog.vert", defer _)
-	asyncLoadShader("depthfog.frag", defer _)
+asyncBuildShaderCache = -> 
+	await
+		asyncLoadShader("toonshading.vert", defer bla)
+		asyncLoadShader("toonshading.frag", defer bla)
+		asyncLoadShader("depthfog.vert", defer bla)
+		asyncLoadShader("depthfog.frag", defer bla)
 	null
 
 window.asyncBuildShaderCache = asyncBuildShaderCache

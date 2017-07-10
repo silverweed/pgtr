@@ -2,9 +2,6 @@
 
 init = (world, scene, camera, cb) ->
 
-	dld = toonLighting.uniforms.directionalLightDirection.value
-	console.assert(typeof(dld.x) == 'number' and not isNaN(dld.x),
-		"directionalLightDirection = #{dld.x}, #{dld.y}, #{dld.z}")
 	target = create("WebGLRenderTarget", window.innerWidth, window.innerHeight)
 	target.depthBuffer = true
 	target.depthTexture = create("DepthTexture")
@@ -44,7 +41,7 @@ init = (world, scene, camera, cb) ->
 			tcomposer.renderer.render(ppScene.scene, ppScene.camera)
 			null
 	}
-	cb({ composer: tcomposer, overrideMaterial: toonLighting })
+	cb({ composer: tcomposer })
 
 
 ## Exports ##
