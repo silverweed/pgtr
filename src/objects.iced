@@ -109,13 +109,13 @@ OBJECTS = {
 				geometry: cache.models.turtle
 				material: create('ShaderMaterial',
 					uniforms: {
-						shininess: 20,
-						reflectivity: 0.4,
-						color: 0x222222,
-						specular: 0x111111,
-						nBands: 4,
-						map: cache.textures.turtle,
-						envMap: opts.envMap
+						shininess: {value:20},
+						reflectivity:{value: 0.4},
+						color: {value:0x222222FF},
+						specular: {value:0x111111FF},
+						nBands: {value:4},
+						map: value: cache.textures.turtle
+						#envMap: opts.envMap
 					},
 					vertexShader:window.cache.shaders["toonshading.vert"],
 					fragmentShader: window.cache.shaders["toonshading.frag"]
