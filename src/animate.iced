@@ -10,8 +10,7 @@ renderLoop = (world) ->
 		world.stats.begin()
 		requestAnimationFrame(animate)
 		delta = world.clock.getDelta()
-		if delta > 1/10.0
-			delta = 1/30.0
+		delta = 1/30.0 if delta > 1/10.0
 		# Update player
 		#world.controls?.update(delta)
 		player.update(delta)

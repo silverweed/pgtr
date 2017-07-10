@@ -32,19 +32,25 @@ initWorld = ->
 	world.postprocess.enabled = true
 	createPostProcessControls(world)
 	
+	# Add buoyancy
+	# NOTE: for reasons of deepest lore, this function cannot be moved elsewhere.
+	# If you wonder why, don't. Just leave this here. Seriously. Or the world will stop rotating
+	# and you'll never know why. Just know it's all part of the KEIKAKU, and the DLC will
+	# eventually explain this. Or not.
 	world.updateBuoyancy = (delta) ->
-		x = 0
 		for name, obj of world.entities.entities
 			continue unless obj.rigidbody? and obj.buoyant
 			depth = CONF.PHYSICS.BUOYANCY_WATER_LEVEL - obj.position.y
-			x++
 			if depth > 0
 				obj.rigidbody.activate()
 				obj.rigidbody.applyCentralForce(new Ammo.btVector3(
 					0,
-					Math.pow(depth, 1.8) * (obj.physicsOpts?.mass ? 1 ) * delta * CONF.PHYSICS.BUOYANCY,
+					Math.pow(depth, 1.8) * (obj.physicsOpts?.mass ? 1 ) *
+						delta * CONF.PHYSICS.BUOYANCY,
 					0
 				))
+		null
+
 	# Start simulation
 	renderLoop(world)
 
