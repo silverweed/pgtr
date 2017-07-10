@@ -1,7 +1,6 @@
 #define MAXLIGHTS 10
 #define MAXDISTANCE 30
 
-
 //uniform PointLight[] pointLights
 //uniform AmbientLight ambientLight;
 varying vec3 vPosition;
@@ -13,10 +12,9 @@ void main()
 
 	vec4 mvPosition = viewMatrix * modelMatrix * vec4 (position, 1.0);
 	vPosition = vec3(mvPosition) / mvPosition.w;
-	vNormal = normal;
+	vNormal = normalMatrix * normal;
 	vUv = uv;
 	//calculate directional light shading
-	vec3 lightResult = vec3(0.0,0.0,0.0);
 	
 
 
