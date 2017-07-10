@@ -1,25 +1,6 @@
 'use strict'
 
 init = (world, scene, camera, cb) ->
-	await
-		asyncLoadShader("toonshading.vert", defer toonvert)
-		asyncLoadShader("toonshading.frag", defer toonfrag)
-		asyncLoadShader("depthfog.vert", defer fogvert)
-		asyncLoadShader("depthfog.frag", defer fogfrag)
-	
-	toonLighting = create("ShaderMaterial",
-		uniforms: {
-			nBands: { value: 3 }
-			directionalLightDirection: {
-				value: (world.objects.sunlight.target.position.sub(
-					world.objects.sunlight.position)).normalize()
-			}
-			directionalLightColor: { value: world.objects.sunlight.color }
-			directionalLightIntensity: { value: 0.5 }
-		}
-		vertexShader: toonvert
-		fragmentShader: toonfrag
-	)
 
 	dld = toonLighting.uniforms.directionalLightDirection.value
 	console.assert(typeof(dld.x) == 'number' and not isNaN(dld.x),
@@ -38,8 +19,8 @@ init = (world, scene, camera, cb) ->
 			minVisionDepth: { value: 60.0 },
 			maxVisionDepth: { value: 200.0 }
 		}
-		vertexShader: fogvert
-		fragmentShader: fogfrag
+		vertexShader:window.cache.shaders["depthfog.vert"],
+		fragmentShader: window.cache.shaders["depthfog.frag"]
 	)
 
 	l "camera far is: #{world.camera.far}"

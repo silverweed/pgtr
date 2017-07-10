@@ -1,19 +1,32 @@
-
+uniform int nBands;
+uniform sampler2D map;
+uniform float shininess;
+uniform float reflectivity;
+uniform vec4 color;
+uniform vec4 specular;
 
 varying vec3 vLightResult;
-uniform int nBands;
+varying vec3 vPosition;
+
+uniform vec3 directionalLightDirection;
+uniform vec3 directionalLightColor;
+uniform float directionalLightIntensity;
 
 void main(){
 	float floatbands = float(nBands);
-	/*float intensity = 0.0;*/
-	float intensity = ceil((length(vLightResult)*floatbands))/floatbands;
-	/*if (length(vLightResult) < 0.3)*/
-		/*intensity = 0.0;*/
-	/*else if (length(vLightResult) < 0.6)*/
-		/*intensity = 0.5;*/
-	/*else*/
-		/*intensity = 1.0;*/
-	
-	gl_FragColor = vec4(vLightResult * intensity, 1.0);
+
+	vec3 V = normalize(-vPosition);
+	float specMultiplier = max(dot(
+				normalize(-directionalLightDirection + V),normal)
+			,0.0);
+	specMultiplier *= pow(specMultiplier, shininess);
+	specMultiplier = ceil(specMultiplier*floatbands)/floatbands;
+
+	vLightResult = dot(vNormal, directionalLightDirection)*directionalLightColor * directionalLightIntensity;
+	float lightMultiplier = ceil((length(vLightResult)*floatbands))/floatbands;
+
+	vec4 shadedColor = texture(map, vUv)*color*lightMultiplier;
+	vec4 shadedSpec = specular * specular;
+	gl_FragColor = shadedColor + shadedSpec;
 
 }

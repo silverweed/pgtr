@@ -34,8 +34,9 @@ asyncBuildScene = (cb) ->
 	await
 		asyncLoadTexturesAndModels(['turtle', 'white', 'black'], ['turtle'], defer(textures, models))
 		asyncLoadSkybox(CONF.SKYBOX.URLS, CONF.SKYBOX.SIZE, defer(sky, cubemap))
+		asyncBuildShaderCache()
 		#asyncLoadMultiMaterial(['white', 'black', 'black', 'black', 'black', 'black'], defer(cubemat))
-
+	
 	objects = OBJECTS.create(envMap: cubemap)
 	await
 		asyncLoadOcean(CONF.OCEAN.URL, renderer, camera, scene, objects.sunlight, defer(water, ocean))
