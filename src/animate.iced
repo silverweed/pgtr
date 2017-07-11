@@ -4,16 +4,28 @@
 
 'use strict'
 
+wholeTime =0
+
 renderLoop = (world) ->
 	player = world.entities.player()
 	animate = ->
+		
 		world.stats.begin()
 		requestAnimationFrame(animate)
 		delta = world.clock.getDelta()
 		delta = 1/30.0 if delta > 1/10.0
+		if delta > 1/10.0
+			delta = 1/30.0
+		wholeTime += delta
 		# Update player
 		#world.controls?.update(delta)
 		player.update(delta)
+		world.objects.toonShadedMats.forEach (t) ->
+			t.uniforms.directionalLightDirection.value =
+				(world.objects.sunlight.target.position.clone().sub(
+				 world.objects.sunlight.position)).normalize().clone()
+			t.uniforms.ambientIntensity.value = world.objects.ambientLight.ambientIntensity
+			t.uniforms.ambientColor.value = world.objects.ambientLight.ambientColor
 		#world.camera.lookAt(world.entities.player().position)
 		# Update debug input
 		world.debug.forEach (e) -> e?.update? && e.update(delta)

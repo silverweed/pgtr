@@ -1,5 +1,10 @@
+
 OBJECTS = {
 	create: (opts) ->
+		toonShadedMats = []
+		THREE.Material.prototype.addToListAndReturn = (list) ->
+			list.push(this)
+			this
 		sunlight = OBJECTS.createSunlight()
 		lights = [
 			sunlight
@@ -101,28 +106,39 @@ OBJECTS = {
 		console.assert(typeof(sunlight.target.position.x) == 'number' and not isNaN(sunlight.target.position.x),
 			"sunlight.target.position = " +
 			"#{sunlight.target.position.x}, #{sunlight.target.position.y}, #{sunlight.target.position.z}")
-		{
+		#THREE.Material.prototype.addToListAndReturn = undefined
+		return {
+			ambientLight:{
+					ambientIntensity: 0.1,
+					ambientColor:create("Vector4", 1.0,0.5,0.0,1.0)
+				},
 			lights: lights
 			objects: [
 				lights...
 				misc...
 			]
 			sunlight: sunlight
+			toonShadedMats: toonShadedMats,
 			player: createPlayer(createModel(
 				geometry: cache.models.turtle
 				material: create('ShaderMaterial',
 					uniforms: {
+						directionalLightColor:{value: create('Vector4', 1.0,0.0,1.0,1.0)},
+						directionalLightDirection:{value:create('Vector3', sunlight._direction...)},
+						directionalLightIntensity:{value: 1.0},
+						ambientColor:{value: create("Vector4",0.2,0.1,0.1,1.0)},
+						ambientIntensity:{value: 0.1},
 						shininess: {value:20}
 						reflectivity:{value: 0.4}
-						color: {value: create('Vector4', .13, .13, .13, 1)}
-						specular: {value: create('Vector4', 0.67, 0.67, 0.067, 1)}
+						color: {value: create('Vector4', 0.13, 0.13, 0.13, 1.0)}
+						specular: {value: create('Vector4', 1.0, 0.0, 0.0, 1.0)}
 						nBands: {value:4}
 						map: {value: cache.textures.turtle}
 						#envMap: opts.envMap
 					},
 					vertexShader:window.cache.shaders["toonshading.vert"],
 					fragmentShader: window.cache.shaders["toonshading.frag"]
-				)
+				).addToListAndReturn(toonShadedMats)
 			)
 				.at(-20, 5, 0)
 				.scaled(3)

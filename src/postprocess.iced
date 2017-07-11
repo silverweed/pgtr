@@ -1,8 +1,8 @@
 'use strict'
 
 init = (world, scene, camera, cb) ->
-
-	target = create("WebGLRenderTarget", window.innerWidth, window.innerHeight)
+	#is this a good idea? vram pls?
+	target = create("WebGLRenderTarget", window.innerWidth*2.0, window.innerHeight*2.0)
 	target.depthBuffer = true
 	target.depthTexture = create("DepthTexture")
 	
@@ -36,7 +36,6 @@ init = (world, scene, camera, cb) ->
 		ppScene : ppScene
 		renderer: world.renderer
 		render: (sc, cam) ->
-			tcomposer.renderer.render.autoClear = false 
 			tcomposer.renderer.render(sc, cam, target)
 			tcomposer.renderer.render(ppScene.scene, ppScene.camera)
 			null
