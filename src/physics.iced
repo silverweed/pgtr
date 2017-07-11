@@ -43,17 +43,21 @@ class Physics
 	# 	- static (default: false)
 	addRigidBody: (threeObj, opts) ->
 		# Determine the shape of the collider
-		shape = switch opts?.collisionShape
+		shape = null
+		switch opts?.collisionShape
 			when 'btBoxShape'
-				new Ammo.btBoxShape(new Ammo.btVector3(
+				shape = new Ammo.btBoxShape(new Ammo.btVector3(
 					threeObj.scale.x / 2,
 					threeObj.scale.y / 2,
 					threeObj.scale.z / 2
 				))
 			when 'btSphereShape', undefined
-				new Ammo.btSphereShape(threeObj.scale.x)
+				shape = new Ammo.btSphereShape(threeObj.scale.x)
+			when 'btCylinderShape'
+				shape = new Ammo.btCylinderShape(new Ammo.btVector3(opts.collisionShapeArgs[0],
+					opts.collisionShapeArgs[1], opts.collisionShapeArgs[2]))
 			else
-				new Ammo[opts.collisionShape](opts.collisionShapeArgs)
+				shape = new Ammo[opts.collisionShape](opts.collisionShapeArgs...)
 
 		# Set the motion state
 		# http://bulletphysics.org/mediawiki-1.5.8/index.php/MotionStates

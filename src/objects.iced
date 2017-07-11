@@ -5,6 +5,7 @@ OBJECTS = {
 			sunlight
 			create('AmbientLight', CONF.SUN.COLOR, 3).with('name', 'ambient_light')
 		]
+		barrelExtent = [10, 14, 10]
 		misc = [
 			sunlight.gizmo
 			sunlight.targetGizmo
@@ -25,74 +26,78 @@ OBJECTS = {
 					collisionShape: 'btBoxShape',
 				})
 			createModel(
-				geometry: create('BoxGeometry', 1, 1, 1)
+				geometry: cache.models.barrel
 				material: create('MeshLambertMaterial',
 					reflectivity: 0.2
-					color: 0x44ff44
-					map: cache.textures.turtle
+					color: 0x333333
+					map: cache.textures.barrel
 					envMap: opts.envMap
 				)
 			).at(20, 0, 0)
-				.scaled(10, 10, 10)
+				.scaled(3)
 				.with('name', 'cube_shark1')
 				.with('physics', on)
 				.with('physicsOpts', {
-					mass: 1,
-					static: true,
-					collisionShape: 'btBoxShape',
+					mass: 1
+					static: true
+					collisionShape: 'btCylinderShape'
+					collisionShapeArgs: barrelExtent
 				})
 			createModel(
-				geometry: create('BoxGeometry', 1, 1, 1)
+				geometry: cache.models.barrel
 				material: create('MeshLambertMaterial',
 					reflectivity: 0.2
-					color: 0x44ff44
-					map: cache.textures.turtle
+					color: 0x333333
+					map: cache.textures.barrel
 					envMap: opts.envMap
 				)
-			).at(20, 12, 0)
-				.scaled(10, 10, 10)
+			).at(20, 2*barrelExtent[1] + 1, 0)
+				.scaled(3)
 				.with('name', 'cube_shark2')
 				.with('physics', on)
 				.with('physicsOpts', {
-					mass: 0.4,
-					#static: true,
-					collisionShape: 'btBoxShape',
+					mass: 0.4
+					#static: true
+					collisionShape: 'btCylinderShape'
+					collisionShapeArgs: barrelExtent
 				})
 			createModel(
-				geometry: create('BoxGeometry', 1, 1, 1)
+				geometry: cache.models.barrel
 				material: create('MeshLambertMaterial',
 					reflectivity: 0.2
-					color: 0x44ff44
-					map: cache.textures.turtle
+					color: 0x333333
+					map: cache.textures.barrel
 					envMap: opts.envMap
 				)
-			).at(20, 34, 0)
-				.scaled(10, 10, 10)
+			).at(20, barrelExtent[1]*4 + 2, 0)
+				.scaled(3)
 				.with('name', 'cube_shark3')
 				.with('physics', on)
 				.with('buoyant', true)
 				.with('physicsOpts', {
-					mass: 0.1,
-					#static: true,
-					collisionShape: 'btBoxShape',
+					mass: 0.1
+					#static: true
+					collisionShape: 'btCylinderShape'
+					collisionShapeArgs: barrelExtent
 				})
 			createModel(
-				geometry: create('BoxGeometry', 1, 1, 1)
+				geometry: cache.models.barrel
 				material: create('MeshLambertMaterial',
 					reflectivity: 0.2
-					color: 0x44ff44
-					map: cache.textures.turtle
+					color: 0x333333
+					map: cache.textures.barrel
 					envMap: opts.envMap
 				)
-			).at(20, 56, 0)
-				.scaled(10, 10, 10)
+			).at(20, barrelExtent[1]*6 + 3, 0)
+				.scaled(3)
 				.with('name', 'cube_shark4')
 				.with('buoyant', true)
 				.with('physics', on)
 				.with('physicsOpts', {
-					mass: 1,
-					#static: true,
-					collisionShape: 'btBoxShape',
+					mass: 1
+					#static: true
+					collisionShape: 'btCylinderShape'
+					collisionShapeArgs: barrelExtent
 				})
 		]
 		console.assert(typeof(sunlight.target.position.x) == 'number' and not isNaN(sunlight.target.position.x),
@@ -111,8 +116,8 @@ OBJECTS = {
 					uniforms: {
 						shininess: {value:20}
 						reflectivity:{value: 0.4}
-						color: {value: create('Vector4', 34, 34, 34, 255)}
-						specular: {value: create('Vector4', 17, 17, 17, 255)}
+						color: {value: create('Vector4', .13, .13, .13, 1)}
+						specular: {value: create('Vector4', 0.67, 0.67, 0.067, 1)}
 						nBands: {value:4}
 						map: {value: cache.textures.turtle}
 						#envMap: opts.envMap
