@@ -56,8 +56,8 @@ OBJECTS = {
 				.with('name', 'cube_shark2')
 				.with('physics', on)
 				.with('physicsOpts', {
+					buoyant: yes
 					mass: 0.4
-					#static: true
 					collisionShape: 'btCylinderShape'
 					collisionShapeArgs: barrelExtent
 				})
@@ -73,10 +73,9 @@ OBJECTS = {
 				.scaled(3)
 				.with('name', 'cube_shark3')
 				.with('physics', on)
-				.with('buoyant', true)
 				.with('physicsOpts', {
+					buoyant: yes
 					mass: 0.1
-					#static: true
 					collisionShape: 'btCylinderShape'
 					collisionShapeArgs: barrelExtent
 				})
@@ -91,11 +90,10 @@ OBJECTS = {
 			).at(20, barrelExtent[1]*6 + 3, 0)
 				.scaled(3)
 				.with('name', 'cube_shark4')
-				.with('buoyant', true)
 				.with('physics', on)
 				.with('physicsOpts', {
+					buoyant: yes
 					mass: 1
-					#static: true
 					collisionShape: 'btCylinderShape'
 					collisionShapeArgs: barrelExtent
 				})
@@ -129,10 +127,11 @@ OBJECTS = {
 				.at(-20, 5, 0)
 				.scaled(3)
 				.with('name', 'player')
-				.with('buoyant', true)
 				.with('physics', on)
 				.with('physicsOpts', {
+					buoyant: yes
 					lockedAxes: ['x', 'z']
+					buoyancyOffset: 8
 				})
 			)
 		}
