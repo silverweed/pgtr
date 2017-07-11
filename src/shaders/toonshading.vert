@@ -5,18 +5,16 @@
 //uniform AmbientLight ambientLight;
 varying vec3 vPosition;
 varying vec3 vNormal;
+varying vec3 vViewNormal;
 varying vec2 vUv;
 
 void main()
 {
 
-	vec4 mvPosition = viewMatrix * modelMatrix * vec4 (position, 1.0);
-	vPosition = vec3(mvPosition) / mvPosition.w;
-	vNormal = normalMatrix * normal;
+	vec4 mvPosition =  viewMatrix * modelMatrix * vec4 (position, 1.0);
+	vPosition = vec3(mvPosition/ mvPosition.w)- cameraPosition;
+	vNormal =  normal;
+	vViewNormal = normalMatrix * normal;
 	vUv = uv;
-	//calculate directional light shading
-	
-
-
 	gl_Position = projectionMatrix * mvPosition;
 }
