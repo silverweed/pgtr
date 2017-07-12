@@ -13,7 +13,7 @@ void main()
 
 	vec4 mvPosition =  viewMatrix * modelMatrix * vec4 (position, 1.0);
 	vPosition = vec3(mvPosition/ mvPosition.w)- cameraPosition;
-	vNormal =  normal;
+	vNormal =  mat3(modelMatrix)*normal;
 	vViewNormal = normalMatrix * normal;
 	vUv = uv;
 	gl_Position = projectionMatrix * mvPosition;
