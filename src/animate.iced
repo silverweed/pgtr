@@ -21,6 +21,9 @@ renderLoop = (world) ->
 		#world.controls?.update(delta)
 		player.update(delta)
 		world.objects.toonShadedMats.forEach (t) ->
+			t.uniforms.directionalLightColor.value = create("Vector4",
+				world.objects.sunlight.color.toArray()...,1.0)
+			t.uniforms.directionalLightIntensity.value = world.objects.sunlight.intensity
 			t.uniforms.directionalLightDirection.value =
 				(world.objects.sunlight.target.position.clone().sub(
 				 world.objects.sunlight.position)).normalize().clone()

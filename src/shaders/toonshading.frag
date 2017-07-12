@@ -21,19 +21,22 @@ void main(){
 	float floatbands = float(nBands);
 	vec3 dirlightNorm = normalize(-directionalLightDirection);
 	vec3 V = normalize(-vPosition);
-	vec4 lightres = max(dot(vNormal, dirlightNorm),0.0)*directionalLightColor * directionalLightIntensity;
+	float lightres = max(dot(vNormal, dirlightNorm),0.0)* directionalLightIntensity;
 	float specMultiplier = max(dot(
 				normalize(dirlightNorm + V),normalize(vNormal))
 			,0.0);
-	float lightMultiplier = ceil((length(lightres)*floatbands))/floatbands;
 	specMultiplier = pow(specMultiplier, shininess*10.0);
 	float fres = 1.0-max(dot(normalize(vViewNormal),vec3(0.0,0.0,1.0)),0.0);
-	fres = pow(fres, 6.0);
-	fres = floor(fres*floatbands)/floatbands;
+	fres = pow(fres, 10.0);
+	//fres = floor(fres*floatbands)/floatbands;
 	specMultiplier = floor(specMultiplier*floatbands)/(floatbands);
-	lightMultiplier += fres + ambientIntensity;
-	vec4 shadedColor = texture2D(map, vUv)*lightMultiplier;
-	vec4 shadedSpec = specular * specMultiplier;
-	gl_FragColor = (1.0-ambientIntensity)*(shadedColor + shadedSpec) + ambientIntensity*ambientColor ;
+	float lightMultiplier = fres*0.3 + ambientIntensity + lightres;
+	lightMultiplier = ceil(lightMultiplier*floatbands)/floatbands;
+	vec4 shadedColor = texture2D(map, vUv);
+	shadedColor = (shadedColor/length(shadedColor))*lightMultiplier;
+	vec4 shadedSpec = (specular/length(specular))*specMultiplier;
+	//vec4 shadedSpec = specular * specMultiplier;
+	gl_FragColor = (shadedColor + shadedSpec) + ambientIntensity*ambientColor ;
 	return;
+	gl_FragColor = vec4(lightMultiplier);
 }

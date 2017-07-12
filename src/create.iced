@@ -29,7 +29,6 @@ create = (objname, opts...) ->
 		this[attr] = val
 		this
 	obj = new constr(opts...)
-	l "Created #{objname} with params #{opts}"
 	obj
 
 

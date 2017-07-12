@@ -5,11 +5,31 @@ OBJECTS = {
 		THREE.Material.prototype.addToListAndReturn = (list) ->
 			list.push(this)
 			this
+		
 		sunlight = OBJECTS.createSunlight()
 		lights = [
 			sunlight
 			create('AmbientLight', CONF.SUN.COLOR, 3).with('name', 'ambient_light')
 		]
+		barrelMaterial = create("ShaderMaterial",
+			uniforms: {
+				directionalLightColor:{value: create('Vector4', 1.0,0.0,1.0,1.0)},
+				directionalLightDirection:{value:create('Vector3', sunlight._direction...)},
+				directionalLightIntensity:{value: 1.0},
+				ambientColor:{value: create("Vector4",0.2,0.1,0.1,1.0)},
+				ambientIntensity:{value: 0.1},
+				shininess: {value:20}
+				reflectivity:{value: 0.4}
+				color: {value: create('Vector4', 1.0, 1.0, 1.0, 1.0)}
+				specular: {value: create('Vector4', 0.0, 0.0, 0.0, 1.0)}
+				nBands: {value:3}
+				map: {value: cache.textures.barrel}
+			},
+			vertexShader:window.cache.shaders["toonshading.vert"],
+			fragmentShader: window.cache.shaders["toonshading.frag"]
+		).addToListAndReturn(toonShadedMats)
+		
+
 		barrelExtent = [10, 14, 10]
 		misc = [
 			sunlight.gizmo
@@ -32,12 +52,7 @@ OBJECTS = {
 				})
 			createModel(
 				geometry: cache.models.barrel
-				material: create('MeshLambertMaterial',
-					reflectivity: 0.2
-					color: 0x333333
-					map: cache.textures.barrel
-					envMap: opts.envMap
-				)
+				material: barrelMaterial
 			).at(20, 0, 0)
 				.scaled(3)
 				.with('name', 'cube_shark1')
@@ -50,12 +65,7 @@ OBJECTS = {
 				})
 			createModel(
 				geometry: cache.models.barrel
-				material: create('MeshLambertMaterial',
-					reflectivity: 0.2
-					color: 0x333333
-					map: cache.textures.barrel
-					envMap: opts.envMap
-				)
+				material: barrelMaterial
 			).at(20, 2*barrelExtent[1] + 1, 0)
 				.scaled(3)
 				.with('name', 'cube_shark2')
@@ -68,12 +78,7 @@ OBJECTS = {
 				})
 			createModel(
 				geometry: cache.models.barrel
-				material: create('MeshLambertMaterial',
-					reflectivity: 0.2
-					color: 0x333333
-					map: cache.textures.barrel
-					envMap: opts.envMap
-				)
+				material: barrelMaterial
 			).at(20, barrelExtent[1]*4 + 2, 0)
 				.scaled(3)
 				.with('name', 'cube_shark3')
@@ -86,12 +91,7 @@ OBJECTS = {
 				})
 			createModel(
 				geometry: cache.models.barrel
-				material: create('MeshLambertMaterial',
-					reflectivity: 0.2
-					color: 0x333333
-					map: cache.textures.barrel
-					envMap: opts.envMap
-				)
+				material: barrelMaterial
 			).at(20, barrelExtent[1]*6 + 3, 0)
 				.scaled(3)
 				.with('name', 'cube_shark4')
@@ -164,6 +164,7 @@ OBJECTS = {
 				emissive: 0xffff00
 			)
 		).scaled(3)
+		sunlight.intensity = 1.0
 		sunlight.gizmo = createModel(
 			geometry: create('SphereGeometry', 10)
 			material: create('MeshLambertMaterial'
