@@ -28,34 +28,70 @@ OBJECTS = {
 			vertexShader:window.cache.shaders["toonshading.vert"],
 			fragmentShader: window.cache.shaders["toonshading.frag"]
 		).addToListAndReturn(toonShadedMats)
-		
 
-		barrelExtent = [10, 14, 10]
+		iBarrel = 5
+		createBarrel = ->
+			createModel(
+				geometry: cache.models.barrel
+				material: barrelMaterial
+			)	.scaled(3)
+				.with('name', "barrel#{iBarrel++}")
+				.with('physics', on)
+				.with('physicsOpts', {
+					buoyant: yes
+					mass: 1
+					collisionShape: 'btCylinderShape'
+					collisionShapeArgs: barrelExtent
+				})
+		createBarrels = (n) ->
+			for i in [0..n]
+				createBarrel()
+					.at((nextRand() - 0.5) * 5000, 0, (nextRand() - 0.5) * 5000)
+					.then('rotateX', nextRand() * Math.PI * 2)
+					.then('rotateY', nextRand() * Math.PI * 2)
+					.then('rotateZ', nextRand() * Math.PI * 2)
+		_static = (obj) ->
+			obj.physicsOpts.static = yes
+			obj
+
+		createBarrelPyramid = (base, x, z) ->
+			barrels = []
+			for i in [0..base]
+				barrels.push(_static(createBarrel().at(x, 0, z + 2 * barrelExtent[2] * i + i)))
+			for i in [0..base-1]
+				for j in [0..base-i-1]
+					barrels.push(
+						createBarrel().at(
+							x,
+							barrelExtent[1] * 2 * (i+1) + (i+1),
+							z + barrelExtent[2] * (i+1 + 2 * j)))
+			barrels
+		barrelExtent = [12, 14, 12]
 		misc = [
 			sunlight.gizmo
 			sunlight.targetGizmo
-			createModel(
-				geometry: create('BoxGeometry', 1, 1, 1)
-				material: create('MeshPhongMaterial',
-					shininess: 30
-					color: 0x000000
-					specular: 0x999999
-					envMap: opts.envMap
-				)
-			)	.scaled(10, 100, 10)
-				.with('name', 'cube_black1')
-				.with('physics', on)
-				.with('physicsOpts', {
-					mass: 1,
-					static: true,
-					collisionShape: 'btBoxShape',
-				})
+			#createModel(
+				#geometry: create('BoxGeometry', 1, 1, 1)
+				#material: create('MeshPhongMaterial',
+					#shininess: 30
+					#color: 0x000000
+					#specular: 0x999999
+					#envMap: opts.envMap
+				#)
+			#)	.scaled(10, 100, 10)
+				#.with('name', 'cube_black1')
+				#.with('physics', on)
+				#.with('physicsOpts', {
+					#mass: 1,
+					#static: true,
+					#collisionShape: 'btBoxShape',
+				#})
 			createModel(
 				geometry: cache.models.barrel
 				material: barrelMaterial
 			).at(20, 0, 0)
 				.scaled(3)
-				.with('name', 'cube_shark1')
+				.with('name', 'barrel1')
 				.with('physics', on)
 				.with('physicsOpts', {
 					mass: 1
@@ -68,7 +104,7 @@ OBJECTS = {
 				material: barrelMaterial
 			).at(20, 2*barrelExtent[1] + 1, 0)
 				.scaled(3)
-				.with('name', 'cube_shark2')
+				.with('name', 'barrel2')
 				.with('physics', on)
 				.with('physicsOpts', {
 					buoyant: yes
@@ -81,7 +117,7 @@ OBJECTS = {
 				material: barrelMaterial
 			).at(20, barrelExtent[1]*4 + 2, 0)
 				.scaled(3)
-				.with('name', 'cube_shark3')
+				.with('name', 'barrel3')
 				.with('physics', on)
 				.with('physicsOpts', {
 					buoyant: yes
@@ -94,7 +130,7 @@ OBJECTS = {
 				material: barrelMaterial
 			).at(20, barrelExtent[1]*6 + 3, 0)
 				.scaled(3)
-				.with('name', 'cube_shark4')
+				.with('name', 'barrel4')
 				.with('physics', on)
 				.with('physicsOpts', {
 					buoyant: yes
@@ -102,6 +138,8 @@ OBJECTS = {
 					collisionShape: 'btCylinderShape'
 					collisionShapeArgs: barrelExtent
 				})
+			createBarrels(50)...
+			createBarrelPyramid(10, 50, 50)...
 		]
 		console.assert(typeof(sunlight.target.position.x) == 'number' and not isNaN(sunlight.target.position.x),
 			"sunlight.target.position = " +
@@ -147,7 +185,8 @@ OBJECTS = {
 				.with('physicsOpts', {
 					buoyant: yes
 					lockedAxes: ['x', 'z']
-					buoyancyOffset: 8
+					mass: 10
+					#buoyancyOffset: 8
 				})
 			)
 		}

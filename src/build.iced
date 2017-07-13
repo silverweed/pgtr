@@ -57,7 +57,7 @@ asyncBuildScene = (cb) ->
 	physics = new Physics()
 	#physics.createGround()
 	# Add the objects
-	addAll(scene, entities, physics, [sky, ocean, pPlane, player, objects.objects...])
+	addAll(scene, entities, physics, [sky, pPlane, player, objects.objects...])
 	cb(
 		scene: scene
 		water: water

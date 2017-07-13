@@ -2,6 +2,8 @@
 uniform vec4 fogColor;
 uniform float near;
 uniform float far;
+uniform float minVisionDepth;
+uniform float maxVisionDepth;
 
 uniform sampler2D renderedScene;
 uniform sampler2D depthTexture;
@@ -15,12 +17,12 @@ void main(){
 	vec4 color = texture2D(renderedScene, vUv);
 	float alpha = dep;
 
-	if(alpha  <0.03){
+	if(alpha < minVisionDepth){
 		alpha = 0.0;
-	}else if( alpha < 0.3){
+	}else if( alpha < maxVisionDepth){
 		//alpha =0.2;
-		alpha = (alpha -0.03)/0.27;
-	}else if(alpha < 0.99){
+		alpha = (alpha -minVisionDepth)/(maxVisionDepth - minVisionDepth);
+	}else if(alpha < 0.9999){
 		alpha = 1.0;
 	}else{
 		alpha = 0.0;

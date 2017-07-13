@@ -62,8 +62,10 @@ class Physics
 		# Set the motion state
 		# http://bulletphysics.org/mediawiki-1.5.8/index.php/MotionStates
 		pos = threeObj.position
+		q = threeObj.quaternion
 		motionState = new Ammo.btDefaultMotionState(new Ammo.btTransform(
-			new Ammo.btQuaternion(0, 0, 0, 1),
+			#new Ammo.btQuaternion(0, 0, 0, 1),
+			new Ammo.btQuaternion(q.x, q.y, q.z, q.w),
 			new Ammo.btVector3(pos.x, pos.y, pos.z))
 		)
 

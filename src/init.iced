@@ -50,7 +50,7 @@ initWorld = ->
 					0,
 					#Math.pow(depth, 1.8) * (obj.physicsOpts?.mass ? 1 ) *
 						#delta * CONF.PHYSICS.BUOYANCY * (nextRand() + 0.5),
-					movedVolume * delta * CONF.PHYSICS.BUOYANCY * (nextRand() + 0.5)
+					movedVolume * delta * CONF.PHYSICS.BUOYANCY * (nextRand() + 0.5) * (obj.physicsOpts.mass ? 1)
 					0
 				))
 		null

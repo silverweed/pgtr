@@ -33,9 +33,9 @@ renderLoop = (world) ->
 		# Update debug input
 		world.debug.forEach (e) -> e?.update? && e.update(delta)
 		# Render scene
-		#world.water.uniforms.time.value += delta
-		player.plane.material.uniforms.time.value += delta
-		updateRipples(player, delta)
+		world.water.uniforms.time.value += delta
+		player.planeWater.uniforms.time.value += delta
+		#updateRipples(player, delta)
 		world.updateBuoyancy(delta)
 		world.physics.step(delta, CONF.PHYSICS.SUBSTEPS, CONF.PHYSICS.FIXED_TIME_STEP) if world.physics.enabled
 		#world.water.render()

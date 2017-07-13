@@ -14,7 +14,7 @@ createPlayer = (object) ->
 
 updatePlayer = (deltaTime) ->
 	# Probably FIXME
-	@canJump = @position.y < 2.2
+	@canJump = @position.y < CONF.PLAYER.JUMP_MAX_Y
 
 	# Forward / Backward
 	fwd = (Input.forward ? 0) - (Input.backward ? 0)

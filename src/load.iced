@@ -122,26 +122,50 @@ asyncLoadOcean = (waternormal_url, renderer, camera, scene, sunlight, cb) ->
 	cb(water, mirrorMesh)
 
 asyncLoadPlayerPlane = (waternormal_url, renderer, camera, scene, sunlight, cb) ->
-	await create('TextureLoader').load(waternormal_url, defer waternormal)
-	waternormal.wrapS = waternormal.wrapT = THREE.RepeatWrapping
-	water = create('WaterRippled', renderer, camera, scene,
-		textureWidth: 512
-		textureHeight: 512
-		waterNormals: waternormal
-		alpha: 1.0
-		sunDirection: sunlight.position.clone().normalize()
-		sunColor: sunlight.color.getHex()
-		waterColor: 0x535b23 #0x001e0f
-		distortionScale: 50.0
+	#await create('TextureLoader').load(waternormal_url, defer waternormal)
+	#waternormal.wrapS = waternormal.wrapT = THREE.RepeatWrapping
+	#water = create('WaterRippled', renderer, camera, scene,
+		#textureWidth: 512
+		#textureHeight: 512
+		#waterNormals: waternormal
+		#alpha: 1.0
+		#sunDirection: sunlight.position.clone().normalize()
+		#sunColor: sunlight.color.getHex()
+		#waterColor: 0x535b23 #0x001e0f
+		#distortionScale: 50.0
+	#)
+	await
+		asyncLoadTexture('waterNoise1', defer noise1)
+		asyncLoadTexture('waterNoise2', defer noise2)
+		asyncLoadShader('toonwater.vert', defer watervert)
+		asyncLoadShader('toonwater.frag', defer waterfrag)
+	noise1.wrapS = noise2.wrapS = noise1.wrapT = noise2.wrapT = THREE.RepeatWrapping
+	console.assert(cache.textures.waterNoise1 and cache.textures.waterNoise2 and cache.shaders["toonwater.vert"] and cache.shaders["toonwater.frag"],
+		"Not all assets loaded!")
+	water = create("ShaderMaterial",
+		uniforms: {
+			speed1:        { value: create('Vector2', 100, 151) }
+			speed2:        { value: create('Vector2', 70, 50) }
+			noiseTexture1: { value: cache.textures.waterNoise2 }
+			noiseTexture2: { value: cache.textures.waterNoise2 }
+			waveAmplitude: { value: 15 }
+			time:          { value: 0 }
+			foamColor:     { value: create('Vector4', 1, 1, 1, 1) }
+			waterColor:    { value: create('Vector4', 0, 0.7, 1, 1) }
+			size1:         { value: 10000 }
+			size2:         { value: 700 }
+		},
+		vertexShader: cache.shaders["toonwater.vert"],
+		fragmentShader: cache.shaders["toonwater.frag"]
 	)
 	mirrorMesh = create('Mesh'
 		create('PlaneBufferGeometry'
-			300
-			300
-			1000
-			1000
+			30000  # width
+			30000  # height
+			1000 # subdX
+			1000 # subdY
 		)
-		water.material
+		water
 	)	.at(0, CONF.OCEAN.Y - 1, 0)
 		.then('rotateX', -Math.PI / 2.0)
 		.add(water)
