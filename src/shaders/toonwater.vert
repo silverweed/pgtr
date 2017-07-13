@@ -13,7 +13,7 @@ float rand(vec2 n) {
 
 void main(){
 
-	vec3 pos = modelMatrix * position;
+	vec3 pos = vec3(modelMatrix * vec4(position, 1.0));
 	vec2 uv1 = vec2 (fract(pos.x + speed1.x * time),fract(pos.y + speed1.y * time));
 	vec2 uv2 = vec2 (fract(pos.x + speed2.x * time),fract(pos.y + speed2.y * time));
 	float h = texture2D(noiseTexture1,uv1).x + texture2D(noiseTexture2,uv2).x;

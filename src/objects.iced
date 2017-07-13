@@ -189,9 +189,9 @@ OBJECTS = {
 				sunlight.position.y + 200 * v.y
 				sunlight.position.z + 200 * v.z
 			)
-			l "sunlight position = #{sunlight.target.position.x}"
+			#l "sunlight position = #{sunlight.target.position.x}"
 			sunlight._direction = [ax, ay, az]
-			l "direction = #{sunlight._direction}"
+			#l "direction = #{sunlight._direction}"
 		sunlight.rotate = (ax, ay, az) ->
 			[x, y, z] = sunlight._direction
 			sunlight.setDirection(x + ax, y + ay, z + az)

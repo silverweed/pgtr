@@ -77,28 +77,47 @@ asyncLoadSkybox = (urls, size, cb) ->
 		cubemap
 	)
 
-asyncLoadOcean = (waternormal_url, renderer, camera, scene, sunlight, cb) -> 
-	await create('TextureLoader').load(waternormal_url, defer waternormal)
-	waternormal.wrapS = waternormal.wrapT = THREE.RepeatWrapping
-	water = create('Water', renderer, camera, scene,
-		textureWidth: 512
-		textureHeight: 512
-		waterNormals: waternormal
-		alpha: 1.0
-		sunDirection: sunlight.position.clone().normalize()
-		sunColor: sunlight.color.getHex()
-		waterColor: 0x535b23 #0x001e0f 
-		distortionScale: 50.0
+asyncLoadOcean = (waternormal_url, renderer, camera, scene, sunlight, cb) ->
+	#await create('TextureLoader').load(waternormal_url, defer waternormal)
+	#waternormal.wrapS = waternormal.wrapT = THREE.RepeatWrapping
+	#water = create('Water', renderer, camera, scene,
+		#textureWidth: 512
+		#textureHeight: 512
+		#waterNormals: waternormal
+		#alpha: 1.0
+		#sunDirection: sunlight.position.clone().normalize()
+		#sunColor: sunlight.color.getHex()
+		#waterColor: 0x535b23 #0x001e0f 
+		#distortionScale: 50.0
+	#)
+	await
+		asyncLoadTexture('waterNoise1', defer noise1)
+		asyncLoadTexture('waterNoise2', defer noise2)
+		asyncLoadShader('toonwater.vert', defer watervert)
+		asyncLoadShader('toonwater.frag', defer waterfrag)
+	noise1.wrapS = noise2.wrapS = noise1.wrapT = noise2.wrapT = THREE.RepeatWrapping
+	water = create("ShaderMaterial",
+		uniforms: {
+			speed1:        { value: create('Vector2', 10, 20) }
+			speed2:        { value: create('Vector2', 20, 13) }
+			noiseTexture1: { value: noise1 }
+			noiseTexture2: { value: noise2 }
+			waveAmplitude: { value: 5 }
+			time:          { value: 0 }
+			foamColor:     { value: create('Vector4', 0.2, 0.2, 0.6, 1) }
+			waterColor:    { value: create('Vector4', 0, 0, 0, 1) }
+		},
+		vertexShader: cache.shaders["toonwater.vert"],
+		fragmentShader: cache.shaders["toonwater.frag"]
 	)
 	mirrorMesh = create('Mesh'
 		create('PlaneBufferGeometry'
 			10000
 			10000
 		)
-		water.material
+		water
 	)	.at(0, CONF.OCEAN.Y, 0)
 		.then('rotateX', -Math.PI / 2.0)
-		.add(water)
 	#water.position.z = -1000
 	cb(water, mirrorMesh)
 

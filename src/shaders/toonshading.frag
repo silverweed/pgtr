@@ -32,11 +32,10 @@ void main(){
 	specMultiplier = floor(specMultiplier*floatbands)/(floatbands);
 	float lightMultiplier = fres*0.3 + ambientIntensity + lightres;
 	lightMultiplier = ceil(lightMultiplier*floatbands)/floatbands;
-	vec4 shadedColor = texture2D(map, vUv);
-	shadedColor = (shadedColor/length(shadedColor))*lightMultiplier;
+	vec4 shadedColor = texture2D(map, vUv) * lightMultiplier;
 	vec4 shadedSpec = (specular/length(specular))*specMultiplier;
 	//vec4 shadedSpec = specular * specMultiplier;
-	gl_FragColor = (shadedColor + shadedSpec) + ambientIntensity*ambientColor ;
+	gl_FragColor = vec4(shadedColor);
 	return;
-	gl_FragColor = vec4(lightMultiplier);
+	gl_FragColor = (shadedColor + shadedSpec) + ambientIntensity*ambientColor ;
 }
