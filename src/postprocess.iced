@@ -10,7 +10,7 @@ init = (world, scene, camera, cb) ->
 		uniforms: {
 			renderedScene:  { value: target.texture },
 			depthTexture:   { value: target.depthTexture },
-			fogColor:       { value: create("Vector4", 0.7,0.7,0.7,1.0) }
+			fogColor:       { value: create("Vector4", 0.9,0.9,0.9,1.0) }
 			near:           { value: world.camera.near },
 			far:            { value: world.camera.far },
 			minVisionDepth: { value: 0.2 },

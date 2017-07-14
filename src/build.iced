@@ -43,8 +43,9 @@ asyncBuildScene = (cb) ->
 	
 	objects = OBJECTS.create(envMap: cubemap)
 	await
-		asyncLoadOcean(CONF.OCEAN.URL, renderer, camera, scene, objects.sunlight, defer(water, ocean))
+		#asyncLoadOcean(CONF.OCEAN.URL, renderer, camera, scene, objects.sunlight, defer(water, ocean))
 		asyncLoadPlayerPlane(CONF.OCEAN.URL, renderer, camera, scene, objects.sunlight, defer(pPlaneWater, pPlane))
+	water = null
 
 	entities = Entities.new(scene)
 

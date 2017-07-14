@@ -102,7 +102,7 @@ asyncLoadOcean = (waternormal_url, renderer, camera, scene, sunlight, cb) ->
 			speed2:        { value: create('Vector2', 20, 13) }
 			noiseTexture1: { value: noise1 }
 			noiseTexture2: { value: noise2 }
-			waveAmplitude: { value: 5 }
+			waveAmplitude: { value: 2 }
 			time:          { value: 0 }
 			foamColor:     { value: create('Vector4', 0.2, 0.2, 0.6, 1) }
 			waterColor:    { value: create('Vector4', 0, 0, 0, 1) }
@@ -140,19 +140,22 @@ asyncLoadPlayerPlane = (waternormal_url, renderer, camera, scene, sunlight, cb) 
 		asyncLoadShader('toonwater.vert', defer watervert)
 		asyncLoadShader('toonwater.frag', defer waterfrag)
 	noise1.wrapS = noise2.wrapS = noise1.wrapT = noise2.wrapT = THREE.RepeatWrapping
-	console.assert(cache.textures.waterNoise1 and cache.textures.waterNoise2 and cache.shaders["toonwater.vert"] and cache.shaders["toonwater.frag"],
+	console.assert(cache.textures.waterNoise1 and
+		cache.textures.waterNoise2 and
+		cache.shaders["toonwater.vert"] and
+		cache.shaders["toonwater.frag"],
 		"Not all assets loaded!")
 	water = create("ShaderMaterial",
 		uniforms: {
 			speed1:        { value: create('Vector2', 100, 151) }
-			speed2:        { value: create('Vector2', 70, 50) }
-			noiseTexture1: { value: cache.textures.waterNoise2 }
+			speed2:        { value: create('Vector2', -70, -50) }
+			noiseTexture1: { value: cache.textures.waterNoise1 }
 			noiseTexture2: { value: cache.textures.waterNoise2 }
 			waveAmplitude: { value: 15 }
 			time:          { value: 0 }
 			foamColor:     { value: create('Vector4', 1, 1, 1, 1) }
 			waterColor:    { value: create('Vector4', 0, 0.7, 1, 1) }
-			size1:         { value: 10000 }
+			size1:         { value: 1000 }
 			size2:         { value: 700 }
 		},
 		vertexShader: cache.shaders["toonwater.vert"],
@@ -160,8 +163,8 @@ asyncLoadPlayerPlane = (waternormal_url, renderer, camera, scene, sunlight, cb) 
 	)
 	mirrorMesh = create('Mesh'
 		create('PlaneBufferGeometry'
-			30000  # width
-			30000  # height
+			10000  # width
+			10000  # height
 			1000 # subdX
 			1000 # subdY
 		)
@@ -169,24 +172,7 @@ asyncLoadPlayerPlane = (waternormal_url, renderer, camera, scene, sunlight, cb) 
 	)	.at(0, CONF.OCEAN.Y - 1, 0)
 		.then('rotateX', -Math.PI / 2.0)
 		.add(water)
-	#water.position.z = -1000
 	cb(water, mirrorMesh)
-
-#asyncLoadMultiMaterial = (urls, cb) ->
-	#loader = create('TextureLoader')
-	#materials = []
-	#await
-		#for url in urls
-			#l "Loading #{texpath url}"
-			#loader.load(texpath(url), defer texture)
-			#l texture
-			#materials.push(create('MeshLambertMaterial',
-				#emissiveMap: texture
-				#emissiveIntensity: 100
-				#color: 0x000000
-			#))
-			#l "Done loading #{url}"
-	#cb(create('MultiMaterial', materials))
 
 ## Exports
 window.cache = cache
@@ -195,4 +181,3 @@ window.asyncLoadSkybox = asyncLoadSkybox
 window.asyncLoadOcean = asyncLoadOcean
 window.asyncLoadPlayerPlane = asyncLoadPlayerPlane
 window.asyncLoadShader = asyncLoadShader
-#window.asyncLoadMultiMaterial = asyncLoadMultiMaterial

@@ -29,7 +29,8 @@ OBJECTS = {
 			fragmentShader: window.cache.shaders["toonshading.frag"]
 		).addToListAndReturn(toonShadedMats)
 
-		iBarrel = 5
+		iBarrel = 1
+		barrelExtent = [12, 14, 12]
 		createBarrel = ->
 			createModel(
 				geometry: cache.models.barrel
@@ -66,85 +67,19 @@ OBJECTS = {
 							barrelExtent[1] * 2 * (i+1) + (i+1),
 							z + barrelExtent[2] * (i+1 + 2 * j)))
 			barrels
-		barrelExtent = [12, 14, 12]
 		misc = [
 			sunlight.gizmo
 			sunlight.targetGizmo
-			#createModel(
-				#geometry: create('BoxGeometry', 1, 1, 1)
-				#material: create('MeshPhongMaterial',
-					#shininess: 30
-					#color: 0x000000
-					#specular: 0x999999
-					#envMap: opts.envMap
-				#)
-			#)	.scaled(10, 100, 10)
-				#.with('name', 'cube_black1')
-				#.with('physics', on)
-				#.with('physicsOpts', {
-					#mass: 1,
-					#static: true,
-					#collisionShape: 'btBoxShape',
-				#})
-			createModel(
-				geometry: cache.models.barrel
-				material: barrelMaterial
-			).at(20, 0, 0)
-				.scaled(3)
-				.with('name', 'barrel1')
-				.with('physics', on)
-				.with('physicsOpts', {
-					mass: 1
-					static: true
-					collisionShape: 'btCylinderShape'
-					collisionShapeArgs: barrelExtent
-				})
-			createModel(
-				geometry: cache.models.barrel
-				material: barrelMaterial
-			).at(20, 2*barrelExtent[1] + 1, 0)
-				.scaled(3)
-				.with('name', 'barrel2')
-				.with('physics', on)
-				.with('physicsOpts', {
-					buoyant: yes
-					mass: 0.4
-					collisionShape: 'btCylinderShape'
-					collisionShapeArgs: barrelExtent
-				})
-			createModel(
-				geometry: cache.models.barrel
-				material: barrelMaterial
-			).at(20, barrelExtent[1]*4 + 2, 0)
-				.scaled(3)
-				.with('name', 'barrel3')
-				.with('physics', on)
-				.with('physicsOpts', {
-					buoyant: yes
-					mass: 0.1
-					collisionShape: 'btCylinderShape'
-					collisionShapeArgs: barrelExtent
-				})
-			createModel(
-				geometry: cache.models.barrel
-				material: barrelMaterial
-			).at(20, barrelExtent[1]*6 + 3, 0)
-				.scaled(3)
-				.with('name', 'barrel4')
-				.with('physics', on)
-				.with('physicsOpts', {
-					buoyant: yes
-					mass: 1
-					collisionShape: 'btCylinderShape'
-					collisionShapeArgs: barrelExtent
-				})
+			_static createBarrel().at(20, 0, 0)
+			createBarrel().at(20, 2*barrelExtent[1] + 1, 0)
+			createBarrel().at(20, barrelExtent[1]*4 + 2, 0)
+			createBarrel().at(20, barrelExtent[1]*6 + 3, 0)
 			createBarrels(50)...
 			createBarrelPyramid(10, 50, 50)...
 		]
 		console.assert(typeof(sunlight.target.position.x) == 'number' and not isNaN(sunlight.target.position.x),
 			"sunlight.target.position = " +
 			"#{sunlight.target.position.x}, #{sunlight.target.position.y}, #{sunlight.target.position.z}")
-		#THREE.Material.prototype.addToListAndReturn = undefined
 		return {
 			ambientLight:{
 					ambientIntensity: 0.1,
