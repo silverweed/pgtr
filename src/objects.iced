@@ -121,6 +121,8 @@ OBJECTS = {
 					buoyant: yes
 					lockedAxes: ['x', 'z']
 					mass: 10
+					collisionShape: 'btSphereShape'
+					collisionShapeArgs: 5
 					#buoyancyOffset: 8
 				})
 			)

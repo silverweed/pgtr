@@ -52,7 +52,7 @@ class Physics
 					threeObj.scale.z / 2
 				))
 			when 'btSphereShape', undefined
-				shape = new Ammo.btSphereShape(threeObj.scale.x)
+				shape = new Ammo.btSphereShape(opts.collisionShapeArgs)
 			when 'btCylinderShape'
 				shape = new Ammo.btCylinderShape(new Ammo.btVector3(opts.collisionShapeArgs[0],
 					opts.collisionShapeArgs[1], opts.collisionShapeArgs[2]))
