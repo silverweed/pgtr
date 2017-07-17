@@ -21,7 +21,7 @@ OBJECTS = {
 				shininess: {value:20}
 				reflectivity:{value: 0.4}
 				color: {value: create('Vector4', 1.0, 1.0, 1.0, 1.0)}
-				specular: {value: create('Vector4', 0.0, 0.0, 0.0, 1.0)}
+				specular: {value: create('Vector4', 1.0, 1.0, 0.2, 1.0)}
 				nBands: {value:3}
 				map: {value: cache.textures.barrel}
 			},
@@ -104,7 +104,7 @@ OBJECTS = {
 						shininess: {value:20}
 						reflectivity:{value: 0.4}
 						color: {value: create('Vector4', 0.13, 0.13, 0.13, 1.0)}
-						specular: {value: create('Vector4', 1.0, 0.0, 0.0, 1.0)}
+						specular: {value: create('Vector4', 1.0, 1.0, 0.0, 1.0)}
 						nBands: {value:4}
 						map: {value: cache.textures.turtle}
 						#envMap: opts.envMap

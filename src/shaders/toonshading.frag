@@ -34,10 +34,7 @@ void main(){
 	lightMultiplier = clamp( lightMultiplier , 0.0, 1.0);
 	lightMultiplier = ceil(lightMultiplier*floatbands)/floatbands;
 	vec4 shadedColor = texture2D(map, vUv) * lightMultiplier;
-	//vec4 shadedSpec = (specular/length(specular))*specMultiplier;
 	vec4 shadedSpec = specular * specMultiplier;
-	gl_FragColor = shadedColor + shadedSpec + ambientIntensity*ambientColor ;
+	gl_FragColor = ((1.0 - specMultiplier)*shadedColor + specMultiplier*shadedSpec) + ambientIntensity*ambientColor ;
 	return;
-	gl_FragColor = vec4(lightMultiplier);
-	gl_FragColor = shadedSpec;
 }
