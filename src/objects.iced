@@ -13,13 +13,13 @@ OBJECTS = {
 		]
 		barrelMaterial = create("ShaderMaterial",
 			uniforms: {
-				directionalLightColor:{value: create('Vector4', 1.0,0.0,1.0,1.0)},
-				directionalLightDirection:{value:create('Vector3', sunlight._direction...)},
-				directionalLightIntensity:{value: 1.0},
-				ambientColor:{value: create("Vector4",0.2,0.1,0.1,1.0)},
-				ambientIntensity:{value: 0.1},
+				directionalLightColor:{value: create('Vector4', 1.0,0.0,1.0,1.0)}
+				directionalLightDirection:{value:create('Vector3', sunlight._direction...)}
+				directionalLightIntensity:{value: 1.0}
+				ambientColor:{value: create("Vector4",0.2,0.1,0.1,1.0)}
+				ambientIntensity:{value: 0.1}
 				shininess: {value:20}
-				reflectivity:{value: 0.4}
+				ks:{value: 0.1}
 				color: {value: create('Vector4', 1.0, 1.0, 1.0, 1.0)}
 				specular: {value: create('Vector4', 1.0, 1.0, 0.2, 1.0)}
 				nBands: {value:3}
@@ -102,6 +102,7 @@ OBJECTS = {
 						ambientColor:{value: create("Vector4",0.2,0.1,0.1,1.0)},
 						ambientIntensity:{value: 0.1},
 						shininess: {value:20}
+						ks:{value: 1.0}
 						reflectivity:{value: 0.4}
 						color: {value: create('Vector4', 0.13, 0.13, 0.13, 1.0)}
 						specular: {value: create('Vector4', 1.0, 1.0, 0.0, 1.0)}
