@@ -27,15 +27,17 @@ void main(){
 			,0.0);
 	specMultiplier = pow(specMultiplier, shininess*10.0);
 	float fres = 1.0-max(dot(normalize(vViewNormal),vec3(0.0,0.0,1.0)),0.0);
-	fres = pow(fres, 10.0);
-	//fres = floor(fres*floatbands)/floatbands;
+	fres = pow(fres, 5.0);
+	fres = floor(fres*floatbands)/floatbands;
 	specMultiplier = floor(specMultiplier*floatbands)/(floatbands);
-	float lightMultiplier = fres*0.3 + ambientIntensity + lightres;
+	float lightMultiplier = fres + ambientIntensity + lightres;
+	lightMultiplier = clamp( lightMultiplier , 0.0, 1.0);
 	lightMultiplier = ceil(lightMultiplier*floatbands)/floatbands;
 	vec4 shadedColor = texture2D(map, vUv) * lightMultiplier;
-	vec4 shadedSpec = (specular/length(specular))*specMultiplier;
-	//vec4 shadedSpec = specular * specMultiplier;
-	gl_FragColor = vec4(shadedColor);
+	//vec4 shadedSpec = (specular/length(specular))*specMultiplier;
+	vec4 shadedSpec = specular * specMultiplier;
+	gl_FragColor = shadedColor + shadedSpec + ambientIntensity*ambientColor ;
 	return;
-	gl_FragColor = (shadedColor + shadedSpec) + ambientIntensity*ambientColor ;
+	gl_FragColor = vec4(lightMultiplier);
+	gl_FragColor = shadedSpec;
 }

@@ -35,7 +35,6 @@ initWorld = ->
 	# Add buoyancy
 	# NOTE: for reasons of deepest lore, these functions cannot be moved elsewhere.
 	getMovedVolume = (obj, depth) ->
-		center = new Ammo.btVector3(0, 0, 0)
 		radius = obj.scale.x
 		return Math.PI * depth * depth * (radius - Math.min(radius, depth) / 3.0)
 
