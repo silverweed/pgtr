@@ -35,7 +35,6 @@ initWorld = ->
 	# Add buoyancy
 	# NOTE: for reasons of deepest lore, these functions cannot be moved elsewhere.
 	getMovedVolume = (obj, depth) ->
-		center = new Ammo.btVector3(0, 0, 0)
 		radius = obj.scale.x
 		return Math.PI * depth * depth * (radius - Math.min(radius, depth) / 3.0)
 
@@ -46,13 +45,13 @@ initWorld = ->
 			if depth > 0
 				movedVolume = getMovedVolume(obj, depth + (obj.physicsOpts.buoyancyOffset ? 0))
 				obj.rigidbody.activate()
-				obj.rigidbody.applyCentralForce(new Ammo.btVector3(
+				force = new Ammo.btVector3(
 					0,
-					#Math.pow(depth, 1.8) * (obj.physicsOpts?.mass ? 1 ) *
-						#delta * CONF.PHYSICS.BUOYANCY * (nextRand() + 0.5),
 					movedVolume * delta * CONF.PHYSICS.BUOYANCY * (nextRand() + 0.5) * (obj.physicsOpts.mass ? 1)
 					0
-				))
+				)
+				obj.rigidbody.applyCentralForce(force)
+				Ammo.destroy(force)
 		null
 
 	# Start simulation

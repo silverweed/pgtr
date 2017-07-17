@@ -112,14 +112,15 @@ class Physics
 				"simulation is losing time!")
 		@dynamicsWorld.stepSimulation(timeStep, subdivisions, fixedTimeStep)
 		# Sync threejs objects with bullet data
+		transform = new Ammo.btTransform()
 		@bodies.forEach ([body, obj]) ->
 			# Read the object
-			transform = new Ammo.btTransform()
 			body.getMotionState().getWorldTransform(transform)
 			origin = transform.getOrigin()
 			rot = transform.getRotation()
 			obj.position.set(origin.x(), origin.y(), origin.z())
 			obj.quaternion.set(rot.x(), rot.y(), rot.z(), rot.w())
+		#Ammo.destroy(transform)
 		this
 
 window.Physics = Physics

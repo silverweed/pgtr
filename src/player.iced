@@ -25,20 +25,27 @@ updatePlayer = (deltaTime) ->
 		# I have NO CLUE why I have to multiply angle by 2, but it apparently works.
 		p.setRotation(q.getAxis(), q.getAngle() * 2)
 		f = p.op_mul(@speed * fwd)
-		@rigidbody.applyCentralForce(new Ammo.btVector3(f.y(), f.z(), f.w()))
+		force = new Ammo.btVector3(f.y(), f.z(), f.w())
+		@rigidbody.applyCentralForce(force)
+		Ammo.destroy(p)
+		Ammo.destroy(force)
 
 	# Turn left / right
 	right = (Input.right ? 0) - (Input.left ? 0)
 	if right > 0 or right < 0
 		@rigidbody.activate()
-		@rigidbody.applyTorque(new Ammo.btVector3(0, @speed * -right, 0))
+		torque = new Ammo.btVector3(0, @speed * -right, 0)
+		@rigidbody.applyTorque(torque)
 		q = @rigidbody.getWorldTransform().getRotation()
+		Ammo.destroy(torque)
 
 	# Jump
 	if Input.jump and @canJump
 		@rigidbody.activate()
-		@rigidbody.applyCentralImpulse(new Ammo.btVector3(0, CONF.PLAYER.JUMP_FORCE, 0))
+		impulse = new Ammo.btVector3(0, CONF.PLAYER.JUMP_FORCE, 0)
+		@rigidbody.applyCentralImpulse(impulse)
 		@canJump = false
+		Ammo.destroy(impulse)
 
 	@plane?.position.set(@position.x, @plane.position.y, @position.z)
 
